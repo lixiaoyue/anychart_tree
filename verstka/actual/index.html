@@ -1,0 +1,345 @@
+<!doctype html>
+
+<html>
+<head>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>AnyChart live tree</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery.dropotron-1.0.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $('#menu > ul').dropotron({
+                mode: 'fade',
+                globalOffsetY: 11,
+                offsetY: -15
+            });
+        });
+    </script>
+
+</head>
+<body>
+<div id="wrapper">
+    <div id="header">
+        <div id="logo">
+            <h1><a href="#">AnyChart requirements tree</a></h1>
+        </div>
+    </div>
+    <div id="menu">
+        <ul>
+            <li class="first">
+                <span class="opener">Services<b></b></span>
+                <ul>
+                    <li><a href="#">Lorem Ipsum</a></li>
+                    <li><a href="#">Consequat Dolor</a></li>
+                    <li><a href="#">Magna Feugiat</a></li>
+                    <li>
+                        <span>Sed Tempus<b></b></span>
+                        <ul>
+                            <li><a href="#">Lorem Ipsum</a></li>
+                            <li><a href="#">Consequat Dolor</a></li>
+                            <li><a href="#">Magna Feugiat</a></li>
+                            <li><a href="#">Sed Tempus</a></li>
+                            <li><a href="#">Etiam Nullam</a></li>
+                            <li><a href="#">Amet Phasellus</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Etiam Nullam</a></li>
+                    <li><a href="#">Amet Phasellus</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Products</a></li>
+            <li><a href="#">Clients</a></li>
+            <li>
+                <span class="opener">Support<b></b></span>
+                <ul>
+                    <li><a href="#">Lorem Ipsum</a></li>
+                    <li><a href="#">Consequat Dolor</a></li>
+                    <li><a href="#">Magna Feugiat</a></li>
+                    <li>
+                        <span>Sed Tempus<b></b></span>
+                        <ul>
+                            <li><a href="#">Lorem Ipsum</a></li>
+                            <li><a href="#">Consequat Dolor</a></li>
+                            <li><a href="#">Magna Feugiat</a></li>
+                            <li><a href="#">Sed Tempus</a></li>
+                            <li><a href="#">Etiam Nullam</a></li>
+                            <li><a href="#">Amet Phasellus</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Etiam Nullam</a></li>
+                    <li><a href="#">Amet Phasellus</a></li>
+                </ul>
+            </li>
+            <li><a href="#">About</a></li>
+            <li class="last"><a href="#">Contact</a></li>
+        </ul>
+        <br class="clearfix" />
+    </div>
+
+    <div id="page">
+        <div id="sidebar">
+            <div class="sidebar_content">
+                <ul class="tree">
+                    <li id="tie_1" class="tie"> Первый узел дерева
+                        <ul class="tie_1 tie_content">
+                            <li>Описание</li>
+                            <li class="folder">Требования
+                                <ul>
+                                    <li>Требование первое</li>
+                                    <li>Требование второе</li>
+                                    <li>Требование третье</li>
+                                </ul>
+                            </li>
+                            <li>Обсуждение</li>
+                            <li>Задачи</li>
+                        </ul>
+                        <ul class="tree">
+                            <li id="tie_1_1">Вложенный узел дерева
+                                <ul class="tie_1_1 tie_content">
+                                    <li>Описание</li>
+                                    <li class="folder">Требования
+                                        <ul>
+                                            <li>Требование первое</li>
+                                            <li>Требование второе</li>
+                                            <li>Требование третье</li>
+                                        </ul>
+                                    </li>
+                                    <li>Обсуждение</li>
+                                    <li>Задачи</li>
+                                </ul>
+                                <ul class="tree">
+                                    <li id="tie_1_1_1">Вложенный вложенный узел дерева
+                                        <ul class="tie_1_1_1 tie_content">
+                                            <li>Описание</li>
+                                            <li class="folder">Требования
+                                                <ul>
+                                                    <li>Требование первое</li>
+                                                    <li>Требование второе</li>
+                                                    <li>Требование третье</li>
+                                                </ul>
+                                            </li>
+                                            <li>Обсуждение</li>
+                                            <li>Задачи</li>
+                                        </ul>
+                                    </li>
+                                    <li id="tie_1_1_2">Вложенный вложенный узел дерева
+                                        <ul class="tie_1_1_2 tie_content">
+                                            <li>Описание</li>
+                                            <li class="folder">Требования
+                                                <ul>
+                                                    <li>Требование первое</li>
+                                                    <li>Требование второе</li>
+                                                    <li>Требование третье</li>
+                                                </ul>
+                                            </li>
+                                            <li>Обсуждение</li>
+                                            <li>Задачи</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li id="tie_1_1_3">Вложенный вложенный узел дерева
+                                <ul class="tie_1_1_3 tie_content">
+                                    <li>Описание</li>
+                                    <li class="folder">Требования
+                                        <ul>
+                                            <li>Требование первое</li>
+                                            <li>Требование второе</li>
+                                            <li>Требование третье</li>
+                                        </ul>
+                                    </li>
+                                    <li>Обсуждение</li>
+                                    <li>Задачи</li>
+                                </ul>
+                            </li>
+                            <li id="tie_1_3">Вложенный узел дерева
+                                <ul class="tie_1_3 tie_content">
+                                    <li>Описание</li>
+                                    <li class="folder">Требования
+                                        <ul>
+                                            <li>Требование первое</li>
+                                            <li>Требование второе</li>
+                                            <li>Требование третье</li>
+                                        </ul>
+                                    </li>
+                                    <li>Обсуждение</li>
+                                    <li>Задачи</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="tie_2" class="tie"> Второй узел дерева
+                        <ul class="tie_1 tie_content">
+                            <li>Описание</li>
+                            <li class="folder">Требования
+                                <ul>
+                                    <li>Требование первое</li>
+                                    <li>Требование второе</li>
+                                    <li>Требование третье</li>
+                                </ul>
+                            </li>
+                            <li>Обсуждение</li>
+                            <li>Задачи</li>
+                        </ul>
+                        <ul class="tree">
+                            <li id="tie_2_1">Вложенный узел дерева
+                                <ul class="tie_1_1 tie_content">
+                                    <li>Описание</li>
+                                    <li class="folder">Требования
+                                        <ul>
+                                            <li>Требование первое</li>
+                                            <li>Требование второе</li>
+                                            <li>Требование третье</li>
+                                        </ul>
+                                    </li>
+                                    <li>Обсуждение</li>
+                                    <li>Задачи</li>
+                                </ul>
+                            </li>
+                            <li id="tie_2_2">Вложенный узел дерева
+                                <ul class="tie_1_2 tie_content">
+                                    <li>Описание</li>
+                                    <li class="folder">Требования
+                                        <ul>
+                                            <li>Требование первое</li>
+                                            <li>Требование второе</li>
+                                            <li>Требование третье</li>
+                                        </ul>
+                                    </li>
+                                    <li>Обсуждение</li>
+                                    <li>Задачи</li>
+                                </ul>
+                            </li>
+                            <li id="tie_2_3">Вложенный узел дерева
+                                <ul class="tie_1_3 tie_content">
+                                    <li>Описание</li>
+                                    <li class="folder">Требования
+                                        <ul>
+                                            <li>Требование первое</li>
+                                            <li>Требование второе</li>
+                                            <li>Требование третье</li>
+                                        </ul>
+                                    </li>
+                                    <li>Обсуждение</li>
+                                    <li>Задачи</li>
+                                </ul>
+                             </li>
+                        </ul>
+                    </li>
+                    <li id="tie_3" class="tie"> Третий узел дерева
+                        <ul class="tie_1 tie_content">
+                            <li>Описание</li>
+                            <li class="folder">Требования
+                                <ul>
+                                    <li>Требование первое</li>
+                                    <li>Требование второе</li>
+                                    <li>Требование третье</li>
+                                </ul>
+                            </li>
+                            <li>Обсуждение</li>
+                            <li>Задачи</li>
+                        </ul>
+                        <ul class="tree">
+                            <li id="tie_3_1">Вложенный узел дерева
+                                <ul class="tie_1_1 tie_content">
+                                    <li>Описание</li>
+                                    <li class="folder">Требования
+                                        <ul>
+                                            <li>Требование первое</li>
+                                            <li>Требование второе</li>
+                                            <li>Требование третье</li>
+                                        </ul>
+                                    </li>
+                                    <li>Обсуждение</li>
+                                    <li>Задачи</li>
+                                </ul>
+                            </li>
+                            <li id="tie_3_2">Вложенный узел дерева
+                                <ul class="tie_1_2 tie_content">
+                                    <li>Описание</li>
+                                    <li class="folder">Требования
+                                        <ul>
+                                            <li>Требование первое</li>
+                                            <li>Требование второе</li>
+                                            <li>Требование третье</li>
+                                        </ul>
+                                    </li>
+                                    <li>Обсуждение</li>
+                                    <li>Задачи</li>
+                                </ul>
+                            </li>
+                            <li id="tie_3_3">Вложенный узел дерева
+                                <ul class="tie_1_3 tie_content">
+                                    <li>Описание</li>
+                                    <li class="folder">Требования
+                                        <ul>
+                                            <li>Требование первое</li>
+                                            <li>Требование второе</li>
+                                            <li>Требование третье</li>
+                                        </ul>
+                                    </li>
+                                    <li>Обсуждение</li>
+                                    <li>Задачи</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="content">
+            <div id="tabs_manage_block">
+                <ul>
+                    <li class="active" id="tab1" ><a href="#">Дерево</a><div class="closeTab"></div></li>
+                    <li id="tab2"><a href="#">Корень дерева</a><div class="closeTab"></div></li>
+                    <li id="tab3"><a href="#">Ствол дерева</a><div class="closeTab"></div></li>
+                    <li id="tab4"><a href="#">Крона дерева</a><div class="closeTab"></div></li>
+                    <li id="tab5"><a href="#">Consequat Dolor</a><div class="closeTab"></div></li>
+                    <li id="tab6"><a href="#">Magna Feugiat</a><div class="closeTab"></div></li>
+                    <li id="tab7"><a href="#">Sed Tempus</a><div class="closeTab"></div></li>
+                    <li id="tab8"><a href="#">Consequat Dolor</a><div class="closeTab"></div></li>
+                    <li id="tab9"><a href="#">Magna Feugiat</a><div class="closeTab"></div></li>
+                    <li id="tab10"><a href="#">Sed Tempus</a><div class="closeTab"></div></li>
+                </ul>
+            </div>
+            <div id="tabs_content_block">
+                <div class="tab1">
+                    <p>В дереве выделяют три основные части: <a href="#" title="Корень">корень</a>, <a href="#" title="Ствол (ботаника)">ствол</a> и <a href="#" title="Крона дерева" class="mw-redirect">крона</a>.</p>
+                </div>
+                <div class="tab2">
+                    <p><b>Корень дерева</b> — это, как правило, подземная часть растения. Основные функции&nbsp;— удержание дерева в вертикальном положении, всасывание питательных веществ из <a href="#" title="Почва">почвы</a> и передача их в ствол. Корни имеют большую протяжённость: они могут уходить на глубину до 30 метров и в стороны на расстояние до 100 метров. У некоторых деревьев есть воздушные корни, которые находятся над поверхностью земли, а их функция схожа с функцией листьев.</p>
+                </div>
+                <div class="tab3">
+                    <p><b>Ствол дерева</b> выполняет функцию опоры для кроны, а также осуществляет передачу веществ между корнями и кроной. В зимний период времени выступает в роли хранилища влаги и питательных веществ. Древесный ствол состоит из <a href="#" title="Пороки древесины">сердцевины</a>, <a href="#" title="Древесина">древесины</a>, которая нарастает от <a href="#" title="Камбий">камбия</a> внутрь, образуя <a href="#" title="Годичные кольца">годовые кольца</a>&nbsp;— тёмные и светлые участки, видимые на поперечном спиле дерева. Количество годовых колец в лесах умеренной зоны соответствует возрасту дерева, а их толщина&nbsp;— условиям жизни дерева в каждый конкретный год. В засушливых районах у деревьев могут появляться ложные кольца после выпадения осадков. Снаружи ствол покрыт <a href="#" title="Кора">корой</a>. В течение своей жизни дерево имеет, как правило, единственный ствол. При повреждении (спиливании) главного ствола у некоторых деревьев из спящих почек могут развиваться сестринские стволы.</p>
+                </div>
+                <div class="tab4">
+                    <p><b>Крона дерева</b>&nbsp;— совокупность веток и листьев в верхней части растения, продолжающая ствол от первого разветвления до верхушки дерева или кустарника со всеми боковыми ответвлениями и листвой. Различают такие характеристики, как <i>форма кроны</i>&nbsp;— от колонновидной до раскидистой и <i>плотность кроны</i>&nbsp;— от плотной до редкой, ажурной. Под действием света в листьях в результате <a href="#" title="Фотосинтез">фотосинтеза</a> происходит синтез необходимых веществ.</p>
+                </div>
+                <div class="tab5">
+                    <p>В дереве выделяют три основные части: <a href="#" title="Корень">корень</a>, <a href="#" title="Ствол (ботаника)">ствол</a> и <a href="#" title="Крона дерева" class="mw-redirect">крона</a>.</p>
+                    <p><b>Корень дерева</b> — это, как правило, подземная часть растения. Основные функции&nbsp;— удержание дерева в вертикальном положении, всасывание питательных веществ из <a href="#" title="Почва">почвы</a> и передача их в ствол. Корни имеют большую протяжённость: они могут уходить на глубину до 30 метров и в стороны на расстояние до 100 метров. У некоторых деревьев есть воздушные корни, которые находятся над поверхностью земли, а их функция схожа с функцией листьев.</p>
+                    <p><b>Ствол дерева</b> выполняет функцию опоры для кроны, а также осуществляет передачу веществ между корнями и кроной. В зимний период времени выступает в роли хранилища влаги и питательных веществ. Древесный ствол состоит из <a href="#" title="Пороки древесины">сердцевины</a>, <a href="#" title="Древесина">древесины</a>, которая нарастает от <a href="#" title="Камбий">камбия</a> внутрь, образуя <a href="#" title="Годичные кольца">годовые кольца</a>&nbsp;— тёмные и светлые участки, видимые на поперечном спиле дерева. Количество годовых колец в лесах умеренной зоны соответствует возрасту дерева, а их толщина&nbsp;— условиям жизни дерева в каждый конкретный год. В засушливых районах у деревьев могут появляться ложные кольца после выпадения осадков. Снаружи ствол покрыт <a href="#" title="Кора">корой</a>. В течение своей жизни дерево имеет, как правило, единственный ствол. При повреждении (спиливании) главного ствола у некоторых деревьев из спящих почек могут развиваться сестринские стволы.</p>
+                    <p><b>Крона дерева</b>&nbsp;— совокупность веток и листьев в верхней части растения, продолжающая ствол от первого разветвления до верхушки дерева или кустарника со всеми боковыми ответвлениями и листвой. Различают такие характеристики, как <i>форма кроны</i>&nbsp;— от колонновидной до раскидистой и <i>плотность кроны</i>&nbsp;— от плотной до редкой, ажурной. Под действием света в листьях в результате <a href="#" title="Фотосинтез">фотосинтеза</a> происходит синтез необходимых веществ.</p>
+                </div>
+            </div>
+
+            <div id="footer">
+                Copyright (c) 2012 AnyChart.com. All rights reserved. Developed by AnyChart QA Department.
+                <!--Design by <a href="mailto:olga@irnok.net">Olga</a>.-->
+            </div>
+        </div>
+
+
+        <br class="clearfix" />
+    </div>
+
+
+</div>
+
+</body>
+</html>
