@@ -33,7 +33,7 @@ window.onresize = function (){
 
 //Resizing detection
 function tabsWidthDetect(){
-    $('#tabs_manage_block ul li').css('width', (parseInt($('#tabs_manage_block ul').css('width')) - 1)/$('#tabs_manage_block ul li').length - 12);
+    $('#tabs_manage_block ul li').css('width', (parseInt($('#tabs_manage_block ul').css('width')) - 1)/$('#tabs_manage_block ul li').length - 20);
 }
 
 //При клике по вкладке показать содержимое вкладки
