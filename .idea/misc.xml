@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
   <component name="DependencyValidationManager">
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
@@ -7,5 +8,8 @@
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
   </component>
   <component name="ProjectRootManager" version="2" />
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.3 (C:\Python27\python.exe)" project-jdk-type="Python SDK" />
+>>>>>>> 55aba439682d2572e691aaf7db5a45303e4d4d9e
 </project>
 
