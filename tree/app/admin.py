@@ -1,13 +1,57 @@
-from app.models import Cathedra
-from app.models import Hobb
-from app.models import Student
-from app.models import Prepod
+from app.models import RoleInSystem
+from app.models import RoleInAnychart
+from app.models import People
+from app.models import Status
+from app.models import TypesOfRequirement
+from app.models import Node
+from app.models import TypeOfNodesRelationship
+from app.models import NodesRelationship
+from app.models import Requirement
+from app.models import Task
+from app.models import History
+from app.models import RoleInCircle
 from django.contrib import admin
 
-class PrepodAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'character')
+class RoleInSystemAdmin(admin.ModelAdmin):
+    list_display = ('name',)
 
-admin.site.register(Prepod, PrepodAdmin)
-admin.site.register(Hobb)
-admin.site.register(Student)
-admin.site.register(Cathedra)
+class RoleInAnychartAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+class PeopleAdmin(admin.ModelAdmin):
+    filter_horizontal = ('role_in_anychart',)
+    list_display = ('name',)
+
+class StatusAdmin(admin.ModelAdmin):
+    list_display = ('title',)
+
+class TypesOfRequirementAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+class NodeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'parent')
+
+class RequirementAdmin(admin.ModelAdmin):
+    list_display = ('name', 'type')
+
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ('title',)
+
+class HistoryAdmin(admin.ModelAdmin):
+    list_display = ('requirement', 'task', 'status', 'man')
+
+class RoleInCircleAdmin(admin.ModelAdmin):
+    filter_horizontal = ('man', 'role')
+
+admin.site.register(RoleInSystem, RoleInSystemAdmin)
+admin.site.register(RoleInAnychart, RoleInAnychartAdmin)
+admin.site.register(People, PeopleAdmin)
+admin.site.register(Status, StatusAdmin)
+admin.site.register(TypesOfRequirement, TypesOfRequirementAdmin)
+admin.site.register(Node, NodeAdmin)
+admin.site.register(TypeOfNodesRelationship)
+admin.site.register(NodesRelationship)
+admin.site.register(Requirement, RequirementAdmin)
+admin.site.register(Task, TaskAdmin)
+admin.site.register(History, HistoryAdmin)
+admin.site.register(RoleInCircle, RoleInCircleAdmin)
