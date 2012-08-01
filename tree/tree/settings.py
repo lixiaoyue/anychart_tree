@@ -2,7 +2,6 @@
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
@@ -48,7 +47,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = 'C:/Users/alice/PycharmProjects/anychartTree/tree/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -105,7 +104,7 @@ ROOT_URLCONF = 'tree.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'tree.wsgi.application'
 
-TEMPLATE_DIRS = ('C:/Users/alice/PycharmProjects/tree/templates',)
+TEMPLATE_DIRS = ('C:/Users/alice/PycharmProjects/anychartTree/tree/templates',)
 
 INSTALLED_APPS = (
     'django.contrib.admin',
