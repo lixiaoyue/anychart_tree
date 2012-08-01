@@ -235,6 +235,36 @@ li.req div p{
 }
 .treeview a.open_tab{padding-left: 20px; background: url(../i/open_tab.png) no-repeat center left;}
 .treeview a.notification{padding-left: 20px; background: url(../i/bug.png) no-repeat center left;}
+
+.treeview div#popup_menu ul{
+     position: absolute;
+     background: rgba(16, 78, 139, 0.9);
+     border-top: solid 1px #1874CD;
+     border-bottom: solid 1px #1C86EE;
+     text-shadow: 0 1px 1px #007D7D;
+     list-style: none;
+     margin: 10px 0;
+     padding: 15px 10px 15px 10px;
+     min-width: 200px;
+     border-radius: 6px;
+     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
+     z-index: 20;
+ }
+.treeview div#popup_menu ul li a{
+    color: white;
+    text-decoration: none;
+    font-family: Georgia, serif;
+    letter-spacing: -1px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    height: 20px;
+    display: block;
+    cursor: pointer;
+}
+.treeview div#popup_menu ul li a:hover{
+    color: #ccc;
+}
 /* TREE -->> */
 /* <<-- TABS */
 #tabs_manage_block{

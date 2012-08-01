@@ -3,6 +3,52 @@ $(function(){
     $('#tabs_content_block').css('height', $(window).height()-205);
     tabsWidthDetect();
     showTabContent($('#tabs_manage_block ul li.active').attr('id'));
+
+    //Вспомогательное меню на правую кнопку мыши
+    $('span.right_active').contextMenu('popup_menu',
+        {
+            bindings: {
+                'create': function(t) {
+                    console.log('Trigger was '+t.id+'\nAction was Create');
+                },
+                'edit': function(t) {
+                    console.log('Trigger was '+t.id+'\nAction was Edit');
+                },
+                'delete': function(t) {
+                    console.log('Trigger was '+t.id+'\nAction was Delete');
+                }
+            },
+            menuStyle: {
+
+                border: '2px solid #000'
+
+            },
+
+            itemStyle: {
+
+                fontFamily : 'verdana',
+
+                backgroundColor : '#666',
+
+                color: 'white',
+
+                border: 'none',
+
+                padding: '1px'
+
+            },
+
+            itemHoverStyle: {
+
+                color: '#fff',
+
+                backgroundColor: '#0f0',
+
+                border: 'none'
+
+            }
+        });
+
 });
 
 
@@ -22,6 +68,11 @@ $('a.sc').live('click', function(){
             $('li#'+liId + ' div:first p a.sc').removeClass('open_req').addClass('close_req');
         }
     }
+});
+
+//Вспомогательное меню на правую кнопку мыши
+$('span.right_active').live('click', function(){
+        $(this).css('color', 'red');
 });
 
 //Ресайз окна
