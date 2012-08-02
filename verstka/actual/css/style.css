@@ -250,8 +250,8 @@ li.req div p{
      box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
      z-index: 20;
  }
-.treeview div#popup_menu ul li a{
-    color: white;
+div#jqContextMenu ul li a{
+    color: rgba(16, 78, 139, 0.9);
     text-decoration: none;
     font-family: Georgia, serif;
     letter-spacing: -1px;
