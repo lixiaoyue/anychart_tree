@@ -89,19 +89,23 @@
         <div id="sidebar">
             <div class="treeview">
                 <ul>
-                <div class="contextMenu" id="popup_menu">
+                <div class="contextMenu" id="popup_tie_menu">
                     <ul>
-                        <li id="edit"><a>Редактировать</a></li>
-                        <li id="delete"><a>Удалить </a></li>
-                        <li id="create"><a>Создать</a></li>
+                        <li id="create_tie"><a>Создать дочерний узел</a></li>
+                        <li id="delete_tie"><a>Удалить узел</a></li>
                     </ul>
                 </div>
-
+                <div class="contextMenu" id="popup_req_menu">
+                    <ul>
+                        <li id="add_req"><a>Добавить требование</a></li>
+                        <li id="delete_all_req"><a>Удалить все требования</a></li>
+                    </ul>
+                </div>
                     <li id="tree_tie_1">
-                        <div><p><a href="#" class="sc open_tie"></a> <span class="right_active">AnyChart products</span></p></div>
+                        <div><p><a href="#" class="sc open_tie"></a> <span class="right_active tie">AnyChart products</span></p></div>
                         <ul>
                             <li class="cl" id="tree_tie_1_1">
-                                <div><p><a href="#" class="sc close_tie" ></a><span class="right_active">AnyChart</span> </p></div>
+                                <div><p><a href="#" class="sc close_tie" ></a><span class="right_active tie">AnyChart</span> </p></div>
 
                                 <ul>
                                     <li>
@@ -114,7 +118,7 @@
                                     <li id="req_tie_1_1" class="cl req">
                                         <div>
                                             <p>
-                                                <a href="#" class="sc close_req" ></a>  <span class="right_active">Требования</span>
+                                                <a href="#" class="sc close_req" ></a>  <span class="right_active req">Требования</span>
                                             </p>
                                         </div>
                                         <ul>
@@ -135,7 +139,7 @@
                                         </ul>
                                     </li>
                                     <li id="tree_tie_1_1_1" class="cl">
-                                        <div><p><a href="#" class="sc close_tie"></a><span class="right_active">Guages</span></p></div>
+                                        <div><p><a href="#" class="sc close_tie"></a><span class="right_active tie">Guages</span></p></div>
                                         <ul>
                                             <li>
                                                 <div>
@@ -146,7 +150,7 @@
                                             </li>
                                             <li id="req_tie_1_1_1" class="cl req">
                                                 <div>
-                                                    <p><a href="#" class="sc close_req"></a> <span class="right_active">Требования</span></p>
+                                                    <p><a href="#" class="sc close_req"></a> <span class="right_active req">Требования</span></p>
                                                 </div>
                                                 <ul>
                                                     <li>
@@ -169,7 +173,7 @@
                                             <li id="tree_tie_1_1_1_1" class="cl">
                                                 <div>
                                                     <p>
-                                                        <a href="#" class="sc close_tie" ></a><span class="right_active">Circular guages</span>
+                                                        <a href="#" class="sc close_tie" ></a><span class="right_active tie">Circular guages</span>
                                                     </p>
                                                 </div>
                                                 <ul>
@@ -183,7 +187,7 @@
                                                     <li id="req_tie_1_1_1_1" class="cl req">
                                                         <div>
                                                             <p>
-                                                                <a href="#" class="sc close_req"></a><span class="right_active">Требования</span>
+                                                                <a href="#" class="sc close_req"></a><span class="right_active req">Требования</span>
                                                             </p>
                                                         </div>
                                                         <ul>
@@ -215,7 +219,7 @@
                                             <li id="tree_tie_1_1_1_2" class="cl">
                                                 <div>
                                                     <p>
-                                                        <a href="#" class="sc close_tie" ></a><span class="right_active">Vertical guages</span>
+                                                        <a href="#" class="sc close_tie" ></a><span class="right_active tie">Vertical guages</span>
                                                     </p>
                                                 </div>
                                                 <ul>
@@ -229,7 +233,7 @@
                                                     <li class="cl req" id="reg_tie_1_1_1_2">
                                                         <div>
                                                             <p>
-                                                                <a href="#" class="sc close_req" ></a><span class="right_active">Требования</span>
+                                                                <a href="#" class="sc close_req" ></a><span class="right_active req">Требования</span>
                                                             </p>
                                                         </div>
                                                         <ul>
@@ -261,7 +265,7 @@
                                             <li id="tree_tie_1_1_1_3"  class="cl">
                                                 <div>
                                                     <p>
-                                                        <a href="#" class="sc close_tie" ></a><span class="right_active"> Horizontal guages</span>
+                                                        <a href="#" class="sc close_tie" ></a><span class="right_active tie"> Horizontal guages</span>
                                                     </p>
                                                 </div>
                                                 <ul>
@@ -275,7 +279,7 @@
                                                     <li class="cl req" id="req_tie_1_1_1_3">
                                                         <div>
                                                             <p>
-                                                                <a href="#" class="sc close_req"></a> <span class="right_active">Требования</span>
+                                                                <a href="#" class="sc close_req"></a> <span class="right_active req">Требования</span>
                                                             </p>
                                                         </div>
                                                         <ul>
@@ -315,7 +319,7 @@
                                     </li>
                                     <li id="tree_tie_1_1_2" class="cl">
 
-                                        <div><p><a href="#" class="sc close_tie" ></a><span class="right_active">Pie and Donut Chart</span></p></div>
+                                        <div><p><a href="#" class="sc close_tie" ></a><span class="right_active tie">Pie and Donut Chart</span></p></div>
                                         <ul>
                                             <li>
                                                 <div>
@@ -327,7 +331,7 @@
                                             <li class="cl req" id="req_tie_1_1_2">
                                                 <div>
                                                     <p>
-                                                        <a href="#" class="sc close_req"></a><span class="right_active">Требования</span>
+                                                        <a href="#" class="sc close_req"></a><span class="right_active req">Требования</span>
                                                     </p>
                                                 </div>
                                                 <ul>
@@ -351,7 +355,7 @@
                                             <li class="cl" id="tree_tie_1_1_2_1">
                                                 <div>
                                                     <p>
-                                                        <a href="#" class="sc close_tie"></a><span class="right_active">Pie Chart</span>
+                                                        <a href="#" class="sc close_tie"></a><span class="right_active tie">Pie Chart</span>
                                                     </p>
                                                 </div>
                                                 <ul>
@@ -365,7 +369,7 @@
                                                     <li class="cl req" id="req_tie_1_1_2_1">
                                                         <div>
                                                             <p>
-                                                                <a href="#" class="sc close_req" ></a><span class="right_active">Требования</span>
+                                                                <a href="#" class="sc close_req" ></a><span class="right_active req">Требования</span>
                                                             </p>
                                                         </div>
                                                         <ul>
@@ -397,7 +401,7 @@
                                             <li class="cl" id="tree_tie_1_1_2_2">
                                                 <div>
                                                     <p>
-                                                        <a href="#" class="sc close_tie" ></a><span class="right_active">Donut Chart</span>
+                                                        <a href="#" class="sc close_tie" ></a><span class="right_active tie">Donut Chart</span>
                                                     </p>
                                                 </div>
                                                 <ul>
@@ -411,7 +415,7 @@
                                                     <li class="cl req" id="req_tie_1_1_2_2">
                                                         <div>
                                                             <p>
-                                                                <a href="#" class="sc close_req" ></a><span class="right_active">Требования</span>
+                                                                <a href="#" class="sc close_req" ></a><span class="right_active req">Требования</span>
                                                             </p>
                                                         </div>
                                                         <ul>
@@ -461,7 +465,7 @@
                             <li class="cl" id="tree_tie_1_2">
                                 <div>
                                     <p>
-                                        <a href="#" class="sc close_tie" ></a> <span class="right_active">AnyStock</span>
+                                        <a href="#" class="sc close_tie" ></a> <span class="right_active tie">AnyStock</span>
                                     </p>
                                 </div>
                                 <ul>
@@ -475,7 +479,7 @@
                                     <li class="cl req" id="req_tie_1_2">
                                         <div>
                                             <p>
-                                                <a href="#" class="sc close_req" ></a><span class="right_active">Требования</span>
+                                                <a href="#" class="sc close_req" ></a><span class="right_active req">Требования</span>
                                             </p>
                                         </div>
                                         <ul>

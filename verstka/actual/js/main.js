@@ -4,51 +4,33 @@ $(function(){
     tabsWidthDetect();
     showTabContent($('#tabs_manage_block ul li.active').attr('id'));
 
-    //Вспомогательное меню на правую кнопку мыши
-    $('span.right_active').contextMenu('popup_menu',
-        {
+    //Вспомогательные меню на правую кнопку мыши
+    $('span.right_active.tie').contextMenu('popup_tie_menu',{
             bindings: {
-                'create': function(t) {
+                'create_tie': function(t) {
                     console.log('Trigger was '+t.id+'\nAction was Create');
                 },
-                'edit': function(t) {
-                    console.log('Trigger was '+t.id+'\nAction was Edit');
-                },
-                'delete': function(t) {
+                'delete_tie': function(t) {
                     console.log('Trigger was '+t.id+'\nAction was Delete');
                 }
             },
             menuStyle: {
-
-                border: '2px solid #000'
-
-            },
-
-            itemStyle: {
-
-                fontFamily : 'verdana',
-
-                backgroundColor : '#666',
-
-                color: 'white',
-
-                border: 'none',
-
-                padding: '1px'
-
-            },
-
-            itemHoverStyle: {
-
-                color: '#fff',
-
-                backgroundColor: '#0f0',
-
-                border: 'none'
-
+                width: 160
             }
-        });
-
+    });
+    $('span.right_active.req').contextMenu('popup_req_menu',{
+        bindings: {
+            'add_req': function(t) {
+                console.log('Trigger was '+t.id+'\nAction was Create');
+            },
+            'delete_all_req': function(t) {
+                console.log('Trigger was '+t.id+'\nAction was Delete');
+            }
+        },
+        menuStyle: {
+            width: 160
+        }
+    });
 });
 
 
@@ -68,11 +50,6 @@ $('a.sc').live('click', function(){
             $('li#'+liId + ' div:first p a.sc').removeClass('open_req').addClass('close_req');
         }
     }
-});
-
-//Вспомогательное меню на правую кнопку мыши
-$('span.right_active').live('click', function(){
-        $(this).css('color', 'red');
 });
 
 //Ресайз окна

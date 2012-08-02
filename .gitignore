@@ -14,18 +14,5 @@ gen/
 
 # Local configuration file (sdk path, etc)
 local.properties
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
 .idea/
 ./tree/.idea
->>>>>>> Stashed changes
-=======
-.idea/
-./tree/.idea
->>>>>>> Stashed changes
-=======
-.idea/
-./tree/.idea
->>>>>>> Stashed changes
