@@ -6,6 +6,8 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tree/.idea/workspace.xml" afterPath="$PROJECT_DIR$/tree/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tree/app/admin.py" afterPath="$PROJECT_DIR$/tree/app/admin.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tree/app/models.py" afterPath="$PROJECT_DIR$/tree/app/models.py" />
     </list>
     <ignored path="anychart_tree.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,37 +32,21 @@
       <file leaf-file-name="admin.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tree/app/admin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="0" selection-start="455" selection-end="455" vertical-scroll-proportion="-8.84">
+            <state line="17" column="0" selection-start="612" selection-end="612" vertical-scroll-proportion="-8.84">
               <folding>
-                <element signature="e#0#35#0" expanded="true" />
+                <element signature="e#134#175#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="workspace.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tree/.idea/workspace.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="10" selection-start="1359" selection-end="1359" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="5" selection-start="67" selection-end="67" vertical-scroll-proportion="0.15124555">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tree/app/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="63" column="0" selection-start="2048" selection-end="2048" vertical-scroll-proportion="-18.36">
-              <folding />
+            <state line="24" column="33" selection-start="792" selection-end="792" vertical-scroll-proportion="0.53817505">
+              <folding>
+                <element signature="e#14#42#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -123,11 +109,12 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/tree/app/models.py" />
         <option value="$PROJECT_DIR$/tree/templates/index.html" />
         <option value="$PROJECT_DIR$/tree/tree/settings.py" />
         <option value="$PROJECT_DIR$/tree/app/admin.py" />
         <option value="$PROJECT_DIR$/tree/.idea/workspace.xml" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/tree/app/models.py" />
       </list>
     </option>
   </component>
@@ -203,7 +190,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value=".idea" />
+              <option name="myItemId" value="app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -336,7 +323,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1696" height="1036" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -458,33 +445,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tree/app/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="0" selection-start="2048" selection-end="2048" vertical-scroll-proportion="-18.36">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tree/app/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="0" selection-start="455" selection-end="455" vertical-scroll-proportion="-8.84">
+        <state line="17" column="0" selection-start="612" selection-end="612" vertical-scroll-proportion="-8.84">
           <folding>
-            <element signature="e#0#35#0" expanded="true" />
+            <element signature="e#134#175#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tree/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="10" selection-start="1359" selection-end="1359" vertical-scroll-proportion="0.0">
+        <state line="28" column="10" selection-start="1475" selection-end="1475" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="5" selection-start="67" selection-end="67" vertical-scroll-proportion="0.15124555">
+        <state line="25" column="12" selection-start="340" selection-end="340" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tree/app/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="33" selection-start="792" selection-end="792" vertical-scroll-proportion="0.53817505">
+          <folding>
+            <element signature="e#14#42#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

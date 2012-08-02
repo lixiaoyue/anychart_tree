@@ -16,6 +16,11 @@ gen/
 local.properties
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+.idea/
+./tree/.idea
+>>>>>>> Stashed changes
 =======
 .idea/
 ./tree/.idea
