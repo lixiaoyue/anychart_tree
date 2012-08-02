@@ -3,10 +3,8 @@
   <component name="ChangeListManager">
     <list id="12c1d75b-3346-432a-ae85-f8c3e8ae93d1" name="Default" comment="" />
     <list default="true" id="40c5f38e-4891-40b6-ad57-ba3cfb85fccd" name="New changelist" comment="добавлено подобие бд">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tree/.idea/workspace.xml" afterPath="$PROJECT_DIR$/tree/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tree/app/admin.py" afterPath="$PROJECT_DIR$/tree/app/admin.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tree/app/models.py" afterPath="$PROJECT_DIR$/tree/app/models.py" />
     </list>
     <ignored path="anychart_tree.iws" />
@@ -43,7 +41,7 @@
       <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tree/app/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="33" selection-start="792" selection-end="792" vertical-scroll-proportion="0.53817505">
+            <state line="18" column="33" selection-start="578" selection-end="578" vertical-scroll-proportion="0.53817505">
               <folding>
                 <element signature="e#14#42#0" expanded="true" />
               </folding>
@@ -322,7 +320,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1696" height="1036" extended-state="0" />
+    <frame x="-8" y="-8" width="1696" height="1036" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32990867" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -470,7 +468,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tree/app/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="33" selection-start="792" selection-end="792" vertical-scroll-proportion="0.53817505">
+        <state line="18" column="33" selection-start="578" selection-end="578" vertical-scroll-proportion="0.53817505">
           <folding>
             <element signature="e#14#42#0" expanded="true" />
           </folding>
