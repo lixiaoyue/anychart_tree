@@ -78,6 +78,9 @@ class Release(models.Model):
     deadline = models.DateField()
     def __unicode__(self):
         return unicode(self.name)
+    class Meta:
+        verbose_name = _('release')
+        verbose_name_plural = _('release')
 
 class Requirement(models.Model):
     name = models.CharField(max_length=30)
@@ -87,6 +90,9 @@ class Requirement(models.Model):
     release = models.ForeignKey(Release)
     def __unicode__(self):
         return unicode(self.name)
+    class Meta:
+        verbose_name = _('requirement')
+        verbose_name_plural = _('requirements')
 
 class ToDoImmediately(models.Model):
     author = models.OneToOneField(People, related_name='author')
@@ -100,7 +106,9 @@ class ToDoImmediately(models.Model):
     node = models.ForeignKey(Node)
     def __unicode__(self):
         return u'%s %s' % (self.author, self.title)
-
+    class Meta:
+        verbose_name = _('to do')
+        verbose_name_plural = _('to do')
 
 class RequirementsEdition(models.Model):
     version = models.ForeignKey(VersionOfRequirement)
@@ -113,6 +121,9 @@ class RequirementsEdition(models.Model):
     edition_name = models.CharField(max_length=30)
     def __unicode__(self):
         return unicode(self.version)
+    class Meta:
+        verbose_name = _('requirement edition')
+        verbose_name_plural = _('requirement edition')
 
 class Task(models.Model):
     title = models.CharField(max_length=30)
@@ -120,6 +131,9 @@ class Task(models.Model):
     status = models.ForeignKey(Status)
     def __unicode__(self):
         return unicode(self.title)
+    class Meta:
+        verbose_name = _('task')
+        verbose_name_plural = _('tasks')
 
 class History(models.Model):
     requirement = models.ForeignKey(Requirement)
@@ -131,6 +145,9 @@ class History(models.Model):
     comment = models.TextField()
     def __unicode__(self):
         return unicode(self.comment)
+    class Meta:
+        verbose_name = _('history')
+        verbose_name_plural = _('history')
 
 class RoleInCircle(models.Model):
     requirement = models.ForeignKey(Requirement)
@@ -138,3 +155,6 @@ class RoleInCircle(models.Model):
     man = models.ManyToManyField(People)
     def __unicode__(self):
         return unicode(self.requirement)
+    class Meta:
+        verbose_name = _('role in life circle of requirement')
+        verbose_name_plural = _('role in life circle of requirement')
