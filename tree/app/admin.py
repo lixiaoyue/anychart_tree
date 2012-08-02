@@ -10,6 +10,10 @@ from app.models import Requirement
 from app.models import Task
 from app.models import History
 from app.models import RoleInCircle
+from app.models import RequirementsEdition
+from app.models import VersionOfRequirement
+from app.models import Release
+from app.models import ToDoImmediately
 from django.contrib import admin
 
 class RoleInSystemAdmin(admin.ModelAdmin):
@@ -43,6 +47,9 @@ class HistoryAdmin(admin.ModelAdmin):
 class RoleInCircleAdmin(admin.ModelAdmin):
     filter_horizontal = ('man', 'role')
 
+class VersionOfRequirementAdmin(admin.ModelAdmin):
+    list_display = ('number',)
+
 admin.site.register(RoleInSystem, RoleInSystemAdmin)
 admin.site.register(RoleInAnychart, RoleInAnychartAdmin)
 admin.site.register(People, PeopleAdmin)
@@ -55,3 +62,7 @@ admin.site.register(Requirement, RequirementAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(History, HistoryAdmin)
 admin.site.register(RoleInCircle, RoleInCircleAdmin)
+admin.site.register(RequirementsEdition)
+admin.site.register(VersionOfRequirement)
+admin.site.register(Release)
+admin.site.register(ToDoImmediately)
