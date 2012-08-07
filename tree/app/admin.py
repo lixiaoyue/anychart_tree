@@ -15,6 +15,7 @@ from app.models import VersionOfRequirement
 from app.models import Release
 from app.models import ToDoImmediately
 from django.contrib import admin
+from mptt.admin import MPTTModelAdmin
 
 class RoleInSystemAdmin(admin.ModelAdmin):
     list_display = ('name',)
@@ -32,8 +33,8 @@ class StatusAdmin(admin.ModelAdmin):
 class TypesOfRequirementAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
-class NodeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'parent')
+class NodeAdmin(MPTTModelAdmin):
+    mptt_level_indent = 20
 
 class RequirementAdmin(admin.ModelAdmin):
     list_display = ('name', 'type')
