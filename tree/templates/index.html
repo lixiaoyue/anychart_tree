@@ -10,7 +10,6 @@
     <script type="text/javascript" src="../media/js/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="../media/js/jquery.dropotron-1.0.js"></script>
     <script type="text/javascript" src="../media/js/main.js"></script>
-
     <script type="text/javascript">
         $(function() {
             $('#menu > ul').dropotron({
@@ -87,441 +86,51 @@
 <div id="page">
 <div id="sidebar">
 <div class="treeview">
-<ul>
-<li id="tree_tie_1">
-<div><p><a href="#" class="sc open_tie"></a> <span>AnyChart products</span></p></div>
-<ul>
-<li class="cl" id="tree_tie_1_1">
-<div><p><a href="#" class="sc close_tie" ></a><span>AnyChart</span> </p></div>
-<ul>
-<li>
-    <div>
-        <p>
-            <a class="open_tab" href="#" id="description_tie_1_1">Описание</a>
-        </p>
-    </div>
-</li>
-<li id="req_tie_1_1" class="cl req">
-    <div>
-        <p>
-            <a href="#" class="sc close_req" ></a>  <span>Требования</span>
-        </p>
-    </div>
+    {% load mptt_tags %}
     <ul>
-        <li>
-            <div>
-                <p>
-                    <a href="#" id="business_1_tie_1_1" class="open_tab business">Требование соответствия дизайну.</a>
-                </p>
-            </div>
-        </li>
-        <li>
-            <div>
-                <p>
-                    <a href="#" id="functional_1_tie_1_1" class="open_tab functional">Об использовании css стилей.</a>
-                </p>
-            </div>
-        </li>
-    </ul>
-</li>
-<li id="tree_tie_1_1_1" class="cl">
-    <div><p><a href="#" class="sc close_tie"></a><span>Guages</span></p></div>
-    <ul>
-        <li>
-            <div>
-                <p>
-                    <a href="#" class="open_tab" id="description_tie_1_1_1">Описание</a>
-                </p>
-            </div>
-        </li>
-        <li id="req_tie_1_1_1" class="cl req">
-            <div>
-                <p><a href="#" class="sc close_req"></a> <span>Требования</span></p>
-            </div>
+        {% recursetree nodes %}
+        <li id="tree_tie_{{ node.id }}" class="cl">
+            <div><p><a href="#" class="sc close_tie"></a> <span>{{ node.name }}</span></p></div>
             <ul>
                 <li>
                     <div>
                         <p>
-                            <a href="#" id="business_1_tie_1_1_1" class="open_tab business">Требование соответствия дизайну.</a>
+                            <a class="open_tab" href="#" id="description_tie_{{ node.id }}">Описание</a>
                         </p>
                     </div>
                 </li>
-                <li>
+                <li id="req_tie_{{ node.id }}" class="cl req">
                     <div>
                         <p>
-                            <a href="#" id="functional_1_tie_1_1_1"  class="open_tab functional">Об использовании css стилей.</a>
+                            <a href="#" class="sc close_req"></a>  <span class="right_active req">Требования</span>
                         </p>
                     </div>
+                    <ul>
+                        <!--<li>-->
+                            <!--<div>-->
+                                <!--<p>-->
+                                    <!--<a href="#" id="business_1_tie_{{ node.id }}" class="open_tab business">Требование соответствия дизайну.</a>-->
+                                <!--</p>-->
+                            <!--</div>-->
+                        <!--</li>-->
+                    </ul>
                 </li>
-            </ul>
-        </li>
 
-        <li id="tree_tie_1_1_1_1" class="cl">
-            <div>
-                <p>
-                    <a href="#" class="sc close_tie" ></a><span>Circular guages</span>
-                </p>
-            </div>
-            <ul>
+            {% if not node.is_leaf_node %}
+                    {{ children }}
+            {% endif %}
                 <li>
                     <div>
                         <p>
-                            <a href="#" class="open_tab" id="description_tie_1_1_1_1">Описание</a>
-                        </p>
-                    </div>
-                </li>
-                <li id="req_tie_1_1_1_1" class="cl req">
-                    <div>
-                        <p>
-                            <a href="#" class="sc close_req"></a><span>Требования</span>
-                        </p>
-                    </div>
-                    <ul>
-                        <li>
-                            <div>
-                                <p>
-                                    <a href="#" id="business_1_tie_1_1_1_1" class="open_tab business">Требование соответствия дизайну.</a>
-                                </p>
-                            </div>
-                        </li>
-                        <li>
-                            <div>
-                                <p>
-                                    <a href="#" id="functional_1_tie_1_1_1_1"  class="functional open_tab">Об использовании css стилей.</a>
-                                </p>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <div>
-                        <p>
-                            <a href="#" id="notification_tie_1_1_1_1" class="notification open_tab">Замечания</a>
+                            <a href="#" id="notification_tie_{{ node.id }}" class="open_tab notification">Замечания</a>
                         </p>
                     </div>
                 </li>
             </ul>
         </li>
-        <li id="tree_tie_1_1_1_2" class="cl">
-            <div>
-                <p>
-                    <a href="#" class="sc close_tie" ></a><span>Vertical guages</span>
-                </p>
-            </div>
-            <ul>
-                <li>
-                    <div>
-                        <p>
-                            <a href="#" class="open_tab" id="description_tie_1_1_1_2">Описание</a>
-                        </p>
-                    </div>
-                </li>
-                <li class="cl req" id="reg_tie_1_1_1_2">
-                    <div>
-                        <p>
-                            <a href="#" class="sc close_req" ></a><span>Требования</span>
-                        </p>
-                    </div>
-                    <ul>
-                        <li>
-                            <div>
-                                <p>
-                                    <a href="#" id="business_1_tie_1_1_1_2"  class="open_tab business">Требование соответствия дизайну.</a>
-                                </p>
-                            </div>
-                        </li>
-                        <li>
-                            <div>
-                                <p>
-                                    <a href="#" id="functional_1_tie_1_1_1_2"  class="open_tab functional">Об использовании css стилей.</a>
-                                </p>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <div>
-                        <p>
-                            <a href="#" id="notification_tie_1_1_1_2" class="notification open_tab">Замечания</a>
-                        </p>
-                    </div>
-                </li>
-            </ul>
-        </li>
-        <li id="tree_tie_1_1_1_3"  class="cl">
-            <div>
-                <p>
-                    <a href="#" class="sc close_tie" ></a><span> Horizontal guages</span>
-                </p>
-            </div>
-            <ul>
-                <li>
-                    <div>
-                        <p>
-                            <a href="#" class="open_tab" id="description_tie_1_1_1_3">Описание</a>
-                        </p>
-                    </div>
-                </li>
-                <li class="cl req" id="req_tie_1_1_1_3">
-                    <div>
-                        <p>
-                            <a href="#" class="sc close_req"></a> <span>Требования</span>
-                        </p>
-                    </div>
-                    <ul>
-                        <li>
-                            <div>
-                                <p>
-                                    <a href="#" id="business_1_tie_1_1_1_3" class="open_tab business">Требование соответствия дизайну.</a>
-                                </p>
-                            </div>
-                        </li>
-                        <li>
-                            <div>
-                                <p>
-                                    <a href="#" id="functional_1_tie_1_1_1_3"  class="open_tab functional">Об использовании css стилей.</a>
-                                </p>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <div>
-                        <p>
-                            <a href="#" id="notification_tie_1_1_1_3" class="notification open_tab">Замечания</a>
-                        </p>
-                    </div>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <div>
-                <p>
-                    <a href="#" id="notification_tie_1_1_1" class="notification open_tab">Замечания</a>
-                </p>
-            </div>
-        </li>
+        {% endrecursetree %}
     </ul>
-</li>
-<li id="tree_tie_1_1_2" class="cl">
 
-    <div><p><a href="#" class="sc close_tie" ></a><span>Pie and Donut Chart</span></p></div>
-    <ul>
-        <li>
-            <div>
-                <p>
-                    <a class="open_tab" id="description_tie_1_1_2" href="#">Описание</a>
-                </p>
-            </div>
-        </li>
-        <li class="cl req" id="req_tie_1_1_2">
-            <div>
-                <p>
-                    <a href="#" class="sc close_req"></a><span>Требования</span>
-                </p>
-            </div>
-            <ul>
-                <li>
-                    <div>
-                        <p>
-                            <a href="#" id="business_1_tie_1_1_2" class="business open_tab">Требование соответствия дизайну.</a>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p>
-                            <a href="#" id="functional_1_tie_1_1_2" class="functional open_tab">Об использовании css стилей.</a>
-                        </p>
-                    </div>
-                </li>
-            </ul>
-        </li>
-
-        <li class="cl" id="tree_tie_1_1_2_1">
-            <div>
-                <p>
-                    <a href="#" class="sc close_tie"></a><span>Pie Chart</span>
-                </p>
-            </div>
-            <ul>
-                <li>
-                    <div>
-                        <p>
-                            <a href="#" class="open_tab" id="description_tie_1_1_2_1">Описание</a>
-                        </p>
-                    </div>
-                </li>
-                <li class="cl req" id="req_tie_1_1_2_1">
-                    <div>
-                        <p>
-                            <a href="#" class="sc close_req" ></a><span>Требования</span>
-                        </p>
-                    </div>
-                    <ul>
-                        <li>
-                            <div>
-                                <p>
-                                    <a href="#" id="business_1_tie_1_1_2_1" class="open_tab business">Требование соответствия дизайну.</a>
-                                </p>
-                            </div>
-                        </li>
-                        <li>
-                            <div>
-                                <p>
-                                    <a href="#" id="functional_1_tie_1_1_2_1"  class="functional open_tab" >Об использовании css стилей.</a>
-                                </p>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <div>
-                        <p>
-                            <a href="#" id="notification_tie_1_1_2_1"  class="notification open_tab">Замечания</a>
-                        </p>
-                    </div>
-                </li>
-            </ul>
-        </li>
-        <li class="cl" id="tree_tie_1_1_2_2">
-            <div>
-                <p>
-                    <a href="#" class="sc close_tie" ></a><span>Donut Chart</span>
-                </p>
-            </div>
-            <ul>
-                <li>
-                    <div>
-                        <p>
-                            <a href="#" id="description_tie_1_1_2_2" class="open_tab">Описание</a>
-                        </p>
-                    </div>
-                </li>
-                <li class="cl req" id="req_tie_1_1_2_2">
-                    <div>
-                        <p>
-                            <a href="#" class="sc close_req" ></a><span>Требования</span>
-                        </p>
-                    </div>
-                    <ul>
-                        <li>
-                            <div>
-                                <p>
-                                    <a href="#" id="business_1_tie_1_1_2_2"  class="business open_tab">Требование соответствия дизайну.</a>
-                                </p>
-                            </div>
-                        </li>
-                        <li>
-                            <div>
-                                <p>
-                                    <a href="#" id="functional_1_tie_1_1_2_2" class="functional open_tab">Об использовании css стилей.</a>
-                                </p>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <div>
-                        <p>
-                            <a href="#" id="notification_tie_1_1_2_2"  class="notification open_tab">Замечания</a>
-                        </p>
-                    </div>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <div>
-                <p>
-                    <a href="#" id="notification_tie_1_1_2"  class=" open_tab notification">Замечания</a>
-                </p>
-            </div>
-        </li>
-    </ul>
-</li>
-<li>
-    <div>
-        <p>
-            <a href="#" id="notification_tie_1_1" class="open_tab notification">Замечания</a>
-        </p>
-    </div>
-</li>
-</ul>
-</li>
-<li class="cl" id="tree_tie_1_2">
-    <div>
-        <p>
-            <a href="#" class="sc close_tie" ></a> <span>AnyStock</span>
-        </p>
-    </div>
-    <ul>
-        <li>
-            <div>
-                <p>
-                    <a href="#" id="description_tie_1_2" class="open_tab"> Описание</a>
-                </p>
-            </div>
-        </li>
-        <li class="cl req" id="req_tie_1_2">
-            <div>
-                <p>
-                    <a href="#" class="sc close_req" ></a><span>Требования</span>
-                </p>
-            </div>
-            <ul>
-                <li>
-                    <div>
-                        <p>
-                            <a href="#" id="business_1_tie_1_2" class="open_tab business">Требование соответствия дизайну.</a>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p>
-                            <a href="#" id="functional_1_tie_1_2" class="functional open_tab">Об использовании css стилей.</a>
-                        </p>
-                    </div>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <div>
-                <p>
-                    <a href="#" id="notification_tie_1_2"  class="open_tab notification">Замечания</a>
-                </p>
-            </div>
-        </li>
-    </ul>
-</li>
-<li>
-    <div>
-        <p>
-            <a href="#" class="open_tab" id="system_1">О системе "AnyChart requirements tree"</a>
-        </p>
-    </div>
-</li>
-<li>
-    <div>
-        <p>
-            <a href="#" class="open_tab"  id="user_guide">Заметки пользователя системы</a>
-        </p>
-    </div>
-</li>
-<li>
-    <div>
-        <p>
-            <a href="#" class="open_tab notification" id="system_notices" >Замечания по системе</a>
-        </p>
-    </div>
-</li>
-</ul>
-</li>
-{{nodes|unordered_list}}
-{% for i in nodes%}
-<li>{{i.id}} - {{i.name}}</li>
-{% endfor%}
-</ul>
 </div>
 </div>
 <div id="content">

@@ -86,7 +86,7 @@ class Release(models.Model):
         verbose_name_plural = _('release')
 
 class Requirement(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=200)
     type = models.ForeignKey(TypesOfRequirement)
     node = models.ForeignKey(Node, blank=True,null=True)
     business_requirement = models.OneToOneField('self', blank=True, null=True)
