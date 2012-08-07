@@ -1,6 +1,7 @@
 #coding=utf-8
-from django.db import models
 from django.utils.translation import ugettext as _
+from mptt.models import MPTTModel, TreeForeignKey
+from django.db import models
 
 class RoleInSystem(models.Model):
     name = models.CharField(max_length=30)
@@ -43,12 +44,14 @@ class TypesOfRequirement(models.Model):
         verbose_name = _('type of requirement')
         verbose_name_plural = _('types of requirement')
 
-class Node(models.Model):
+class Node(MPTTModel):
     name = models.CharField(max_length=30)
     description = models.TextField()
-    parent = models.ForeignKey('self', blank=True, null=True)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
     def __unicode__(self):
-        return unicode(self.name)
+        return self.name
+    class MPTTMeta:
+        order_insertion_by = ['name']
 
 class TypeOfNodesRelationship(models.Model):
     name = models.CharField(max_length=30)
@@ -138,10 +141,10 @@ class Task(models.Model):
 class History(models.Model):
     requirement = models.ForeignKey(Requirement)
     version = models.ForeignKey(VersionOfRequirement)
-    task = models.OneToOneField(Task)
-    status = models.OneToOneField(Status)
+    task = models.ForeignKey(Task)
+    status = models.ForeignKey(Status)
     time = models.DateTimeField()
-    man = models.OneToOneField(People)
+    man = models.ForeignKey(People)
     comment = models.TextField()
     def __unicode__(self):
         return unicode(self.comment)
