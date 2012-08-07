@@ -517,6 +517,10 @@
 </li>
 </ul>
 </li>
+{{nodes|unordered_list}}
+{% for i in nodes%}
+<li>{{i.id}} - {{i.name}}</li>
+{% endfor%}
 </ul>
 </div>
 </div>
