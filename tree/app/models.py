@@ -121,7 +121,7 @@ class RequirementsEdition(models.Model):
     file = models.FileField(upload_to="files", blank=True, null=True)
     picture = models.ImageField(upload_to="images", blank=True, null=True)
     deadline = models.DateField()
-    edition_name = models.CharField(max_length=30)
+    edition_name = models.TextField()
     def __unicode__(self):
         return unicode(self.version)
     class Meta:
