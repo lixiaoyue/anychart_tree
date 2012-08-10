@@ -1,9 +1,8 @@
--- MySQL dump 10.13  Distrib 6.0.6-alpha, for Win32 (ia32)
+-- MySQL dump 10.13  Distrib 5.5.25, for Win64 (x86)
 --
--- Host: 127.0.0.1    Database: anychart_tree_db
+-- Host: localhost    Database: anychart_tree_db
 -- ------------------------------------------------------
--- Server version	6.0.6-alpha-community
-USE anychart_tree_db;
+-- Server version	5.5.25
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -21,8 +20,8 @@ USE anychart_tree_db;
 --
 
 DROP TABLE IF EXISTS `app_history`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `requirement_id` int(11) NOT NULL,
@@ -33,18 +32,18 @@ CREATE TABLE `app_history` (
   `man_id` int(11) NOT NULL,
   `comment` longtext NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `task_id` (`task_id`),
-  UNIQUE KEY `status_id` (`status_id`),
-  UNIQUE KEY `man_id` (`man_id`),
   KEY `app_history_6657a0ce` (`requirement_id`),
   KEY `app_history_10f4f63` (`version_id`),
+  KEY `app_history_3ff01bab` (`task_id`),
+  KEY `app_history_44224078` (`status_id`),
+  KEY `app_history_3c7b9ec1` (`man_id`),
   CONSTRAINT `man_id_refs_id_d75431d` FOREIGN KEY (`man_id`) REFERENCES `app_people` (`id`),
   CONSTRAINT `requirement_id_refs_id_60576146` FOREIGN KEY (`requirement_id`) REFERENCES `app_requirement` (`id`),
   CONSTRAINT `status_id_refs_id_612acdd4` FOREIGN KEY (`status_id`) REFERENCES `app_status` (`id`),
   CONSTRAINT `task_id_refs_id_656e8f41` FOREIGN KEY (`task_id`) REFERENCES `app_task` (`id`),
   CONSTRAINT `version_id_refs_id_24ff9808` FOREIGN KEY (`version_id`) REFERENCES `app_versionofrequirement` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_history`
@@ -52,6 +51,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_history` WRITE;
 /*!40000 ALTER TABLE `app_history` DISABLE KEYS */;
+INSERT INTO `app_history` VALUES (1,2,1,1,2,'2012-08-07 08:08:39',1,'срочно переделать второй абзац!'),(2,3,1,2,1,'2012-09-13 08:13:41',3,'проверь, пожалуйста, орфографию');
 /*!40000 ALTER TABLE `app_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -60,18 +60,26 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_node`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_node` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   `description` longtext NOT NULL,
   `parent_id` int(11) DEFAULT NULL,
+  `lft` int(10) unsigned NOT NULL,
+  `rght` int(10) unsigned NOT NULL,
+  `tree_id` int(10) unsigned NOT NULL,
+  `level` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `app_node_63f17a16` (`parent_id`),
+  KEY `app_node_42b06ff6` (`lft`),
+  KEY `app_node_6eabc1a6` (`rght`),
+  KEY `app_node_102f80d8` (`tree_id`),
+  KEY `app_node_2a8f42e8` (`level`),
   CONSTRAINT `parent_id_refs_id_100cc283` FOREIGN KEY (`parent_id`) REFERENCES `app_node` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_node`
@@ -79,7 +87,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_node` WRITE;
 /*!40000 ALTER TABLE `app_node` DISABLE KEYS */;
-INSERT INTO `app_node` VALUES (2,'AnyChart','самый главный узел',NULL),(3,'Gauges','дочрний узел самого главного узла',2),(4,'vertical gauges','дочерний узел дочернего узла самого главного узла',3),(5,'circular gauges','брат дочернего узла дочернего узла самого главного узла',3),(6,'Pie','брат дочернего узла самого главного узла',2);
+INSERT INTO `app_node` VALUES (1,'anychart','самый главный узел',NULL,1,14,1,0),(2,'gauges','дочерний узел самого главного узла',1,2,9,1,1),(3,'pie','брат дочернего узла самого главного узла',1,10,13,1,1),(4,'vertical gauges','дочерний узел дочернего узла самого главного узла',2,7,8,1,2),(5,'circular gauges','брат дочернего узла дочернего узла самого главного узла',2,3,6,1,2),(6,'labels','дочерний узл дочернего узла дочернего узла самого главного узла',5,4,5,1,3),(7,'labels','дочерний узел дочернего узла самого главного узла',3,11,12,1,2);
 /*!40000 ALTER TABLE `app_node` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,8 +96,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_nodesrelationship`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_nodesrelationship` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `first_node_id` int(11) NOT NULL,
@@ -99,11 +107,11 @@ CREATE TABLE `app_nodesrelationship` (
   UNIQUE KEY `first_node_id` (`first_node_id`),
   UNIQUE KEY `second_node_id` (`second_node_id`),
   UNIQUE KEY `type_of_relation_id` (`type_of_relation_id`),
-  CONSTRAINT `type_of_relation_id_refs_id_7a05ef82` FOREIGN KEY (`type_of_relation_id`) REFERENCES `app_typeofnodesrelationship` (`id`),
   CONSTRAINT `first_node_id_refs_id_147b46ed` FOREIGN KEY (`first_node_id`) REFERENCES `app_node` (`id`),
-  CONSTRAINT `second_node_id_refs_id_147b46ed` FOREIGN KEY (`second_node_id`) REFERENCES `app_node` (`id`)
+  CONSTRAINT `second_node_id_refs_id_147b46ed` FOREIGN KEY (`second_node_id`) REFERENCES `app_node` (`id`),
+  CONSTRAINT `type_of_relation_id_refs_id_7a05ef82` FOREIGN KEY (`type_of_relation_id`) REFERENCES `app_typeofnodesrelationship` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_nodesrelationship`
@@ -119,14 +127,14 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_people`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_people` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_people`
@@ -134,7 +142,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_people` WRITE;
 /*!40000 ALTER TABLE `app_people` DISABLE KEYS */;
-INSERT INTO `app_people` VALUES (1,'Борис Палыч'),(2,'Василий Кукуев'),(3,'Абрыхджам Магум');
+INSERT INTO `app_people` VALUES (1,'Шахмин Андрей'),(2,'Бацуев Александр'),(3,'Любушкин Роман'),(4,'Воробьёва Ольга'),(5,'Батырева Александра'),(6,'Родионов Виталий'),(7,'Саух Антон');
 /*!40000 ALTER TABLE `app_people` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -143,8 +151,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_people_role_in_anychart`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_people_role_in_anychart` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `people_id` int(11) NOT NULL,
@@ -155,8 +163,8 @@ CREATE TABLE `app_people_role_in_anychart` (
   KEY `app_people_role_in_anychart_5735280f` (`roleinanychart_id`),
   CONSTRAINT `people_id_refs_id_4c8bb6be` FOREIGN KEY (`people_id`) REFERENCES `app_people` (`id`),
   CONSTRAINT `roleinanychart_id_refs_id_81abb00` FOREIGN KEY (`roleinanychart_id`) REFERENCES `app_roleinanychart` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_people_role_in_anychart`
@@ -164,7 +172,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_people_role_in_anychart` WRITE;
 /*!40000 ALTER TABLE `app_people_role_in_anychart` DISABLE KEYS */;
-INSERT INTO `app_people_role_in_anychart` VALUES (1,1,2),(2,2,3),(3,3,1);
+INSERT INTO `app_people_role_in_anychart` VALUES (1,1,2),(2,2,1),(3,3,1),(4,4,3),(5,5,3),(6,6,3),(7,7,1);
 /*!40000 ALTER TABLE `app_people_role_in_anychart` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,16 +181,16 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_release`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_release` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `number` double NOT NULL,
   `name` varchar(30) NOT NULL,
   `deadline` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_release`
@@ -190,7 +198,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_release` WRITE;
 /*!40000 ALTER TABLE `app_release` DISABLE KEYS */;
-INSERT INTO `app_release` VALUES (1,1,'самый первый релиз','2012-08-31');
+INSERT INTO `app_release` VALUES (1,1,'мишутка','2012-09-30'),(2,1.1,'михаил','2012-10-31');
 /*!40000 ALTER TABLE `app_release` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -199,11 +207,11 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_requirement`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_requirement` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) NOT NULL,
+  `name` varchar(200) NOT NULL,
   `type_id` int(11) NOT NULL,
   `node_id` int(11) DEFAULT NULL,
   `business_requirement_id` int(11) DEFAULT NULL,
@@ -217,8 +225,8 @@ CREATE TABLE `app_requirement` (
   CONSTRAINT `node_id_refs_id_316ccd9f` FOREIGN KEY (`node_id`) REFERENCES `app_node` (`id`),
   CONSTRAINT `release_id_refs_id_6adac0ef` FOREIGN KEY (`release_id`) REFERENCES `app_release` (`id`),
   CONSTRAINT `type_id_refs_id_2fbc17b0` FOREIGN KEY (`type_id`) REFERENCES `app_typesofrequirement` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_requirement`
@@ -226,7 +234,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_requirement` WRITE;
 /*!40000 ALTER TABLE `app_requirement` DISABLE KEYS */;
-INSERT INTO `app_requirement` VALUES (1,'бт №1',3,3,NULL,1),(2,'бт №2',3,3,NULL,1),(3,'бт №3',3,4,NULL,1),(4,'бт №4',3,5,NULL,1),(5,'бт №5',3,5,NULL,1),(6,'бт №6',3,6,NULL,1),(7,'бт №7',3,6,NULL,1),(8,'фт №1',2,NULL,1,1),(9,'фт №2',2,NULL,2,1),(10,'фт №3',2,NULL,3,1),(11,'фт №4',2,NULL,4,1),(12,'фт №5',2,NULL,5,1),(13,'фт №6',2,NULL,6,1),(14,'фт №7',2,NULL,7,1);
+INSERT INTO `app_requirement` VALUES (2,'БТ - 1',1,2,NULL,1),(3,'БТ - 2',1,5,NULL,1),(4,'БТ - 3',1,6,NULL,1),(5,'БТ - 4',1,4,NULL,1),(6,'БТ - 5',1,4,NULL,1),(7,'БТ - 6',1,3,NULL,1),(8,'БТ - 7',1,7,NULL,1),(9,'БТ - 8',1,7,NULL,2),(10,'ФТ - 1',2,NULL,2,1),(11,'ФТ - 2',2,NULL,3,1),(12,'ФТ - 3',2,NULL,4,1),(13,'ФТ - 4',2,NULL,5,1),(14,'ФТ - 5',2,NULL,6,1),(15,'ФТ - 6',2,NULL,7,1),(16,'ФТ - 7',2,NULL,8,1),(17,'ФТ - 8',2,NULL,9,1);
 /*!40000 ALTER TABLE `app_requirement` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,25 +243,25 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_requirementsedition`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_requirementsedition` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `version_id` int(11) NOT NULL,
   `requirement_id` int(11) NOT NULL,
   `name_of_requirement` varchar(30) NOT NULL,
   `description_of_requirement` longtext NOT NULL,
-  `file` varchar(100) NOT NULL,
-  `picture` varchar(100) NOT NULL,
+  `file` varchar(100) DEFAULT NULL,
+  `picture` varchar(100) DEFAULT NULL,
   `deadline` date NOT NULL,
-  `edition_name` varchar(30) NOT NULL,
+  `edition_name` longtext NOT NULL,
   PRIMARY KEY (`id`),
   KEY `app_requirementsedition_10f4f63` (`version_id`),
   KEY `app_requirementsedition_6657a0ce` (`requirement_id`),
   CONSTRAINT `requirement_id_refs_id_7e5ee194` FOREIGN KEY (`requirement_id`) REFERENCES `app_requirement` (`id`),
   CONSTRAINT `version_id_refs_id_7d508676` FOREIGN KEY (`version_id`) REFERENCES `app_versionofrequirement` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_requirementsedition`
@@ -261,7 +269,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_requirementsedition` WRITE;
 /*!40000 ALTER TABLE `app_requirementsedition` DISABLE KEYS */;
-INSERT INTO `app_requirementsedition` VALUES (1,1,1,'требование по тому-то и тому-т','делать так-то и так-то, а не так и так под угрозой отрыва рук','','','2012-08-31','1');
+INSERT INTO `app_requirementsedition` VALUES (1,1,2,'требование для того-то','надо, чтобы всё работало! иначе атата','','','2012-08-07','исправлена грамматическая ошибка в слове \"требования\"'),(2,1,3,'ещё требование','опять надо, чтобы всё работало!','','','2012-08-07','почему требование не в стихах?'),(3,1,4,'для души','описание основных постулатов нашей компании касательно данного узла','','','2012-08-08','рифма-не рифма, но белый стих тоже ничего. больше не буду переделывать.');
 /*!40000 ALTER TABLE `app_requirementsedition` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -270,14 +278,14 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_roleinanychart`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_roleinanychart` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_roleinanychart`
@@ -285,7 +293,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_roleinanychart` WRITE;
 /*!40000 ALTER TABLE `app_roleinanychart` DISABLE KEYS */;
-INSERT INTO `app_roleinanychart` VALUES (1,'develop'),(2,'начальство'),(3,'qa');
+INSERT INTO `app_roleinanychart` VALUES (1,'develop'),(2,'начальство'),(3,'QA'),(4,'sales');
 /*!40000 ALTER TABLE `app_roleinanychart` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -294,16 +302,16 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_roleincircle`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_roleincircle` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `requirement_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `app_roleincircle_6657a0ce` (`requirement_id`),
   CONSTRAINT `requirement_id_refs_id_1f325230` FOREIGN KEY (`requirement_id`) REFERENCES `app_requirement` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_roleincircle`
@@ -311,7 +319,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_roleincircle` WRITE;
 /*!40000 ALTER TABLE `app_roleincircle` DISABLE KEYS */;
-INSERT INTO `app_roleincircle` VALUES (1,1),(2,1),(3,1),(4,2),(5,2),(6,2),(7,8),(8,8);
+INSERT INTO `app_roleincircle` VALUES (1,2),(2,2),(3,2),(4,2),(5,3),(6,3),(7,3),(8,3),(9,4),(10,4),(11,4),(12,4);
 /*!40000 ALTER TABLE `app_roleincircle` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -320,8 +328,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_roleincircle_man`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_roleincircle_man` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `roleincircle_id` int(11) NOT NULL,
@@ -332,8 +340,8 @@ CREATE TABLE `app_roleincircle_man` (
   KEY `app_roleincircle_man_3aa854a1` (`people_id`),
   CONSTRAINT `people_id_refs_id_5e9be456` FOREIGN KEY (`people_id`) REFERENCES `app_people` (`id`),
   CONSTRAINT `roleincircle_id_refs_id_3c7557b4` FOREIGN KEY (`roleincircle_id`) REFERENCES `app_roleincircle` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_roleincircle_man`
@@ -341,7 +349,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_roleincircle_man` WRITE;
 /*!40000 ALTER TABLE `app_roleincircle_man` DISABLE KEYS */;
-INSERT INTO `app_roleincircle_man` VALUES (1,1,1),(2,2,2),(3,3,2),(4,4,2),(5,5,3),(6,6,3),(7,7,2),(8,8,3);
+INSERT INTO `app_roleincircle_man` VALUES (1,1,1),(2,2,2),(3,3,2),(4,4,4),(5,5,3),(6,6,6),(7,7,2),(8,8,4),(9,8,5),(10,9,2),(11,9,6),(12,10,1),(13,11,3),(14,12,4);
 /*!40000 ALTER TABLE `app_roleincircle_man` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -350,8 +358,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_roleincircle_role`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_roleincircle_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `roleincircle_id` int(11) NOT NULL,
@@ -362,8 +370,8 @@ CREATE TABLE `app_roleincircle_role` (
   KEY `app_roleincircle_role_498a662e` (`roleinsystem_id`),
   CONSTRAINT `roleincircle_id_refs_id_3dd11e4d` FOREIGN KEY (`roleincircle_id`) REFERENCES `app_roleincircle` (`id`),
   CONSTRAINT `roleinsystem_id_refs_id_1c34ea24` FOREIGN KEY (`roleinsystem_id`) REFERENCES `app_roleinsystem` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_roleincircle_role`
@@ -371,7 +379,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_roleincircle_role` WRITE;
 /*!40000 ALTER TABLE `app_roleincircle_role` DISABLE KEYS */;
-INSERT INTO `app_roleincircle_role` VALUES (1,1,3),(2,2,2),(3,3,1),(4,4,3),(5,5,1),(6,6,2),(7,7,2),(8,8,1);
+INSERT INTO `app_roleincircle_role` VALUES (1,1,1),(2,2,2),(3,3,3),(4,4,4),(5,5,1),(6,6,2),(7,7,3),(8,8,4),(9,9,1),(10,10,2),(11,11,3),(12,12,4);
 /*!40000 ALTER TABLE `app_roleincircle_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -380,14 +388,14 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_roleinsystem`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_roleinsystem` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_roleinsystem`
@@ -395,7 +403,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_roleinsystem` WRITE;
 /*!40000 ALTER TABLE `app_roleinsystem` DISABLE KEYS */;
-INSERT INTO `app_roleinsystem` VALUES (1,'исполнитель'),(2,'контролер'),(3,'автор');
+INSERT INTO `app_roleinsystem` VALUES (1,'автор'),(2,'корректировщик'),(3,'исполнитель'),(4,'тестировщик');
 /*!40000 ALTER TABLE `app_roleinsystem` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -404,14 +412,14 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_status`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_status` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_status`
@@ -419,7 +427,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_status` WRITE;
 /*!40000 ALTER TABLE `app_status` DISABLE KEYS */;
-INSERT INTO `app_status` VALUES (1,'не проверено'),(2,'на доработке'),(3,'утверждён');
+INSERT INTO `app_status` VALUES (1,'не проверено'),(2,'на доработке'),(3,'утверждено');
 /*!40000 ALTER TABLE `app_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -428,8 +436,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_task`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_task` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(30) NOT NULL,
@@ -440,8 +448,8 @@ CREATE TABLE `app_task` (
   KEY `app_task_44224078` (`status_id`),
   CONSTRAINT `requirement_id_refs_id_10bdc1c6` FOREIGN KEY (`requirement_id`) REFERENCES `app_requirement` (`id`),
   CONSTRAINT `status_id_refs_id_773a1708` FOREIGN KEY (`status_id`) REFERENCES `app_status` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_task`
@@ -449,6 +457,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_task` WRITE;
 /*!40000 ALTER TABLE `app_task` DISABLE KEYS */;
+INSERT INTO `app_task` VALUES (1,'переделать',2,2),(2,'проверить',3,1);
 /*!40000 ALTER TABLE `app_task` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -457,8 +466,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_todoimmediately`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_todoimmediately` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `author_id` int(11) NOT NULL,
@@ -477,8 +486,8 @@ CREATE TABLE `app_todoimmediately` (
   CONSTRAINT `author_id_refs_id_7070c435` FOREIGN KEY (`author_id`) REFERENCES `app_people` (`id`),
   CONSTRAINT `implementer_id_refs_id_7070c435` FOREIGN KEY (`implementer_id`) REFERENCES `app_people` (`id`),
   CONSTRAINT `node_id_refs_id_5eb4424e` FOREIGN KEY (`node_id`) REFERENCES `app_node` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_todoimmediately`
@@ -486,7 +495,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_todoimmediately` WRITE;
 /*!40000 ALTER TABLE `app_todoimmediately` DISABLE KEYS */;
-INSERT INTO `app_todoimmediately` VALUES (16,1,3,'срочно сделать что-то','вот его и его','2012-08-01 07:22:14','','2012-08-01 07:22:15',0,3);
+INSERT INTO `app_todoimmediately` VALUES (1,6,5,'срочно','срочно тестируй! делай хоть что-то полезное!','2012-09-15 08:14:57','','2012-10-19 08:15:05',0,4),(2,7,3,'важное дело','пошли играть в диаблу?','2012-09-14 08:16:12','','2012-09-15 08:16:32',0,1);
 /*!40000 ALTER TABLE `app_todoimmediately` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -495,15 +504,15 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_typeofnodesrelationship`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_typeofnodesrelationship` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   `description` longtext NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_typeofnodesrelationship`
@@ -519,14 +528,14 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_typesofrequirement`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_typesofrequirement` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_typesofrequirement`
@@ -534,7 +543,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_typesofrequirement` WRITE;
 /*!40000 ALTER TABLE `app_typesofrequirement` DISABLE KEYS */;
-INSERT INTO `app_typesofrequirement` VALUES (2,'функциональное'),(3,'бизнес-требование');
+INSERT INTO `app_typesofrequirement` VALUES (1,'бизнес-требование'),(2,'функциональное');
 /*!40000 ALTER TABLE `app_typesofrequirement` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -543,14 +552,14 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `app_versionofrequirement`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_versionofrequirement` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `number` double NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_versionofrequirement`
@@ -558,7 +567,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `app_versionofrequirement` WRITE;
 /*!40000 ALTER TABLE `app_versionofrequirement` DISABLE KEYS */;
-INSERT INTO `app_versionofrequirement` VALUES (1,1),(2,2.3);
+INSERT INTO `app_versionofrequirement` VALUES (1,1);
 /*!40000 ALTER TABLE `app_versionofrequirement` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -567,15 +576,15 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `auth_group`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `auth_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(80) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `auth_group`
@@ -591,8 +600,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `auth_group_permissions`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `auth_group_permissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` int(11) NOT NULL,
@@ -604,7 +613,7 @@ CREATE TABLE `auth_group_permissions` (
   CONSTRAINT `group_id_refs_id_3cea63fe` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
   CONSTRAINT `permission_id_refs_id_5886d21f` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `auth_group_permissions`
@@ -620,8 +629,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `auth_permission`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `auth_permission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
@@ -632,7 +641,7 @@ CREATE TABLE `auth_permission` (
   KEY `auth_permission_1bb8f392` (`content_type_id`),
   CONSTRAINT `content_type_id_refs_id_728de91f` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `auth_permission`
@@ -640,7 +649,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `auth_permission` WRITE;
 /*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can add permission',2,'add_permission'),(5,'Can change permission',2,'change_permission'),(6,'Can delete permission',2,'delete_permission'),(7,'Can add group',3,'add_group'),(8,'Can change group',3,'change_group'),(9,'Can delete group',3,'delete_group'),(10,'Can add user',4,'add_user'),(11,'Can change user',4,'change_user'),(12,'Can delete user',4,'delete_user'),(13,'Can add content type',5,'add_contenttype'),(14,'Can change content type',5,'change_contenttype'),(15,'Can delete content type',5,'delete_contenttype'),(16,'Can add session',6,'add_session'),(17,'Can change session',6,'change_session'),(18,'Can delete session',6,'delete_session'),(19,'Can add site',7,'add_site'),(20,'Can change site',7,'change_site'),(21,'Can delete site',7,'delete_site'),(22,'Can add role in system',8,'add_roleinsystem'),(23,'Can change role in system',8,'change_roleinsystem'),(24,'Can delete role in system',8,'delete_roleinsystem'),(25,'Can add role in anychart',9,'add_roleinanychart'),(26,'Can change role in anychart',9,'change_roleinanychart'),(27,'Can delete role in anychart',9,'delete_roleinanychart'),(28,'Can add people',10,'add_people'),(29,'Can change people',10,'change_people'),(30,'Can delete people',10,'delete_people'),(31,'Can add status',11,'add_status'),(32,'Can change status',11,'change_status'),(33,'Can delete status',11,'delete_status'),(34,'Can add types of requirement',12,'add_typesofrequirement'),(35,'Can change types of requirement',12,'change_typesofrequirement'),(36,'Can delete types of requirement',12,'delete_typesofrequirement'),(37,'Can add node',13,'add_node'),(38,'Can change node',13,'change_node'),(39,'Can delete node',13,'delete_node'),(40,'Can add type of nodes relationship',14,'add_typeofnodesrelationship'),(41,'Can change type of nodes relationship',14,'change_typeofnodesrelationship'),(42,'Can delete type of nodes relationship',14,'delete_typeofnodesrelationship'),(43,'Can add nodes relationship',15,'add_nodesrelationship'),(44,'Can change nodes relationship',15,'change_nodesrelationship'),(45,'Can delete nodes relationship',15,'delete_nodesrelationship'),(46,'Can add version of requirement',16,'add_versionofrequirement'),(47,'Can change version of requirement',16,'change_versionofrequirement'),(48,'Can delete version of requirement',16,'delete_versionofrequirement'),(49,'Can add release',17,'add_release'),(50,'Can change release',17,'change_release'),(51,'Can delete release',17,'delete_release'),(52,'Can add requirement',18,'add_requirement'),(53,'Can change requirement',18,'change_requirement'),(54,'Can delete requirement',18,'delete_requirement'),(55,'Can add requirements edition',19,'add_requirementsedition'),(56,'Can change requirements edition',19,'change_requirementsedition'),(57,'Can delete requirements edition',19,'delete_requirementsedition'),(58,'Can add task',20,'add_task'),(59,'Can change task',20,'change_task'),(60,'Can delete task',20,'delete_task'),(61,'Can add history',21,'add_history'),(62,'Can change history',21,'change_history'),(63,'Can delete history',21,'delete_history'),(64,'Can add role in circle',22,'add_roleincircle'),(65,'Can change role in circle',22,'change_roleincircle'),(66,'Can delete role in circle',22,'delete_roleincircle'),(67,'Can add to do immediately',23,'add_todoimmediately'),(68,'Can change to do immediately',23,'change_todoimmediately'),(69,'Can delete to do immediately',23,'delete_todoimmediately');
+INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can add permission',2,'add_permission'),(5,'Can change permission',2,'change_permission'),(6,'Can delete permission',2,'delete_permission'),(7,'Can add group',3,'add_group'),(8,'Can change group',3,'change_group'),(9,'Can delete group',3,'delete_group'),(10,'Can add user',4,'add_user'),(11,'Can change user',4,'change_user'),(12,'Can delete user',4,'delete_user'),(13,'Can add content type',5,'add_contenttype'),(14,'Can change content type',5,'change_contenttype'),(15,'Can delete content type',5,'delete_contenttype'),(16,'Can add session',6,'add_session'),(17,'Can change session',6,'change_session'),(18,'Can delete session',6,'delete_session'),(19,'Can add site',7,'add_site'),(20,'Can change site',7,'change_site'),(21,'Can delete site',7,'delete_site'),(22,'Can add role in system',8,'add_roleinsystem'),(23,'Can change role in system',8,'change_roleinsystem'),(24,'Can delete role in system',8,'delete_roleinsystem'),(25,'Can add role in anyChart',9,'add_roleinanychart'),(26,'Can change role in anyChart',9,'change_roleinanychart'),(27,'Can delete role in anyChart',9,'delete_roleinanychart'),(28,'Can add man',10,'add_people'),(29,'Can change man',10,'change_people'),(30,'Can delete man',10,'delete_people'),(31,'Can add status',11,'add_status'),(32,'Can change status',11,'change_status'),(33,'Can delete status',11,'delete_status'),(34,'Can add type of requirement',12,'add_typesofrequirement'),(35,'Can change type of requirement',12,'change_typesofrequirement'),(36,'Can delete type of requirement',12,'delete_typesofrequirement'),(37,'Can add node',13,'add_node'),(38,'Can change node',13,'change_node'),(39,'Can delete node',13,'delete_node'),(40,'Can add type of nodes relationship',14,'add_typeofnodesrelationship'),(41,'Can change type of nodes relationship',14,'change_typeofnodesrelationship'),(42,'Can delete type of nodes relationship',14,'delete_typeofnodesrelationship'),(43,'Can add nodes relationship',15,'add_nodesrelationship'),(44,'Can change nodes relationship',15,'change_nodesrelationship'),(45,'Can delete nodes relationship',15,'delete_nodesrelationship'),(46,'Can add version of requirement',16,'add_versionofrequirement'),(47,'Can change version of requirement',16,'change_versionofrequirement'),(48,'Can delete version of requirement',16,'delete_versionofrequirement'),(49,'Can add release',17,'add_release'),(50,'Can change release',17,'change_release'),(51,'Can delete release',17,'delete_release'),(52,'Can add requirement',18,'add_requirement'),(53,'Can change requirement',18,'change_requirement'),(54,'Can delete requirement',18,'delete_requirement'),(55,'Can add to do',19,'add_todoimmediately'),(56,'Can change to do',19,'change_todoimmediately'),(57,'Can delete to do',19,'delete_todoimmediately'),(58,'Can add requirement edition',20,'add_requirementsedition'),(59,'Can change requirement edition',20,'change_requirementsedition'),(60,'Can delete requirement edition',20,'delete_requirementsedition'),(61,'Can add task',21,'add_task'),(62,'Can change task',21,'change_task'),(63,'Can delete task',21,'delete_task'),(64,'Can add history',22,'add_history'),(65,'Can change history',22,'change_history'),(66,'Can delete history',22,'delete_history'),(67,'Can add role in life circle of requirement',23,'add_roleincircle'),(68,'Can change role in life circle of requirement',23,'change_roleincircle'),(69,'Can delete role in life circle of requirement',23,'delete_roleincircle');
 /*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -649,8 +658,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `auth_user`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `auth_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(30) NOT NULL,
@@ -666,7 +675,7 @@ CREATE TABLE `auth_user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `auth_user`
@@ -674,7 +683,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'alice','','','maresha@list.ru','pbkdf2_sha256$10000$rB0n9qlSfx47$Wj/D92eNIaKm6EFYYOowCauzyzIY24wtszIa8UMhuRM=',1,1,1,'2012-07-30 09:22:03','2012-07-30 09:21:51');
+INSERT INTO `auth_user` VALUES (1,'admin','','','admin@admin.ru','pbkdf2_sha256$10000$SIrSqBoU53vD$sRcCjWrjb7kgBnCp9grsGnRjAwGDG0RkeAoInVeoyjo=',1,1,1,'2012-08-07 08:43:29','2012-08-07 02:23:08');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -683,8 +692,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `auth_user_groups`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `auth_user_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -696,7 +705,7 @@ CREATE TABLE `auth_user_groups` (
   CONSTRAINT `group_id_refs_id_f116770` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
   CONSTRAINT `user_id_refs_id_7ceef80f` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `auth_user_groups`
@@ -712,8 +721,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `auth_user_user_permissions`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `auth_user_user_permissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -725,7 +734,7 @@ CREATE TABLE `auth_user_user_permissions` (
   CONSTRAINT `permission_id_refs_id_67e79cb` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
   CONSTRAINT `user_id_refs_id_dfbab7d` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `auth_user_user_permissions`
@@ -741,8 +750,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `django_admin_log`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `django_admin_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `action_time` datetime NOT NULL,
@@ -757,8 +766,8 @@ CREATE TABLE `django_admin_log` (
   KEY `django_admin_log_1bb8f392` (`content_type_id`),
   CONSTRAINT `content_type_id_refs_id_288599e6` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `user_id_refs_id_c8665aa` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `django_admin_log`
@@ -766,7 +775,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2012-07-30 09:27:31',1,16,'1','1.0',1,''),(2,'2012-07-30 09:27:40',1,16,'2','2.3',1,''),(3,'2012-07-30 09:27:59',1,12,'1','hgn',1,''),(4,'2012-07-30 09:28:04',1,13,'1','fgdb',1,''),(5,'2012-08-01 02:15:01',1,9,'1','develop',1,''),(6,'2012-08-01 02:15:06',1,9,'2','начальство',1,''),(7,'2012-08-01 02:15:12',1,9,'3','qa',1,''),(8,'2012-08-01 02:15:21',1,10,'1','Борис Палыч',1,''),(9,'2012-08-01 02:15:37',1,10,'2','Василий Кукуев',1,''),(10,'2012-08-01 02:15:55',1,10,'3','Абрыхджам Магум',1,''),(11,'2012-08-01 02:16:23',1,11,'1','не проверено',1,''),(12,'2012-08-01 02:16:32',1,11,'2','на доработке',1,''),(13,'2012-08-01 02:16:41',1,11,'3','утверждён',1,''),(14,'2012-08-01 02:17:28',1,13,'2','AnyChart',1,''),(15,'2012-08-01 02:17:50',1,13,'3','Gauges',1,''),(16,'2012-08-01 02:18:02',1,13,'1','fgdb',3,''),(17,'2012-08-01 02:19:27',1,13,'4','vertical gauges',1,''),(18,'2012-08-01 02:19:50',1,13,'5','circular gauges',1,''),(19,'2012-08-01 02:20:21',1,13,'6','Pie',1,''),(20,'2012-08-01 02:20:57',1,12,'2','функциональное',1,''),(21,'2012-08-01 02:21:03',1,12,'1','hgn',3,''),(22,'2012-08-01 02:21:11',1,12,'3','бизнес-требование',1,''),(23,'2012-08-01 02:23:27',1,17,'1','самый первый релиз',1,''),(24,'2012-08-01 02:23:44',1,18,'1','бт №1',1,''),(25,'2012-08-01 02:24:04',1,18,'2','бт №2',1,''),(26,'2012-08-01 02:24:24',1,18,'3','бт №3',1,''),(27,'2012-08-01 02:24:37',1,18,'4','бт №4',1,''),(28,'2012-08-01 02:24:48',1,18,'5','бт №5',1,''),(29,'2012-08-01 02:25:03',1,18,'6','бт №6',1,''),(30,'2012-08-01 02:25:20',1,18,'7','бт №7',1,''),(31,'2012-08-01 02:25:30',1,18,'5','бт №5',2,'Changed type.'),(32,'2012-08-01 02:25:48',1,18,'8','фт №1',1,''),(33,'2012-08-01 02:26:00',1,18,'9','фт №2',1,''),(34,'2012-08-01 02:26:13',1,18,'10','фт №3',1,''),(35,'2012-08-01 02:26:27',1,18,'11','фт №4',1,''),(36,'2012-08-01 02:26:53',1,18,'12','фт №5',1,''),(37,'2012-08-01 02:27:12',1,18,'13','фт №6',1,''),(38,'2012-08-01 02:27:26',1,18,'14','фт №7',1,''),(39,'2012-08-01 02:31:16',1,8,'1','исполнитель',1,''),(40,'2012-08-01 02:31:36',1,8,'2','контролер',1,''),(41,'2012-08-01 02:31:42',1,8,'3','автор',1,''),(42,'2012-08-01 02:31:52',1,22,'1','бт №1',1,''),(43,'2012-08-01 02:32:10',1,22,'2','бт №1',1,''),(44,'2012-08-01 02:32:19',1,22,'3','бт №1',1,''),(45,'2012-08-01 02:32:49',1,22,'4','бт №2',1,''),(46,'2012-08-01 02:33:00',1,22,'5','бт №2',1,''),(47,'2012-08-01 02:33:08',1,22,'6','бт №2',1,''),(48,'2012-08-01 02:33:45',1,22,'7','фт №1',1,''),(49,'2012-08-01 02:33:55',1,22,'8','фт №1',1,''),(50,'2012-08-01 02:36:58',1,19,'1','1.0',1,''),(51,'2012-08-01 07:20:34',1,23,'15','15',1,''),(52,'2012-08-01 07:21:51',1,23,'15','Борис Палыч рпт',3,''),(53,'2012-08-01 07:22:18',1,23,'16','Борис Палыч срочно сделать что-то',1,'');
+INSERT INTO `django_admin_log` VALUES (1,'2012-08-07 03:51:07',1,9,'1','develop',1,''),(2,'2012-08-07 03:51:14',1,9,'2','начальство',1,''),(3,'2012-08-07 03:51:18',1,9,'3','QA',1,''),(4,'2012-08-07 03:52:02',1,9,'4','sales',1,''),(5,'2012-08-07 03:52:53',1,10,'1','Шахмин Андрей',1,''),(6,'2012-08-07 03:53:16',1,10,'2','Бацуев Александр',1,''),(7,'2012-08-07 03:54:11',1,10,'3','Любушкин Роман',1,''),(8,'2012-08-07 03:54:27',1,10,'4','Воробьёва Ольга',1,''),(9,'2012-08-07 03:55:37',1,10,'5','Батырева Александра',1,''),(10,'2012-08-07 03:56:11',1,13,'1','anychart',1,''),(11,'2012-08-07 03:56:39',1,13,'2','gauges',1,''),(12,'2012-08-07 03:57:19',1,13,'3','pie',1,''),(13,'2012-08-07 03:58:13',1,13,'4','vertical gauges',1,''),(14,'2012-08-07 04:00:00',1,13,'5','circular gauges',1,''),(15,'2012-08-07 04:01:30',1,13,'6','labels',1,''),(16,'2012-08-07 04:02:18',1,13,'7','labels',1,''),(17,'2012-08-07 04:03:30',1,17,'1','мишутка',1,''),(18,'2012-08-07 04:03:46',1,17,'2','михаил',1,''),(19,'2012-08-07 04:04:10',1,12,'1','бизнес-требование',1,''),(20,'2012-08-07 04:04:16',1,12,'2','функциональное',1,''),(21,'2012-08-07 04:05:50',1,8,'1','автор',1,''),(22,'2012-08-07 04:06:47',1,8,'2','корректировщик',1,''),(23,'2012-08-07 04:07:26',1,8,'3','исполнитель',1,''),(24,'2012-08-07 04:07:30',1,8,'4','тестировщик',1,''),(25,'2012-08-07 04:08:49',1,11,'1','не проверено',1,''),(26,'2012-08-07 04:09:00',1,11,'2','на доработке',1,''),(27,'2012-08-07 04:09:09',1,11,'3','утверждено',1,''),(28,'2012-08-07 04:12:28',1,10,'6','Родионов Виталий',1,''),(29,'2012-08-07 04:26:54',1,18,'1','spdf df hdkfh gkhk dhkfh ehfhru eiouh erh oheroh oerhiio fheroi oeirh foeri fper erge,jh ekdh foeyr foywe oyf3o',1,''),(30,'2012-08-07 04:34:27',1,18,'1','spdf df hdkfh gkhk dhkfh ehfhru eiouh erh oheroh oerhiio fheroi oeirh foeri fper erge,jh ekdh foeyr foywe oyf3o',3,''),(31,'2012-08-07 04:57:11',1,18,'2','БТ - 1',1,''),(32,'2012-08-07 05:00:45',1,18,'3','БТ - 2',1,''),(33,'2012-08-07 05:06:23',1,18,'4','БТ - 3',1,''),(34,'2012-08-07 05:06:39',1,18,'5','БТ - 4',1,''),(35,'2012-08-07 05:06:53',1,18,'6','БТ - 5',1,''),(36,'2012-08-07 05:07:05',1,18,'7','БТ - 6',1,''),(37,'2012-08-07 05:07:25',1,18,'8','БТ - 7',1,''),(38,'2012-08-07 05:07:43',1,18,'9','БТ - 8',1,''),(39,'2012-08-07 05:08:39',1,18,'10','ФТ - 1',1,''),(40,'2012-08-07 05:09:16',1,18,'11','ФТ - 2',1,''),(41,'2012-08-07 05:09:27',1,18,'12','ФТ - 3',1,''),(42,'2012-08-07 05:09:37',1,18,'13','ФТ - 4',1,''),(43,'2012-08-07 05:09:48',1,18,'14','ФТ - 5',1,''),(44,'2012-08-07 05:09:59',1,18,'15','ФТ - 6',1,''),(45,'2012-08-07 05:10:13',1,18,'16','ФТ - 7',1,''),(46,'2012-08-07 05:10:24',1,18,'17','ФТ - 8',1,''),(47,'2012-08-07 07:34:35',1,16,'1','1.0',1,''),(48,'2012-08-07 08:03:35',1,20,'1','1.0',1,''),(49,'2012-08-07 08:04:32',1,20,'2','1.0',1,''),(50,'2012-08-07 08:05:46',1,20,'3','1.0',1,''),(51,'2012-08-07 08:06:07',1,23,'1','БТ - 1',1,''),(52,'2012-08-07 08:06:17',1,23,'2','БТ - 1',1,''),(53,'2012-08-07 08:06:31',1,23,'3','БТ - 1',1,''),(54,'2012-08-07 08:06:45',1,23,'4','БТ - 1',1,''),(55,'2012-08-07 08:06:51',1,23,'5','БТ - 2',1,''),(56,'2012-08-07 08:07:04',1,23,'6','БТ - 2',1,''),(57,'2012-08-07 08:07:10',1,23,'7','БТ - 2',1,''),(58,'2012-08-07 08:07:18',1,23,'8','БТ - 2',1,''),(59,'2012-08-07 08:07:27',1,23,'9','БТ - 3',1,''),(60,'2012-08-07 08:07:38',1,23,'10','БТ - 3',1,''),(61,'2012-08-07 08:07:52',1,23,'11','БТ - 3',1,''),(62,'2012-08-07 08:08:00',1,23,'12','БТ - 3',1,''),(63,'2012-08-07 08:08:23',1,21,'1','переделать',1,''),(64,'2012-08-07 08:08:44',1,22,'1','срочно переделать второй абзац!',1,''),(65,'2012-08-07 08:13:28',1,21,'2','проверить',1,''),(66,'2012-08-07 08:13:51',1,22,'2','проверь, пожалуйста, орфографию',1,''),(67,'2012-08-07 08:15:20',1,19,'1','Родионов Виталий срочно',1,''),(68,'2012-08-07 08:15:45',1,10,'7','Саух Антон',1,''),(69,'2012-08-07 08:16:26',1,19,'2','Саух Антон важное дело',1,'');
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -775,8 +784,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `django_content_type`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `django_content_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
@@ -785,7 +794,7 @@ CREATE TABLE `django_content_type` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_label` (`app_label`,`model`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `django_content_type`
@@ -793,7 +802,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'log entry','admin','logentry'),(2,'permission','auth','permission'),(3,'group','auth','group'),(4,'user','auth','user'),(5,'content type','contenttypes','contenttype'),(6,'session','sessions','session'),(7,'site','sites','site'),(8,'role in system','app','roleinsystem'),(9,'role in anychart','app','roleinanychart'),(10,'people','app','people'),(11,'status','app','status'),(12,'types of requirement','app','typesofrequirement'),(13,'node','app','node'),(14,'type of nodes relationship','app','typeofnodesrelationship'),(15,'nodes relationship','app','nodesrelationship'),(16,'version of requirement','app','versionofrequirement'),(17,'release','app','release'),(18,'requirement','app','requirement'),(19,'requirements edition','app','requirementsedition'),(20,'task','app','task'),(21,'history','app','history'),(22,'role in circle','app','roleincircle'),(23,'to do immediately','app','todoimmediately');
+INSERT INTO `django_content_type` VALUES (1,'log entry','admin','logentry'),(2,'permission','auth','permission'),(3,'group','auth','group'),(4,'user','auth','user'),(5,'content type','contenttypes','contenttype'),(6,'session','sessions','session'),(7,'site','sites','site'),(8,'role in system','app','roleinsystem'),(9,'role in anyChart','app','roleinanychart'),(10,'man','app','people'),(11,'status','app','status'),(12,'type of requirement','app','typesofrequirement'),(13,'node','app','node'),(14,'type of nodes relationship','app','typeofnodesrelationship'),(15,'nodes relationship','app','nodesrelationship'),(16,'version of requirement','app','versionofrequirement'),(17,'release','app','release'),(18,'requirement','app','requirement'),(19,'to do','app','todoimmediately'),(20,'requirement edition','app','requirementsedition'),(21,'task','app','task'),(22,'history','app','history'),(23,'role in life circle of requirement','app','roleincircle');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -802,8 +811,8 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `django_session`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `django_session` (
   `session_key` varchar(40) NOT NULL,
   `session_data` longtext NOT NULL,
@@ -811,7 +820,7 @@ CREATE TABLE `django_session` (
   PRIMARY KEY (`session_key`),
   KEY `django_session_3da3d3d8` (`expire_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `django_session`
@@ -819,7 +828,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('8cc5e5a8580abfff81f2c86bab96abc7','Y2VlZGFiNDNiOGY0OWFmNDIwOGUyN2IzNzAyMTA0MDE4NjA2NDZjYzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==\n','2012-08-13 09:22:03');
+INSERT INTO `django_session` VALUES ('3f9f81c769427ee4fbf958b71481703f','Y2VlZGFiNDNiOGY0OWFmNDIwOGUyN2IzNzAyMTA0MDE4NjA2NDZjYzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==\n','2012-08-21 08:43:29'),('653724f309cfd9fa9c459d0f80144f74','Y2VlZGFiNDNiOGY0OWFmNDIwOGUyN2IzNzAyMTA0MDE4NjA2NDZjYzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==\n','2012-08-21 02:23:51'),('efd5fb72f74091b6fbc3c0f8bd3e04e9','Y2VlZGFiNDNiOGY0OWFmNDIwOGUyN2IzNzAyMTA0MDE4NjA2NDZjYzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVSlkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZHED\nVQ1fYXV0aF91c2VyX2lkcQSKAQF1Lg==\n','2012-08-21 02:42:05');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -828,15 +837,15 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `django_site`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `django_site` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `domain` varchar(100) NOT NULL,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `django_site`
@@ -857,4 +866,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-08-02  2:29:38
+-- Dump completed on 2012-08-10 11:53:12
