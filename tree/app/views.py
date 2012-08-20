@@ -33,6 +33,5 @@ def getRequirementDescription(request):
     if request.is_ajax():
         if request.method == 'POST':
             req_id = request.POST['reqId'].replace('req_','')
-            print req_id
-            req = Requirement.objects.filter(id = req_id)
+            req = Requirement.objects.get(id = req_id)
     return render_to_response("requirement.html", {'req':req})
