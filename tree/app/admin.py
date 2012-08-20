@@ -1,69 +1,77 @@
-from app.models import RoleInSystem
-from app.models import RoleInAnychart
-from app.models import People
-from app.models import Status
-from app.models import TypesOfRequirement
-from app.models import Node
-from app.models import TypeOfNodesRelationship
-from app.models import NodesRelationship
-from app.models import Requirement
-from app.models import Task
-from app.models import History
-from app.models import RoleInCircle
-from app.models import RequirementsEdition
-from app.models import VersionOfRequirement
-from app.models import Release
-from app.models import ToDoImmediately
+from app.models import *
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
 
-class RoleInSystemAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-
-class RoleInAnychartAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-
-class PeopleAdmin(admin.ModelAdmin):
-    filter_horizontal = ('role_in_anychart',)
-    list_display = ('name',)
-
-class StatusAdmin(admin.ModelAdmin):
-    list_display = ('title',)
-
-class TypesOfRequirementAdmin(admin.ModelAdmin):
+class UserRoleAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
 class NodeAdmin(MPTTModelAdmin):
     mptt_level_indent = 20
 
-class RequirementAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type')
+class PersonRoleAdmin(admin.ModelAdmin):
+    list_display = ('role',)
+
+class PersonRoleDetectionAdmin(admin.ModelAdmin):
+    filter_horizontal = ('persons',)
+    list_display = ('role',)
+    raw_id_fields  = ('role', 'node')
+
+class RedactionNumberAdmin(admin.ModelAdmin):
+    list_display = ('number',)
+
+class ReleaseAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    ordering = ('-deadline',)
+    search_fields = ('name', 'description')
+
+class StatusAdmin(admin.ModelAdmin):
+    list_display = ('title',)
 
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('title',)
 
-class HistoryAdmin(admin.ModelAdmin):
-    list_display = ('requirement', 'task', 'status', 'man')
+class CurrentTaskAdmin(admin.ModelAdmin):
+    list_display = ('title',)
+    raw_id_fields = ('status',)
+    list_filter =('status',)
 
-class RoleInCircleAdmin(admin.ModelAdmin):
-    filter_horizontal = ('man', 'role')
+class FileInNodesAdmin(admin.ModelAdmin):
+    list_display = ('name',)
 
-class VersionOfRequirementAdmin(admin.ModelAdmin):
-    list_display = ('number',)
+class NodeEditionHistoryAdmin(admin.ModelAdmin):
+    list_display = ('node','edit_description',)
+    filter_horizontal = ('files',)
+    list_filter =('node',)
 
-admin.site.register(RoleInSystem, RoleInSystemAdmin)
-admin.site.register(RoleInAnychart, RoleInAnychartAdmin)
-admin.site.register(People, PeopleAdmin)
-admin.site.register(Status, StatusAdmin)
-admin.site.register(TypesOfRequirement, TypesOfRequirementAdmin)
+class TypeOfNodesRelationshipAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+class RequirementAdmin(admin.ModelAdmin):
+    list_display = ('name','release')
+    raw_id_fields = ('node',)
+    list_filter =('release',)
+
+class RequirementsEditionAdmin(admin.ModelAdmin):
+    list_display = ('requirement','edit_description',)
+    filter_horizontal = ('files',)
+    list_filter =('requirement',)
+
+class PersonRoleRequirementDetectionAdmin(admin.ModelAdmin):
+    filter_horizontal = ('persons',)
+    list_display = ('role',)
+    raw_id_fields  = ('role', 'req')
+
+admin.site.register(UserRole, UserRoleAdmin)
 admin.site.register(Node, NodeAdmin)
-admin.site.register(TypeOfNodesRelationship)
-admin.site.register(NodesRelationship)
+admin.site.register(PersonRole, PersonRoleAdmin)
+admin.site.register(PersonRoleDetection, PersonRoleDetectionAdmin)
+admin.site.register(RedactionNumber, RedactionNumberAdmin)
+admin.site.register(Release, ReleaseAdmin)
+admin.site.register(Status ,StatusAdmin)
+admin.site.register(CurrentTask, CurrentTaskAdmin)
+admin.site.register(FileInNodes, FileInNodesAdmin)
+admin.site.register(NodeEditionHistory, NodeEditionHistoryAdmin)
+admin.site.register(TypeOfNodesRelationship, TypeOfNodesRelationshipAdmin)
 admin.site.register(Requirement, RequirementAdmin)
-admin.site.register(Task, TaskAdmin)
-admin.site.register(History, HistoryAdmin)
-admin.site.register(RoleInCircle, RoleInCircleAdmin)
-admin.site.register(RequirementsEdition)
-admin.site.register(VersionOfRequirement)
-admin.site.register(Release)
-admin.site.register(ToDoImmediately)
+admin.site.register(RequirementsEdition, RequirementsEditionAdmin)
+admin.site.register(PersonRoleRequirementDetection, PersonRoleRequirementDetectionAdmin)

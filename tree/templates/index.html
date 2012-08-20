@@ -10,16 +10,6 @@
     <script type="text/javascript" src="../media/js/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="../media/js/jquery.dropotron-1.0.js"></script>
     <script type="text/javascript" src="../media/js/main.js"></script>
-    <script type="text/javascript">
-        $(function() {
-            $('#menu > ul').dropotron({
-                mode: 'fade',
-                globalOffsetY: 11,
-                offsetY: -15
-            });
-        });
-    </script>
-
 </head>
 <body>
 <div id="wrapper">
@@ -105,15 +95,7 @@
                             <a href="#" class="sc close_req"></a>  <span class="right_active req">Требования</span>
                         </p>
                     </div>
-                    <ul>
-                        <!--<li>-->
-                            <!--<div>-->
-                                <!--<p>-->
-                                    <!--<a href="#" id="business_1_tie_{{ node.id }}" class="open_tab business">Требование соответствия дизайну.</a>-->
-                                <!--</p>-->
-                            <!--</div>-->
-                        <!--</li>-->
-                    </ul>
+                    <ul></ul>
                 </li>
 
             {% if not node.is_leaf_node %}

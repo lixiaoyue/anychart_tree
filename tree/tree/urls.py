@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
-from app.views import home_page
-from app.views import show_nodes
+from app.views import *
+
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -12,7 +12,8 @@ urlpatterns = patterns('',
     # url(r'^$', 'tree.views.home', name='home'),
     # url(r'^tree/', include('tree.foo.urls')),
     url('^$', home_page),
-    url(r'^nodes/$', show_nodes),
+    url(r'^any/$', any),
+    url(r'^getRequirements/$', getRequirements),
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

@@ -1,8 +1,16 @@
 $(function(){
+    $('#menu > ul').dropotron({
+        mode: 'fade',
+        globalOffsetY: 11,
+        offsetY: -15
+    });
     $('#page').css('height',$(window).height()-95);
     $('#tabs_content_block').css('height', $(window).height()-205);
     tabsWidthDetect();
     showTabContent($('#tabs_manage_block ul li.active').attr('id'));
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": getCookie("csrftoken") }
+    });
 });
 
 
@@ -13,6 +21,7 @@ $('a.sc').live('click', function(){
         $('li#'+liId).removeClass('cl');
         $('li#'+liId + ' div:first p a.sc').removeClass('close_tie').addClass('open_tie');
         if ($('li#'+liId).hasClass('req')){
+            if ($('li#req_tie_1 ul').html() == '')pasteRequirements(liId);
             $('li#'+liId + ' div:first p a.sc').removeClass('close_req').addClass('open_req');
         }
     }else{
@@ -23,6 +32,33 @@ $('a.sc').live('click', function(){
         }
     }
 });
+
+function pasteRequirements(liId){
+    $.ajax({
+        type: "POST",
+        url: "/getRequirements/",
+        data: {liId: liId, csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){
+            $('li#' + liId + ' ul').html(html);
+        }
+    });
+}
+
+function getCookie(c_name)
+{
+    if (document.cookie.length > 0)
+    {
+        c_start = document.cookie.indexOf(c_name + "=");
+        if (c_start != -1)
+        {
+            c_start = c_start + c_name.length + 1;
+            c_end = document.cookie.indexOf(";", c_start);
+            if (c_end == -1) c_end = document.cookie.length;
+            return unescape(document.cookie.substring(c_start,c_end));
+        }
+    }
+    return "";
+}
 
 //Ресайз окна
 window.onresize = function (){
