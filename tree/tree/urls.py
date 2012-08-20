@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url('^$', home_page),
     url(r'^any/$', any),
     url(r'^getRequirements/$', getRequirements),
+    url(r'^getRequirementDescription/$', getRequirementDescription),
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

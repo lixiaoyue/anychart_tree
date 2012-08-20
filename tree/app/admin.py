@@ -13,8 +13,8 @@ class PersonRoleAdmin(admin.ModelAdmin):
 
 class PersonRoleDetectionAdmin(admin.ModelAdmin):
     filter_horizontal = ('persons',)
-    list_display = ('role',)
-    raw_id_fields  = ('role', 'node')
+    list_display = ('role','node')
+    raw_id_fields  = ('node',)
 
 class RedactionNumberAdmin(admin.ModelAdmin):
     list_display = ('number',)
@@ -58,8 +58,8 @@ class RequirementsEditionAdmin(admin.ModelAdmin):
 
 class PersonRoleRequirementDetectionAdmin(admin.ModelAdmin):
     filter_horizontal = ('persons',)
-    list_display = ('role',)
-    raw_id_fields  = ('role', 'req')
+    list_display = ('role','req')
+    raw_id_fields  = ('req',)
 
 admin.site.register(UserRole, UserRoleAdmin)
 admin.site.register(Node, NodeAdmin)

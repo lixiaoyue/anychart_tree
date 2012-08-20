@@ -8,9 +8,9 @@ $(function(){
     $('#tabs_content_block').css('height', $(window).height()-205);
     tabsWidthDetect();
     showTabContent($('#tabs_manage_block ul li.active').attr('id'));
-    $.ajaxSetup({
-        headers: { "X-CSRFToken": getCookie("csrftoken") }
-    });
+//    $.ajaxSetup({
+//        headers: { "X-CSRFToken": getCookie("csrftoken") }
+//    });
 });
 
 
@@ -33,6 +33,7 @@ $('a.sc').live('click', function(){
     }
 });
 
+//Получить список требований для узла
 function pasteRequirements(liId){
     $.ajax({
         type: "POST",
@@ -44,21 +45,21 @@ function pasteRequirements(liId){
     });
 }
 
-function getCookie(c_name)
-{
-    if (document.cookie.length > 0)
-    {
-        c_start = document.cookie.indexOf(c_name + "=");
-        if (c_start != -1)
-        {
-            c_start = c_start + c_name.length + 1;
-            c_end = document.cookie.indexOf(";", c_start);
-            if (c_end == -1) c_end = document.cookie.length;
-            return unescape(document.cookie.substring(c_start,c_end));
-        }
-    }
-    return "";
-}
+//function getCookie(c_name)
+//{
+//    if (document.cookie.length > 0)
+//    {
+//        c_start = document.cookie.indexOf(c_name + "=");
+//        if (c_start != -1)
+//        {
+//            c_start = c_start + c_name.length + 1;
+//            c_end = document.cookie.indexOf(";", c_start);
+//            if (c_end == -1) c_end = document.cookie.length;
+//            return unescape(document.cookie.substring(c_start,c_end));
+//        }
+//    }
+//    return "";
+//}
 
 //Ресайз окна
 window.onresize = function (){
@@ -86,10 +87,12 @@ function showTabContent(tabId){
 }
 
 //Открываем новую вкладку из девера
-$('a.open_tab').live('click', function(){
+$('a.open_tab.reqs').live('click', function(){
     if ($('#tabs_manage_block ul li#tab_' + $(this).attr('id')).length <= 0){
         $('#tabs_manage_block ul li').removeClass('active');
         $('#tabs_manage_block ul').append('<li class="active" id="tab_' + $(this).attr('id') + '" ><a href="#">'+$(this).html()+'</a><div class="closeTab"></div></li>');
+        $('#tabs_content_block').append('<div class="tabs tab_'+$(this).attr('id')+'"> </div>');
+        showRequirementInTab($(this).attr('id'));
         tabsWidthDetect();
     }else{
         $('#tabs_manage_block ul li').removeClass('active');
@@ -97,6 +100,18 @@ $('a.open_tab').live('click', function(){
     }
     showTabContent('tab_'+$(this).attr('id'));
 });
+
+//получить содержимое требования и вставить в таб
+function showRequirementInTab(id_req){
+    $.ajax({
+        type: "POST",
+        url: "/getRequirementDescription/",
+        data: {reqId: id_req, csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){
+           $('#tabs_content_block div.tabs.tab_'+id_req).html(html);
+        }
+    });
+}
 
 //Закрыть вкладку и удалить ее содержимое со страницы
 $('.closeTab').live('click', function(){
