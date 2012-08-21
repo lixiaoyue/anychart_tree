@@ -133,7 +133,6 @@ class Requirement(models.Model):
 class RequirementsEdition(models.Model):
     version = models.ForeignKey(RedactionNumber)
     requirement = models.ForeignKey(Requirement)
-    name_of_requirement = models.CharField(max_length=200)
     description = models.TextField(blank=True, verbose_name=u'Описание требования')
     purpose = models.CharField(max_length=300, blank=True, verbose_name=u'Цель создания элемента')
     reason = models.CharField(max_length=300, verbose_name=u'Источник вдохвения на создание')

@@ -86,7 +86,7 @@ function showTabContent(tabId){
     $('#tabs_content_block div.'+tabId).show();
 }
 
-//Открываем новую вкладку из девера
+//Открываем новое требование из девера
 $('a.open_tab.reqs').live('click', function(){
     if ($('#tabs_manage_block ul li#tab_' + $(this).attr('id')).length <= 0){
         $('#tabs_manage_block ul li').removeClass('active');

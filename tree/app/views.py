@@ -2,7 +2,7 @@
 from django.shortcuts import render_to_response
 from django.conf import settings
 from django.template.context import RequestContext
-from app.models import Node, Requirement
+from app.models import *
 from django.http import HttpResponse
 
 from django.views.decorators.csrf import csrf_exempt
@@ -33,5 +33,5 @@ def getRequirementDescription(request):
     if request.is_ajax():
         if request.method == 'POST':
             req_id = request.POST['reqId'].replace('req_','')
-            req = Requirement.objects.get(id = req_id)
+            req = RequirementsEdition.objects.filter(requirement = req_id).order_by('-version')[0]
     return render_to_response("requirement.html", {'req':req})
