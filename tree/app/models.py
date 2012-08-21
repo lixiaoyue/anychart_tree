@@ -20,8 +20,8 @@ class Node(MPTTModel):
     class MPTTMeta:
         order_insertion_by = ['name']
     class Meta:
-        verbose_name = _(u'Узел')
-        verbose_name_plural = _(u'Узлы')
+        verbose_name = _(u'Бизнес-требование')
+        verbose_name_plural = _(u'Бизнес-требования')
 
 class PersonRole(models.Model):
     role = models.CharField(max_length=200, verbose_name=u'Роль')
@@ -100,8 +100,8 @@ class NodeEditionHistory(models.Model):
     def __unicode__(self):
         return '%s: %s' % (self.edit_description, self.redaction_date)
     class Meta:
-        verbose_name = _(u'История редактирования узлов')
-        verbose_name_plural = _(u'История редактирования узлов')
+        verbose_name = _(u'История редактирования БТ')
+        verbose_name_plural = _(u'История редактирования БТ')
 
 class TypeOfNodesRelationship(models.Model):
     name = models.CharField(max_length=30)

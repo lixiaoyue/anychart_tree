@@ -1,3 +1,6 @@
-{{ req.name_of_requirement }} {{ req.reason }}
+{{ req.requirement.name }} {{ req.reason }}
 <p><textarea rows="4" cols="40" id='req_text_{{ req.id }}'>{{ req.description }}</textarea>
 
+{% for i in req.files.all %}
+    <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
+{% endfor %}

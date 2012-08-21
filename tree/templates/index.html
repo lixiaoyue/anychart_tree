@@ -81,15 +81,9 @@
     <ul>
         {% recursetree nodes %}
         <li id="tree_tie_{{ node.id }}" class="cl">
-            <div><p><a href="#" class="sc close_tie"></a> <span>{{ node.name }}</span></p></div>
+            <div><p><a href="#" class="sc close_tie"></a> <span><a href="#" id="description_tie_{{ node.id }}">{{ node.name }}</a></span></p></div>
             <ul>
-                <li>
-                    <div>
-                        <p>
-                            <a class="open_tab" href="#" id="description_tie_{{ node.id }}">Описание</a>
-                        </p>
-                    </div>
-                </li>
+
                 <li id="req_tie_{{ node.id }}" class="cl req">
                     <div>
                         <p>
@@ -102,16 +96,37 @@
             {% if not node.is_leaf_node %}
                     {{ children }}
             {% endif %}
-                <li>
-                    <div>
-                        <p>
-                            <a href="#" id="notification_tie_{{ node.id }}" class="open_tab notification">Замечания</a>
-                        </p>
-                    </div>
-                </li>
+{#                <li>#}
+{#                    <div>#}
+{#                        <p>#}
+{#                            <a href="#" id="notification_tie_{{ node.id }}" class="open_tab notification">Замечания</a>#}
+{#                        </p>#}
+{#                    </div>#}
+{#                </li>#}
             </ul>
         </li>
         {% endrecursetree %}
+        <li>
+            <div>
+                <p>
+                    <a href="#" id="system_1" class="open_tab info ">О системе "AnyChart requirements tree"</a>
+                </p>
+            </div>
+        </li>
+        <li>
+            <div>
+                <p>
+                    <a href="#" id="user_guide" class="open_tab info">Заметки пользователя системы</a>
+                </p>
+            </div>
+        </li>
+        <li>
+            <div>
+                <p>
+                    <a href="#" id="system_notices" class="open_tab notification info">Замечания по системе</a>
+                </p>
+            </div>
+        </li>
     </ul>
 
 </div>
@@ -119,9 +134,9 @@
 <div id="content">
     <div id="tabs_manage_block">
         <ul>
-            <li class="active" id="tab_system_1" ><a href="#">О системе "AnyChart requirements tree"</a><div class="closeTab"></div></li>
-            <li id="tab_user_guide" ><a href="#">Заметки пользователя системы</a><div class="closeTab"></div></li>
-            <li id="tab_system_notices" ><a href="#">Замечания по системе</a><div class="closeTab"></div></li>
+            <li class="active" id="tab_system_1" ><a href="#">О системе "AnyChart requirements tree"</a><div class="closeTab info"></div></li>
+            <li id="tab_user_guide" ><a href="#">Заметки пользователя системы</a><div class="closeTab info"></div></li>
+            <li id="tab_system_notices" ><a href="#">Замечания по системе</a><div class="closeTab info"></div></li>
         </ul>
     </div>
     <div id="tabs_content_block">

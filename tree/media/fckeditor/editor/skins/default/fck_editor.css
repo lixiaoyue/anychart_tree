@@ -51,12 +51,12 @@ body
 .TB_ToolbarSet, .TB_Expand, .TB_Collapse
 {
     cursor: default;
-    background-color: #efefde;
+    /*background-color: #efefde;*/
 }
 
 .TB_ToolbarSet
 {
-    border-top: #efefde 1px outset;
+    border-top: #000 1px outset;
     border-bottom: #efefde 1px outset;
 }
 
@@ -386,7 +386,7 @@ body
     opacity: 0.75; /* Safari, Opera and Mozilla */
     filter: alpha(opacity=70); /* IE */ /* -moz-opacity: 0.75; Mozilla (Old) */
     height: 23px;
-    background-color: #efefde;
+    /*background-color: #efefde;*/
 }
 
 .SC_FieldLabel

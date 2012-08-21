@@ -8,9 +8,6 @@ $(function(){
     $('#tabs_content_block').css('height', $(window).height()-205);
     tabsWidthDetect();
     showTabContent($('#tabs_manage_block ul li.active').attr('id'));
-//    $.ajaxSetup({
-//        headers: { "X-CSRFToken": getCookie("csrftoken") }
-//    });
 });
 
 
@@ -21,7 +18,7 @@ $('a.sc').live('click', function(){
         $('li#'+liId).removeClass('cl');
         $('li#'+liId + ' div:first p a.sc').removeClass('close_tie').addClass('open_tie');
         if ($('li#'+liId).hasClass('req')){
-            if ($('li#req_tie_1 ul').html() == '')pasteRequirements(liId);
+            if ($('li#' + liId + ' ul').html() == '')pasteRequirements(liId);
             $('li#'+liId + ' div:first p a.sc').removeClass('close_req').addClass('open_req');
         }
     }else{
@@ -44,22 +41,6 @@ function pasteRequirements(liId){
         }
     });
 }
-
-//function getCookie(c_name)
-//{
-//    if (document.cookie.length > 0)
-//    {
-//        c_start = document.cookie.indexOf(c_name + "=");
-//        if (c_start != -1)
-//        {
-//            c_start = c_start + c_name.length + 1;
-//            c_end = document.cookie.indexOf(";", c_start);
-//            if (c_end == -1) c_end = document.cookie.length;
-//            return unescape(document.cookie.substring(c_start,c_end));
-//        }
-//    }
-//    return "";
-//}
 
 //Ресайз окна
 window.onresize = function (){
@@ -86,14 +67,26 @@ function showTabContent(tabId){
     $('#tabs_content_block div.'+tabId).show();
 }
 
-
-//Открываем новое требование из девера
+//Открываем новое требование из дерева
 $('a.open_tab.reqs').live('click', function(){
     if ($('#tabs_manage_block ul li#tab_' + $(this).attr('id')).length <= 0){
         $('#tabs_manage_block ul li').removeClass('active');
         $('#tabs_manage_block ul').append('<li class="active" id="tab_' + $(this).attr('id') + '" ><a href="#">'+$(this).html()+'</a><div class="closeTab"></div></li>');
         $('#tabs_content_block').append('<div class="tabs tab_'+$(this).attr('id')+'"> </div>');
         showRequirementInTab($(this).attr('id'));
+        tabsWidthDetect();
+    }else{
+        $('#tabs_manage_block ul li').removeClass('active');
+        $('#tabs_manage_block ul li#tab_' + $(this).attr('id')).addClass('active');
+    }
+    showTabContent('tab_'+$(this).attr('id'));
+});
+
+//Открываем информационную вкладку из девера
+$('a.open_tab.info').live('click', function(){
+    if ($('#tabs_manage_block ul li#tab_' + $(this).attr('id')).length <= 0){
+        $('#tabs_manage_block ul li').removeClass('active');
+        $('#tabs_manage_block ul').append('<li class="active" id="tab_' + $(this).attr('id') + '" ><a href="#">'+$(this).html()+'</a><div class="closeTab info"></div></li>');
         tabsWidthDetect();
     }else{
         $('#tabs_manage_block ul li').removeClass('active');
@@ -112,8 +105,11 @@ function showRequirementInTab(id_req){
            $('#tabs_content_block div.tabs.tab_'+id_req).html(html);
             $("textarea").each(function(n, obj) {
                 fck = new FCKeditor(obj.id) ;
+                fck.ToolbarSet = 'AnyChartTree';
                 fck.BasePath = "/media/fckeditor/" ;
                 fck.ReplaceTextarea() ;
+                fck.Width = '100%';
+                fck.Height = '300';
             });
         }
     });
@@ -121,7 +117,7 @@ function showRequirementInTab(id_req){
 
 //Закрыть вкладку и удалить ее содержимое со страницы
 $('.closeTab').live('click', function(){
-    $('#tabs_content_block div.'+ $(this).parent().attr('id')).remove();
+    if (!$(this).hasClass('info')){$('#tabs_content_block div.'+ $(this).parent().attr('id')).remove();}
     if ($(this).parent().hasClass('active') && $(this).parent().next().length > 0){
         $('#tabs_manage_block ul li').removeClass('active');
         $(this).parent().next().addClass('active');
