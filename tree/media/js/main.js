@@ -86,7 +86,7 @@ function showTabContent(tabId){
     $('#tabs_content_block div.'+tabId).show();
 }
 
-//Открываем новую вкладку из девера
+//Открываем требование из девера
 $('a.open_tab.reqs').live('click', function(){
     if ($('#tabs_manage_block ul li#tab_' + $(this).attr('id')).length <= 0){
         $('#tabs_manage_block ul li').removeClass('active');
@@ -109,6 +109,11 @@ function showRequirementInTab(id_req){
         data: {reqId: id_req, csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(html){
            $('#tabs_content_block div.tabs.tab_'+id_req).html(html);
+            $("textarea").each(function(n, obj) {
+                fck = new FCKeditor(obj.id) ;
+                fck.BasePath = "/media/fckeditor/" ;
+                fck.ReplaceTextarea() ;
+            });
         }
     });
 }
@@ -141,3 +146,4 @@ $('ul.notification_list li input[type=checkbox]').live('click', function(){
         $(this).parent().children('span.note_status').hide();
     }
 });
+
