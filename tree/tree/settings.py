@@ -17,6 +17,13 @@ DATABASES = {
         'PORT': '',
         }
 }
+ACCOUNT_ACTIVATION_DAYS = 2
+AUTH_USER_EMAIL_UNIQUE = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'olga.vorobyeva@anychart.com'
+EMAIL_HOST_PASSWORD = 'terrawyw9y24sbella'
+EMAIL_USE_TLS = True
 
 TIME_ZONE = 'Russia/Irkutsk'
 LANGUAGE_CODE = 'ru-ru'
@@ -71,6 +78,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'registration',
     'app',
     'mptt',
     )

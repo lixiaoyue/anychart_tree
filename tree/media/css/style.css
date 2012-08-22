@@ -233,6 +233,17 @@ label.menu{
 li.req div p{
     color: #5C5B5B;
 }
+ul.registration{
+    float: right !important;
+    left:0 !important;
+    color: #feb21f;
+    text-shadow: none;
+}
+ul.registration li a.registration{
+    letter-spacing: 0;
+    font-size: 1em !important;
+}
+
 .treeview a.open_tab{padding-left: 20px; background: url(../i/open_tab.png) no-repeat center left;}
 .treeview a.notification{padding-left: 20px; background: url(../i/bug.png) no-repeat center left;}
 /* TREE -->> */

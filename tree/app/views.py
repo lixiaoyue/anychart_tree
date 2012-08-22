@@ -10,7 +10,8 @@ media = settings.MEDIA_URL
 
 def home_page(request):
     nodes = Node.objects.all()
-    return render_to_response('index.html',{'media':media, 'nodes':nodes})
+    user = request.user
+    return render_to_response('index.html',{'media':media, 'nodes':nodes,'user':user})
 
 def any(request):
     return render_to_response("any.html", {'media':media})

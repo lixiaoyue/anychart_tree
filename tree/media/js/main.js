@@ -95,6 +95,21 @@ $('a.open_tab.info').live('click', function(){
     showTabContent('tab_'+$(this).attr('id'));
 });
 
+//Открываем описание узла из дерева
+$('a.open_tie_in_tab').live('click', function(){
+    if ($('#tabs_manage_block ul li#tab_' + $(this).attr('id')).length <= 0){
+        $('#tabs_manage_block ul li').removeClass('active');
+        $('#tabs_manage_block ul').append('<li class="active" id="tab_' + $(this).attr('id') + '" ><a href="#">'+$(this).html()+'</a><div class="closeTab info"></div></li>');
+        $('#tabs_content_block').append('<div class="tabs tab_'+$(this).attr('id')+'"> </div>');
+//        TODO: добавить загрузку информации об узле. т.е. об бизнес-требовании
+        tabsWidthDetect();
+    }else{
+        $('#tabs_manage_block ul li').removeClass('active');
+        $('#tabs_manage_block ul li#tab_' + $(this).attr('id')).addClass('active');
+    }
+    showTabContent('tab_'+$(this).attr('id'));
+});
+
 //получить содержимое требования и вставить в таб
 function showRequirementInTab(id_req){
     $.ajax({

@@ -6,17 +6,17 @@
     <meta name="keywords" content="" />
     <title>AnyChart live tree</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" type="text/css" href="../media/css/style.css" />
-    <script type="text/javascript" src="../media/js/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="../media/js/jquery.dropotron-1.0.js"></script>
-    <script type="text/javascript" src="../media/js/main.js"></script>
-    <script type="text/javascript" src="../media/fckeditor/fckeditor.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ media }}css/style.css" />
+    <script type="text/javascript" src="{{ media }}js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="{{ media }}js/jquery.dropotron-1.0.js"></script>
+    <script type="text/javascript" src="{{ media }}js/main.js"></script>
+    <script type="text/javascript" src="{{ media }}fckeditor/fckeditor.js"></script>
 </head>
 <body>
 <div id="wrapper">
 <div id="header">
     <div id="logo">
-        <h1><a href="#">AnyChart requirements tree</a></h1>
+        <h1><a href="/">AnyChart requirements tree</a></h1>
     </div>
 </div>
 <div id="menu">
@@ -71,6 +71,16 @@
         </li>
         <li><a href="#">О системе</a></li>
     </ul>
+
+    <ul class="registration">
+        {% if user.is_authenticated %}
+            <li>Здравствуйте, {{ user.username }}</li>
+            <li><a class="registration" href="{% url auth_logout %}">Выйти</a></li>
+        {% else %}
+            <li><a class="registration" href="{% url auth_login %}">Log in</a></li>
+            <li><a class="registration" href="{% url registration_register %}">Регистрация</a></li>
+        {% endif %}
+    </ul>
     <br class="clearfix" />
 </div>
 
@@ -81,7 +91,7 @@
     <ul>
         {% recursetree nodes %}
         <li id="tree_tie_{{ node.id }}" class="cl">
-            <div><p><a href="#" class="sc close_tie"></a> <span><a href="#" id="description_tie_{{ node.id }}">{{ node.name }}</a></span></p></div>
+            <div><p><a href="#" class="sc close_tie"></a> <span><a href="#" id="description_tie_{{ node.id }}" class="open_tie_in_tab">{{ node.name }}</a></span></p></div>
             <ul>
 
                 <li id="req_tie_{{ node.id }}" class="cl req">
