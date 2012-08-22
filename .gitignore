@@ -16,4 +16,5 @@ gen/
 local.properties
 .idea/*
 tree/.idea
+tree/media/files
 *.pyc
