@@ -39,9 +39,11 @@
     <div>
         <div>поставить задачу:</div>
         <div style="border: 1px">
-            {% for i in task.all %}
-                <p><input type='radio' id="task_{{ i.id }}" name="motomoto"/>{{ i.title }}</p>
-            {% endfor %}
+            <select name="menu" size="3">
+                {% for i in task.all %}
+                    <option value="task_{{ i.id }}">{{ i.title }}</option>
+                {% endfor %}
+            </select>
         </div>
     </div>
     <h3>Приложение:</h3>
