@@ -25,7 +25,7 @@ def getRequirements(request):
             reqs = Requirement.objects.filter(node = tie_id)
             for req in reqs:
                 message += '''<li><div><p>
-                        <a href="#" id="req_%d" class="open_tab reqs"> %s </a>
+                        <a href="#" id="req_%d" class="open_tab reqs"><span></span> %s </a><span class="edit"></span><span class="delete"></span>
                         </p></div></li>''' %(req.id, req.name)
     return HttpResponse(message)
 

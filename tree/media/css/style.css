@@ -177,7 +177,6 @@ label.menu{
 
 /* <<-- TREE */
 .treeview { padding: 0; clear: both; font-family: Arial, sans-serif; width: 100%; }
-.treeview * { font-size: 100.1%; }
 .treeview ul{
     overflow: hidden;
     width: 100%;
@@ -201,7 +200,7 @@ label.menu{
     border-bottom: 1px dashed;
     padding: 0;
 }
-.treeview li p span{margin-left: 5px;}
+.treeview li p span{margin: 0 5px; float: left}
 .treeview a {padding: 0.1em 0.2em; white-space: nowrap; //height: 1px; text-decoration: none; }
 .treeview img.i{border-right: 2px solid; border-bottom: 0.5em solid;margin-bottom: -0.5em; vertical-align: middle;}
 .treeview a.sc{position: absolute; top: 0.06em; width: 15px; height: 20px; left: -12px; padding: 0; text-decoration: none;}
@@ -212,6 +211,7 @@ label.menu{
 .treeview a {
     color: #2C2B2B;
     font-weight: normal;
+    float: left
 }
 .treeview li p,.treeview img.i,.treeview .sc{
     background: #FFF0F5;
@@ -232,6 +232,7 @@ label.menu{
 }
 li.req div p{
     color: #5C5B5B;
+    font-weight: normal;
 }
 ul.registration{
     float: right !important;
@@ -244,8 +245,22 @@ ul.registration li a.registration{
     font-size: 1em !important;
 }
 
-.treeview a.open_tab{padding-left: 20px; background: url(../i/open_tab.png) no-repeat center left;}
-.treeview a.notification{padding-left: 20px; background: url(../i/bug.png) no-repeat center left;}
+.treeview a.open_tab span{width: 16px; height: 16px; background: url(../i/icons.png) no-repeat -203px top;float: left;}
+.treeview a.notification span{width: 16px; height: 16px; background: url(../i/icons.png) no-repeat -186px top;float: left;}
+.treeview a.status span{width: 16px; height: 16px; background: url(../i/icons.png) no-repeat -169px top;float: left;}
+
+.treeview span.add, .treeview span.edit, .treeview span.delete{
+    width: 16px; height: 16px;float: left;cursor: pointer; opacity: 0.3; margin: 2px 0 0 5px;
+}
+.treeview span.add:hover, .treeview span.edit:hover, .treeview span.delete:hover{
+    opacity: 1;
+}
+.treeview span.add{ background: url(../i/icons.png) no-repeat -119px top;}
+.treeview span.edit{background: url(../i/icons.png) no-repeat -137px top;}
+.treeview span.delete{background: url(../i/icons.png) no-repeat -153px top;}
+a.open_tie_in_tab{color: #104E8B; font-weight: bold;}
+
+
 /* TREE -->> */
 /* <<-- TABS */
 #tabs_manage_block{
@@ -310,7 +325,7 @@ ul.registration li a.registration{
     position: absolute;
     width: 17px;
     height: 15px;
-    background: url(../i/icons.png) no-repeat right center;
+    background: url(../i/icons.png) no-repeat -103px center;
     top:5px;
     right: 5px;
     z-index: 4;

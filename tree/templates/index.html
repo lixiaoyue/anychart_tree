@@ -21,66 +21,39 @@
 </div>
 <div id="menu">
     <ul>
-        <li class="first">
-            <span class="opener">Сервис<b></b></span>
-            <ul>
-                <li>
-                    <span>Распечатать статистику<b></b></span>
-                    <ul>
-                        <li><a href="#">Статистика покрытия тестами</a></li>
-                        <li><a href="#">Статистика ошибок</a></li>
-                        <li><a href="#">Статистика статусов</a></li>
-                        <li><a href="#">Статистика покрытия требованиями</a></li>
-                        <li><a href="#">Статистика покрытия проверрыми требованиями</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">Печатать текущие вкладки</a></li>
-            </ul>
-        </li>
         <li><span class="opener">Режимы просмотра дерева<b></b></span>
             <ul>
                 <li>
                     <span>Показать<b></b></span>
                     <ul>
                         <li><input type="checkbox" id="show_req" checked><label class="menu" for="show_req">Требования</label></li>
-                        <li><input type="checkbox" id="show_notices" checked><label class="menu" for="show_notices">Замечания</label></li>
+                        <li><input type="checkbox" id="show_notices" checked><label class="menu" for="show_notices">Статусы</label></li>
                     </ul>
                 </li>
-                <li><input type="radio" name="mode" value="view" id="mode_view"><label class="menu" for="mode_view">Режим просмотра</label></li>
+                <li><input type="radio" name="mode" value="view" id="mode_view" checked="true"><label class="menu" for="mode_view">Режим просмотра</label></li>
                 <li><input type="radio" name="mode" value="edit" id="mode_edit"><label class="menu" for="mode_edit">Режим редактирования</label></li>
-                <li><input type="radio" name="mode" value="bugfix" id="mode_bugfix"><label class="menu" for="mode_bugfix">Режим bugfix</label></li>
-
-            </ul>
-        </li>
-        <li>
-            <span class="opener">Статистика<b></b></span>
-            <ul>
-                <li><a href="#">Статистика покрытия тестами</a></li>
-                <li><a href="#">Статистика ошибок</a></li>
-                <li><a href="#">Статистика статусов</a></li>
-                <li><a href="#">Статистика покрытия требованиями</a></li>
-                <li><a href="#">Статистика покрытия проверрыми требованиями</a></li>
             </ul>
         </li>
         <li>
             <span class="opener">Поддержка<b></b></span>
             <ul>
-                <li><a href="#">Написать письмо Оле</a></li>
-                <li><a href="#">написать письмо Саше</a></li>
+                <li><a href="#">Написать письмо Галине</a></li>
             </ul>
         </li>
         <li><a href="#">О системе</a></li>
     </ul>
-
-    <ul class="registration">
-        {% if user.is_authenticated %}
+    {% if user.is_authenticated %}
+        <ul class="registration true">
             <li>Здравствуйте, {{ user.username }}</li>
             <li><a class="registration" href="{% url auth_logout %}">Выйти</a></li>
-        {% else %}
+        </ul>
+    {% else %}
+        <ul class="registration false">
             <li><a class="registration" href="{% url auth_login %}">Log in</a></li>
             <li><a class="registration" href="{% url registration_register %}">Регистрация</a></li>
-        {% endif %}
-    </ul>
+        </ul>
+    {% endif %}
+
     <br class="clearfix" />
 </div>
 
@@ -89,53 +62,65 @@
 <div class="treeview">
     {% load mptt_tags %}
     <ul>
-        {% recursetree nodes %}
-        <li id="tree_tie_{{ node.id }}" class="cl">
-            <div><p><a href="#" class="sc close_tie"></a> <span><a href="#" id="description_tie_{{ node.id }}" class="open_tie_in_tab">{{ node.name }}</a></span></p></div>
+        <li>
+            <div>
+                <p>
+                    <a href="#" class="sc close_tie"></a>  <span >AnyChart</span><span class="add"></span>
+                </p>
+            </div>
             <ul>
+                {% recursetree nodes %}
+                <li id="tree_tie_{{ node.id }}" class="cl">
+                    <div><p><a href="#" class="sc close_tie"></a> <span><a href="#" id="description_tie_{{ node.id }}" class="open_tie_in_tab">{{ node.name }}</a></span>
+                        <span class="add"></span><span class="edit"></span><span class="delete"></span></p></div>
+                    <ul>
 
-                <li id="req_tie_{{ node.id }}" class="cl req">
-                    <div>
-                        <p>
-                            <a href="#" class="sc close_req"></a>  <span class="right_active req">Требования</span>
-                        </p>
-                    </div>
-                    <ul></ul>
+                        <li id="req_tie_{{ node.id }}" class="cl req">
+                            <div>
+                                <p>
+                                    <a href="#" class="sc close_req"></a>  <span class="right_active req">Требования</span> <span class="add"></span>
+                                </p>
+                            </div>
+                            <ul></ul>
+                        </li>
+
+                    {% if not node.is_leaf_node %}
+                            {{ children }}
+                    {% endif %}
+                        <li>
+                            <div>
+                                <p>
+                                    <a href="#" id="notification_tie_{{ node.id }}" class="open_tab status"><span></span>Статус</a>
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
                 </li>
 
-            {% if not node.is_leaf_node %}
-                    {{ children }}
-            {% endif %}
-{#                <li>#}
-{#                    <div>#}
-{#                        <p>#}
-{#                            <a href="#" id="notification_tie_{{ node.id }}" class="open_tab notification">Замечания</a>#}
-{#                        </p>#}
-{#                    </div>#}
-{#                </li>#}
+            {% endrecursetree %}
+
+            <li>
+                <div>
+                    <p>
+                        <a href="#" id="system_1" class="open_tab info "><span></span>О системе "AnyChart requirements tree"</a>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p>
+                        <a href="#" id="user_guide" class="open_tab info"><span></span>Заметки пользователя системы</a>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p>
+                        <a href="#" id="system_notices" class="open_tab notification info"><span></span>Замечания по системе</a>
+                    </p>
+                </div>
+            </li>
             </ul>
-        </li>
-        {% endrecursetree %}
-        <li>
-            <div>
-                <p>
-                    <a href="#" id="system_1" class="open_tab info ">О системе "AnyChart requirements tree"</a>
-                </p>
-            </div>
-        </li>
-        <li>
-            <div>
-                <p>
-                    <a href="#" id="user_guide" class="open_tab info">Заметки пользователя системы</a>
-                </p>
-            </div>
-        </li>
-        <li>
-            <div>
-                <p>
-                    <a href="#" id="system_notices" class="open_tab notification info">Замечания по системе</a>
-                </p>
-            </div>
         </li>
     </ul>
 
