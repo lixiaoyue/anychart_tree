@@ -1,57 +1,73 @@
-<style type="text/css">
-    <!--
-    .table {display:table; width: 100%}
-    .table div {display:table-row}
-    .table div div {display:table-cell; vertical-align: middle; margin:10px; padding:10px 5px;}
-    -->
-    #descr_redaction {
-        width:80%;
-        height:400px;
-    }
-    #redaction{
-        width:100%
-    }
-    #reason_redaction{
-        width:100%;
-    }
-</style>
-
-<div class='table' id='common'>
-
+<div class='table edit'>
     <div>
-        <div id='name'>имя:</div>
+        <div id='name'>Имя:</div>
         <div id='name_redaction'>
-            <input maxlength="40" size="45" type='text' id='req_name_{{ node.id }}' value="{{ req.requirement.name }}"/>
+            <input type='text' id='req_name_{{ node.id }}' value="{{ node.node.name }}"/>
         </div>
     </div>
     <div id='reason'>
-        <div>цель создания:</div>
+        <div>Цель создания:</div>
         <div id='reason_redaction'>
-            <input style="width: 100%" type="text" id="req_purpose_{{ node.id }}" value="{{req.purpose}}"/>
-        </div>
-    </div>
-    <div id='descr'>
-        <div>описание:</div>
-        <div id='descr_redaction'>
-            <textarea rows="4" cols="300" id="req_descr_{{ node.id }}">{{req.description}}</textarea>
+            <input type="text" id="req_purpose_{{ node.id }}" value="{{node.purpose}}"/>
         </div>
     </div>
     <div>
-        <div>поставить задачу:</div>
+        <div>Задача:</div>
         <div style="border: 1px">
-            {% for i in tasks.all %}
-                <p><input type='radio' id="task_{{ i.id }}" name="motomoto"/>{{ i.title }}</p>
-            {% endfor %}
+            <select name="menu">
+                {% for i in tasks.all %}
+                    <option value="task_{{ i.id }}">{{ i.title }}</option>
+                {% endfor %}
+            </select>
         </div>
     </div>
-    <h3>Приложение:</h3>
+    <div id='descr'>
+        <div>Описание:</div>
+        <div id='descr_redaction'>
+            <textarea id="req_descr_{{ node.id }}">{{node.description}}</textarea>
+        </div>
+    </div>
+
     <div id='redaction'>
-        <div id='files'>прикреплённые файлы:</div>
+        <div id='files'>Файлы:</div>
         <div id='files_redaction'>
             {% for i in node.files.all %}
                 <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
             {% endfor %}
         </div>
     </div>
-
+</div>
+<div class='table read'>
+    <div>
+        <div>Имя:</div>
+        <div>{{ node.node.name }}
+        </div>
+    </div>
+    {% if node.purpose %}
+        <div >
+            <div>Цель создания:</div>
+            <div>{{node.purpose}}
+            </div>
+        </div>
+    {% endif %}
+        <div>
+            <div>Задача:</div>
+            <div>
+            </div>
+        </div>
+    {% if node.description %}
+        <div>
+            <div>Описание:</div>
+            <div>{{node.description|safe}}
+            </div>
+        </div>
+    {% endif %}
+    <div>
+        <div>Файлы:</div>
+        <div>
+            {% for i in node.files.all %}
+                <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
+            {% endfor %}
+        </div>
+    </div>
 </div>

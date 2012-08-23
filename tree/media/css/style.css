@@ -312,7 +312,7 @@ a.open_tie_in_tab{color: #104E8B; font-weight: bold;}
 #tabs_content_block{
     height: 85%;
     width: 94%;
-    padding: 0.5%;
+    padding: 1.5%;
     margin: 0 auto;
     border: solid 1px #7E7E7E;
     overflow-y: scroll;
@@ -383,6 +383,20 @@ ul.notification_list li input{
 /* FOOTER -->> */
 
 
+.table {display:table; width: 100%}
+.table div {display:table-row}
+.table div div {display:table-cell; vertical-align: top; margin:10px; padding:10px 5px;}
+.table input{width: 98%; border: 1px solid #5C5B5B; padding: 0 1%;}
+#descr_redaction {
+    width:80%;
+    height:400px;
+}
+.table #redaction{
+    width:100%
+}
+.table #reason_redaction{
+    width:100%;
+}
 
 
 #page-bottom{

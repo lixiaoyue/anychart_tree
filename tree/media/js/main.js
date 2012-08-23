@@ -24,8 +24,12 @@ $(function(){
 function switch_mode(is_editable){
     if (is_editable){
         $('.treeview span.add, .treeview span.edit, .treeview span.delete').show();
+        $('.table.read').hide();
+        $('.table.edit').show();
     }else{
         $('.treeview span.add, .treeview span.edit, .treeview span.delete').hide();
+        $('.table.read').show();
+        $('.table.edit').hide();
     }
 }
 
@@ -123,9 +127,11 @@ $('a.open_tab.reqs, a.open_tie_in_tab, a.open_tab.info, a.open_tab.status').live
     }
     showTabContent('tab_'+$(this).attr('id'));
 });
+
 //получить статус бизнес-требования и вставить в Tab
 function showNodeStatusInTab(node_id){
     console.log(node_id);
+    switch_mode(MODE_EDITION);
 }
 
 //получить содержимое бизнес-требования и вставить в таб
@@ -140,10 +146,11 @@ function showNodeInTab(id_node){
                 fck = new FCKeditor(obj.id) ;
                 fck.ToolbarSet = 'AnyChartTree';
                 fck.BasePath = "/media/fckeditor/" ;
-                fck.ReplaceTextarea() ;
                 fck.Width = '100%';
-                fck.Height = '300';
+                fck.Height = '500';
+                fck.ReplaceTextarea() ;
             });
+            switch_mode(MODE_EDITION);
         }
     });
 }
@@ -164,6 +171,7 @@ function showRequirementInTab(id_req){
                 fck.Height = '500';
                 fck.ReplaceTextarea();
             });
+            switch_mode(MODE_EDITION);
         }
     });
 }
