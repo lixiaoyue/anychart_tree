@@ -35,6 +35,7 @@ body
 #xEditingArea
 {
     border: #696969 1px solid;
+    border-top:none;
 }
 
 .SourceField
@@ -56,7 +57,7 @@ body
 
 .TB_ToolbarSet
 {
-    border-top: #000 1px outset;
+    border-top: dimGray 1px solid;
     border-bottom: #efefde 1px outset;
 }
 
@@ -114,7 +115,7 @@ body
 .TB_Expand, .TB_Collapse
 {
     padding: 2px 2px 2px 2px;
-    border: #efefde 1px outset;
+    border: #696969 1px solid;
 }
 
 .TB_Collapse

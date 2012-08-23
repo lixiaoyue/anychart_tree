@@ -16,7 +16,7 @@ class Node(MPTTModel):
     name = models.CharField(max_length=200, verbose_name=u'Название узла')
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', verbose_name=u'Родительский узел')
     def __unicode__(self):
-        return self.name
+        return unicode(self.name)
     class MPTTMeta:
         order_insertion_by = ['name']
     class Meta:

@@ -28,9 +28,9 @@ function switch_mode(is_editable){
         $('.treeview span.add, .treeview span.edit, .treeview span.delete').hide();
     }
 }
+
 //Обработка выбора режима просмотра в меню (радио-баттон)
 $('input[name=mode]').live('change', function() {
-    console.log($('input[name=mode]:checked').val());
     if($('input[name=mode]:checked').val()=='view'){MODE_EDITION = false}else{MODE_EDITION = true}
     switch_mode(MODE_EDITION);
 });
@@ -116,23 +116,22 @@ $('a.open_tab.reqs, a.open_tie_in_tab, a.open_tab.info').live('click', function(
 
 //получить содержимое бизнес-требования и вставить в таб
 function showNodeInTab(id_node){
-//    $.ajax({
-//        type: "POST",
-//        url: "/getRequirementDescription/",
-//        data: {reqId: id_req, csrfmiddlewaretoken: '{{ csrf_token }}'},
-//        success: function(html){
-//            $('#tabs_content_block div.tabs.tab_'+id_req).html(html);
-//            $("textarea").each(function(n, obj) {
-//                fck = new FCKeditor(obj.id) ;
-//                fck.ToolbarSet = 'AnyChartTree';
-//                fck.BasePath = "/media/fckeditor/" ;
-//                fck.ReplaceTextarea() ;
-//                fck.Width = '100%';
-//                fck.Height = '300';
-//            });
-//        }
-//    });
-    console.log(id_node);
+    $.ajax({
+        type: "POST",
+        url: "/getNodeDescription/",
+        data: {nodeId: id_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){
+            $('#tabs_content_block div.tabs.tab_'+id_node).html(html);
+            $("#tabs_content_block div.tabs.tab_" + id_node + " textarea").each(function(n, obj) {
+                fck = new FCKeditor(obj.id) ;
+                fck.ToolbarSet = 'AnyChartTree';
+                fck.BasePath = "/media/fckeditor/" ;
+                fck.ReplaceTextarea() ;
+                fck.Width = '100%';
+                fck.Height = '300';
+            });
+        }
+    });
 }
 
 //получить содержимое требования и вставить в таб

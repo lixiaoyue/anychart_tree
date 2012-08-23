@@ -37,3 +37,12 @@ def getRequirementDescription(request):
             req_id = request.POST['reqId'].replace('req_','')
             req = RequirementsEdition.objects.filter(requirement = req_id).order_by('-redaction_date')[0]
     return render_to_response("requirement.html", {'req':req, 'task': tasks})
+
+@csrf_exempt
+def getNodeDescription(request):
+    if request.is_ajax():
+        if request.method == 'POST':
+            node_id = request.POST['nodeId'].replace('description_tie_','')
+            node = NodeEditionHistory.objects.filter(node = node_id).order_by('-redaction_date')[0]
+            return render_to_response("node.html", {'node':node, 'tasks': CurrentTask.objects.all()[0:2]})
+    return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request))
