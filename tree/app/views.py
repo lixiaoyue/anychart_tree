@@ -46,3 +46,8 @@ def getNodeDescription(request):
             node = NodeEditionHistory.objects.filter(node = node_id).order_by('-redaction_date')[0]
             return render_to_response("node.html", {'node':node, 'tasks': CurrentTask.objects.all()[0:2]})
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request))
+
+@csrf_exempt
+def saveNodeEdition(request):
+    if request.method == 'POST':
+        return HttpResponse(str(request.POST['node_files']))

@@ -41,14 +41,6 @@ class PersonRoleDetection(models.Model):
         verbose_name = _(u'Люди по ролям в узлах')
         verbose_name_plural = _(u'Люди по ролям в узлах')
 
-class RedactionNumber(models.Model):
-    number = models.CharField(max_length=200, verbose_name=u'Номер редакции')
-    def __unicode__(self):
-        return self.number
-    class Meta:
-        verbose_name = _(u'Номер редакции')
-        verbose_name_plural = _(u'Номера редакции')
-
 class Release(models.Model):
     name = models.CharField(max_length=200, verbose_name=u'Название релиза')
     deadline = models.DateTimeField(auto_now=False, verbose_name=u'Срок реализации')
@@ -91,7 +83,6 @@ class NodeEditionHistory(models.Model):
     reason = models.CharField(max_length=300,  verbose_name=u'Источник вдохвения на создание')
     redaction_date = models.DateTimeField(auto_now=True)
     node = models.ForeignKey('Node', verbose_name=u'Редактируемый узел')
-    version = models.ForeignKey('RedactionNumber', verbose_name=u'Номер редакции')
     release = models.ForeignKey('Release', verbose_name=u'Релиз')
     edit_description = models.TextField(verbose_name=u'Обоснование редакции')
     user = models.ForeignKey(User)
@@ -131,7 +122,6 @@ class Requirement(models.Model):
         verbose_name_plural = _(u'Требования')
 
 class RequirementsEdition(models.Model):
-    version = models.ForeignKey(RedactionNumber)
     requirement = models.ForeignKey(Requirement)
     description = models.TextField(blank=True, verbose_name=u'Описание требования')
     purpose = models.CharField(max_length=300, blank=True, verbose_name=u'Цель создания элемента')
@@ -143,7 +133,7 @@ class RequirementsEdition(models.Model):
     user = models.ForeignKey(User)
     cur_task = models.ForeignKey(CurrentTask)
     def __unicode__(self):
-        return unicode(self.version)
+        return unicode(self.requirement)
     class Meta:
         verbose_name = _(u'История редактирования требований')
         verbose_name_plural = _(u'История редактирования требований')

@@ -142,14 +142,7 @@ function showNodeInTab(id_node){
         data: {nodeId: id_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(html){
             $('#tabs_content_block div.tabs.tab_'+id_node).html(html);
-            $("#tabs_content_block div.tabs.tab_" + id_node + " textarea").each(function(n, obj) {
-                fck = new FCKeditor(obj.id) ;
-                fck.ToolbarSet = 'AnyChartTree';
-                fck.BasePath = "/media/fckeditor/" ;
-                fck.Width = '100%';
-                fck.Height = '500';
-                fck.ReplaceTextarea() ;
-            });
+            makeEditors(id_node);
             switch_mode(MODE_EDITION);
         }
     });
@@ -163,19 +156,30 @@ function showRequirementInTab(id_req){
         data: {reqId: id_req, csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(html){
            $('#tabs_content_block div.tabs.tab_'+id_req).html(html);
-            $("textarea").each(function(n, obj) {
-                fck = new FCKeditor(obj.id) ;
-                fck.ToolbarSet = 'AnyChartTree';
-                fck.BasePath = "/media/fckeditor/" ;
-                fck.Width = '100%';
-                fck.Height = '500';
-                fck.ReplaceTextarea();
-            });
+            makeEditors(id_req);
             switch_mode(MODE_EDITION);
         }
     });
 }
 
+function makeEditors(ib_tab){
+    $("#tabs_content_block div.tabs.tab_" + ib_tab + " textarea.big_text").each(function(n, obj) {
+        fck = new FCKeditor(obj.id) ;
+        fck.ToolbarSet = 'AnyChartTree';
+        fck.BasePath = "/media/fckeditor/" ;
+        fck.Width = '100%';
+        fck.Height = '500';
+        fck.ReplaceTextarea() ;
+    });
+    $("#tabs_content_block div.tabs.tab_" + ib_tab + " textarea.small_text").each(function(n, obj) {
+        fck = new FCKeditor(obj.id) ;
+        fck.ToolbarSet = 'Basic';
+        fck.BasePath = "/media/fckeditor/" ;
+        fck.Width = '100%';
+        fck.Height = '200';
+        fck.ReplaceTextarea() ;
+    });
+}
 //Закрыть вкладку и удалить ее содержимое со страницы
 $('.closeTab').live('click', function(){
     if (!$(this).hasClass('info')){$('#tabs_content_block div.'+ $(this).parent().attr('id')).remove();}

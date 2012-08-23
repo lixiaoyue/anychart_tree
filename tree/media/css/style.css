@@ -18,7 +18,7 @@ ul {margin-bottom: 1.5em;}
 ul h4 {	margin-bottom: 0.35em;}
 .box {overflow: hidden;	margin-bottom: 1em;}
 .date {	background: #6E6E6E;padding: 5px 6px 5px 6px;margin: 0 6px 0 0;	color: #FFFFFF;	font-size: 0.8em;border-radius: 2px;}
-
+.table div.hidden{display: none}
 #wrapper {
     position: relative;
     width: 100%;
@@ -387,9 +387,13 @@ ul.notification_list li input{
 .table div {display:table-row}
 .table div div {display:table-cell; vertical-align: top; margin:10px; padding:10px 5px;}
 .table input{width: 98%; border: 1px solid #5C5B5B; padding: 0 1%;}
+.table #files_redaction input{
+    width: auto;
+    float: left;
+    margin: 5px 5px 0 0;
+}
 #descr_redaction {
     width:80%;
-    height:400px;
 }
 .table #redaction{
     width:100%
@@ -397,7 +401,10 @@ ul.notification_list li input{
 .table #reason_redaction{
     width:100%;
 }
-
+.table input[type=submit]{
+    float:right;
+    width: 200px;
+}
 
 #page-bottom{
 	color: #F5F5F5;

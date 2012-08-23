@@ -16,9 +16,6 @@ class PersonRoleDetectionAdmin(admin.ModelAdmin):
     list_display = ('role','node')
     raw_id_fields  = ('node',)
 
-class RedactionNumberAdmin(admin.ModelAdmin):
-    list_display = ('number',)
-
 class ReleaseAdmin(admin.ModelAdmin):
     list_display = ('name',)
     ordering = ('-deadline',)
@@ -65,7 +62,6 @@ admin.site.register(UserRole, UserRoleAdmin)
 admin.site.register(Node, NodeAdmin)
 admin.site.register(PersonRole, PersonRoleAdmin)
 admin.site.register(PersonRoleDetection, PersonRoleDetectionAdmin)
-admin.site.register(RedactionNumber, RedactionNumberAdmin)
 admin.site.register(Release, ReleaseAdmin)
 admin.site.register(Status ,StatusAdmin)
 admin.site.register(CurrentTask, CurrentTaskAdmin)

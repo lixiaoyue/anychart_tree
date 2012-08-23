@@ -1,42 +1,64 @@
 <div class='table edit'>
+<form method="post" action="/saveNodeEdition/">{% csrf_token %}
     <div>
-        <div id='name'>Имя:</div>
+        <div id='name'><label for='req_name_{{ node.id }}'>Имя:</label></div>
         <div id='name_redaction'>
-            <input type='text' id='req_name_{{ node.id }}' value="{{ node.node.name }}"/>
+            <input type='text' id='req_name_{{ node.id }}' name='name' value="{{ node.node.name }}"/>
         </div>
     </div>
-    <div id='reason'>
-        <div>Цель создания:</div>
-        <div id='reason_redaction'>
-            <input type="text" id="req_purpose_{{ node.id }}" value="{{node.purpose}}"/>
+    <div id='purpose'>
+        <div><label for='req_purpose_{{ node.id }}'>Цель создания:</label></div>
+        <div id='req_purpose'>
+            <input type="text" id="req_purpose_{{ node.id }}" name='reason' value="{{node.purpose}}"/>
         </div>
     </div>
     <div>
-        <div>Задача:</div>
+        <div><label for='select_task'> Задача:</label></div>
         <div style="border: 1px">
-            <select name="menu">
+            <select name="cur_task" id='select_task'>
                 {% for i in tasks.all %}
                     <option value="task_{{ i.id }}">{{ i.title }}</option>
                 {% endfor %}
             </select>
         </div>
     </div>
-    <div id='descr'>
-        <div>Описание:</div>
-        <div id='descr_redaction'>
-            <textarea id="req_descr_{{ node.id }}">{{node.description}}</textarea>
+    <div id='description'>
+        <div><label for='req_descr_{{ node.id }}'>Описание:</label></div>
+        <div id='req_description'>
+            <textarea id="req_descr_{{ node.id }}" class="big_text" name='description'>{{node.description}}</textarea>
         </div>
     </div>
-
     <div id='redaction'>
         <div id='files'>Файлы:</div>
         <div id='files_redaction'>
             {% for i in node.files.all %}
-                <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
+                <input type="checkbox" id="file_{{ i.id }}" checked value="file_{{ i.id }}"><a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
             {% endfor %}
         </div>
     </div>
+    <div id='reason_of_redaction'>
+        <div><label for='reason_of_redaction_req_{{ node.id }}'>Обоснование внесения изменений:</label></div>
+        <div id='descr_redaction'>
+            <textarea id="reason_of_redaction_req_{{ node.id }}" class="small_text" name='edit_description'>{{node.edit_description}}</textarea>
+        </div>
+    </div>
+    <div>
+        <div>
+            <div class="hidden">
+                <input type="text" name='node' value="{{node.node.id}}"/>
+                <input type="text" name='release' value="{{node.release}}"/>
+                <select size="5" multiple="true" name='node_files' id='files_sel'>
+                    {% for i in node.files.all %}
+                        <option value="file_{{ i.id }}" selected>{{ i.id }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div><input type="submit" value="Сохранить редакцию"></div>
+    </div>
+</form>
 </div>
+
 <div class='table read'>
     <div>
         <div>Имя:</div>
