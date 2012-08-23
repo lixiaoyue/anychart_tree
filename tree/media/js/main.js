@@ -10,7 +10,6 @@ $(function(){
     showTabContent($('#tabs_manage_block ul li.active').attr('id'));
 });
 
-
 //Сворачиваем, разварачиваем деверо
 $('a.sc').live('click', function(){
     var liId = $(this).parent().parent().parent().attr('id');
@@ -122,9 +121,9 @@ function showRequirementInTab(id_req){
                 fck = new FCKeditor(obj.id) ;
                 fck.ToolbarSet = 'AnyChartTree';
                 fck.BasePath = "/media/fckeditor/" ;
-                fck.ReplaceTextarea() ;
                 fck.Width = '100%';
-                fck.Height = '300';
+                fck.Height = '500';
+                fck.ReplaceTextarea();
             });
         }
     });

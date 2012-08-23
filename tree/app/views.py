@@ -31,8 +31,9 @@ def getRequirements(request):
 
 @csrf_exempt
 def getRequirementDescription(request):
+    tasks = CurrentTask.objects.all()
     if request.is_ajax():
         if request.method == 'POST':
             req_id = request.POST['reqId'].replace('req_','')
             req = RequirementsEdition.objects.filter(requirement = req_id).order_by('-redaction_date')[0]
-    return render_to_response("requirement.html", {'req':req})
+    return render_to_response("requirement.html", {'req':req, 'task': tasks})
