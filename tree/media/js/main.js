@@ -92,18 +92,28 @@ function showTabContent(tabId){
 }
 
 //Открываем вкладку при клике по дереву
-$('a.open_tab.reqs, a.open_tie_in_tab, a.open_tab.info').live('click', function(){
+$('a.open_tab.reqs, a.open_tie_in_tab, a.open_tab.info, a.open_tab.status').live('click', function(){
     if ($('#tabs_manage_block ul li#tab_' + $(this).attr('id')).length <= 0){
         $('#tabs_manage_block ul li').removeClass('active');
+        //open info tab
         if ($(this).hasClass('info')){
             $('#tabs_manage_block ul').append('<li class="active" id="tab_' + $(this).attr('id') + '" ><a href="#">'+$(this).html()+'</a><div class="closeTab info"></div></li>');
+        //open rest tabs
         }else{
             $('#tabs_manage_block ul').append('<li class="active" id="tab_' + $(this).attr('id') + '" ><a href="#">'+$(this).html()+'</a><div class="closeTab"></div></li>');
             $('#tabs_content_block').append('<div class="tabs tab_'+$(this).attr('id')+'"> </div>');
+            //open requirements
             if($(this).hasClass('reqs')){
                 showRequirementInTab($(this).attr('id'));
-            }else{
+            //open nodes
+            }else if($(this).hasClass('open_tie_in_tab')){
                 showNodeInTab($(this).attr('id'));
+            //open status tabs
+            }else{
+                var parent = $(this).parent().parent().parent().parent().parent();
+                var name = parent.children('div').children('p').children('span').children('a.open_tie_in_tab').html();
+                $('#tabs_manage_block ul li#tab_'+$(this).attr('id')+' a').html(name + ': status');
+                showNodeStatusInTab(parent.attr('id'));
             }
         }
         tabsWidthDetect();
@@ -113,6 +123,10 @@ $('a.open_tab.reqs, a.open_tie_in_tab, a.open_tab.info').live('click', function(
     }
     showTabContent('tab_'+$(this).attr('id'));
 });
+//получить статус бизнес-требования и вставить в Tab
+function showNodeStatusInTab(node_id){
+    console.log(node_id);
+}
 
 //получить содержимое бизнес-требования и вставить в таб
 function showNodeInTab(id_node){
