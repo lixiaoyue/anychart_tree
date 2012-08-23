@@ -39,7 +39,7 @@
     <div>
         <div>поставить задачу:</div>
         <div style="border: 1px">
-            <select name="menu" size="3">
+            <select name="menu">
                 {% for i in task.all %}
                     <option value="task_{{ i.id }}">{{ i.title }}</option>
                 {% endfor %}
