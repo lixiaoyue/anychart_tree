@@ -50,4 +50,4 @@ def getNodeDescription(request):
 @csrf_exempt
 def saveNodeEdition(request):
     if request.method == 'POST':
-        return HttpResponse(str(request.POST['node_files']))
+        return HttpResponse(str(request.POST.getlist('node_files')))

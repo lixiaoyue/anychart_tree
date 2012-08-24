@@ -151,6 +151,7 @@ function showNodeInTab(id_node){
 //получить содержимое требования и вставить в таб
 function showRequirementInTab(id_req){
     $.ajax({
+        traditional:true,
         type: "POST",
         url: "/getRequirementDescription/",
         data: {reqId: id_req, csrfmiddlewaretoken: '{{ csrf_token }}'},
