@@ -427,3 +427,6 @@ ul.notification_list li input{
 	padding: 10px;
 }
 
+#new_line{
+    clear: both;
+}
