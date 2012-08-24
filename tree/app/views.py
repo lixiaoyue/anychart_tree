@@ -49,6 +49,7 @@ def getNodeDescription(request):
 
 @csrf_exempt
 def saveNodeEdition(request):
+    nodes = Node.objects.all()
     if request.method == 'POST':
         print request.POST.lists
         for i in request.POST:
@@ -62,30 +63,32 @@ def saveNodeEdition(request):
         set_of_files= []
         print type(request.POST.getlist('node_files'))
         for i in request.POST.getlist('node_files'):
-            print 'in'
             get_id = i.split('_')
             set_of_files.append( FileInNodes.objects.get(id = get_id[-1]))
 
         #редактируемое БТ + релиз
+        prev_node.node.name = request.POST['name']
+        prev_node.node.save()
         curr_bus_req = prev_node.node
-        curr_release_name = request.POST['release']
-        curr_release = Release.objects.get(name = curr_release_name)
+
+        curr_release = Release.objects.get(name = request.POST['release'])
 
         #задание
         task_id = request.POST['cur_task'].split('_')[-1]
         curr_task = CurrentTask.objects.get(id = task_id)
-        node = NodeEditionHistory.objects.create(description = curr_description,
+
+        new_node = NodeEditionHistory.objects.create(
+            description = curr_description,
             reason = curr_reason,
             node = curr_bus_req,
-            edit_description = curr_description,
+            edit_description = request.POST['edit_description'],
             user = request.user,
             cur_task = curr_task,
-            release = curr_release)
-        node.files = set_of_files
+            release = curr_release,
+        )
+        new_node.files = set_of_files
+        new_node.save()
+
 
         #        files.append(FileInNodes.objects.get(id = request.POST.getlist('node_files')[i].))
-        return HttpResponse(str(request.POST.getlist('node_files')))
-
-
-
-
+        return render_to_response('index.html',{'media':media, 'nodes':nodes,'user':request.user})

@@ -265,5 +265,11 @@ $('ul.notification_list li input[type=checkbox]').live('click', function(){
     }
 });
 
+$('#files_redaction input[type=checkbox]').live('click', function(){
+   if ($(this).attr('checked')){
+
+   }
+});
+
 //TODO: добавить новое требование
 
