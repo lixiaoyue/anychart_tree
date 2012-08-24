@@ -1,5 +1,5 @@
 * {	margin: 0;	padding: 0;}
-a {	text-decoration: underline;	color: #104E8B;}
+a {	text-decoration: underline;	color: #104E8B; cursor: pointer}
 a:hover {text-decoration: none;}
 body {font-size: 11.5pt;color: #5C5B5B;}
 body,input {font-family: Georgia, serif;}
@@ -336,8 +336,12 @@ a.open_tie_in_tab{color: #104E8B; font-weight: bold;}
 }
 /* TABS -->> */
 /* <<-- TABS CONTENT */
+ul.notification_list{
+    list-style: none;
+}
 ul.notification_list ul{
     margin-top: 30px ;
+    list-style: none;
 }
 ul.notification_list li{
     margin: 10px 0;
