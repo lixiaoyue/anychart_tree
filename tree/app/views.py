@@ -50,4 +50,8 @@ def getNodeDescription(request):
 @csrf_exempt
 def saveNodeEdition(request):
     if request.method == 'POST':
+        print request.POST.lists
+        get_id = str(request.POST['node'])
+        node = Node.objects.filter(id=get_id)
+        print type(node)
         return HttpResponse(str(request.POST.getlist('node_files')))
