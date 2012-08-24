@@ -51,7 +51,20 @@ def getNodeDescription(request):
 def saveNodeEdition(request):
     if request.method == 'POST':
         print request.POST.lists
-        get_id = str(request.POST['node'])
-        node = Node.objects.filter(id=get_id)
-        print type(node)
+        list = {}
+        get_node = Node.objects.get(id=str(request.POST['node']))
+        node = NodeEditionHistory.objects.filter(node = get_node).order_by('-redaction_date')[0]
+        node = change(node, request.POST)
+        print node.description
         return HttpResponse(str(request.POST.getlist('node_files')))
+
+def change(obj, request):
+    for i in request:
+        if hasattr(obj,i):
+            field = getattr(obj,i)
+            setattr(obj, field, request[])
+            print field
+    return obj
+
+
+
