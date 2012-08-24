@@ -10,10 +10,19 @@ $(function(){
         globalOffsetY: 11,
         offsetY: -15
     });
-    //TODO: Показать вкладку которая в hash
-//    if (location.hash.length>2){
-//        var _xmlFileName = location.hash.substr(1);
-//    }
+    //Показываем вкладку которая в hash
+    if (location.hash.length>2){
+        var tab_id = location.hash.substr(5);
+        if (tab_id.substr(0, 3)=='req'){
+            openTab('reqs', tab_id);
+        }else if(tab_id.substr(0, 15)=='description_tie'){
+            openTab('open_tie_in_tab', tab_id);
+        }else if (tab_id.substr(0, 16)=='notification_tie'){
+            openTab('status', tab_id);
+        }else{
+            openTab('info', tab_id);
+        }
+    }
     //устанавливаем высоту объектов в зависимости от высоты экрана
     $('#page').css('height',$(window).height()-95);
     $('#tabs_content_block').css('height', $(window).height()-205);
@@ -118,27 +127,37 @@ function showTabContent(tabId){
 
 //Открываем вкладку при клике по дереву
 $('a.open_tab.reqs, a.open_tie_in_tab, a.open_tab.info, a.open_tab.status').live('click', function(){
-    if ($('#tabs_manage_block ul li#tab_' + $(this).attr('id')).length <= 0){
+    if($(this).hasClass('reqs')){var type = 'reqs'}
+    else if($(this).hasClass('open_tie_in_tab')){type = 'open_tie_in_tab'}
+    else if($(this).hasClass('info')){type = 'info'}
+    else {type = 'status'}
+    openTab(type, $(this).attr('id'));
+});
+
+//Открываем вкладку по id вкладки и по типу (reqs, open_tie_in_tab, info, status)
+function openTab(type, object_id){
+    var obj = $('a#'+object_id);
+    if ($('#tabs_manage_block ul li#tab_' + object_id).length <= 0){
         $('#tabs_manage_block ul li').removeClass('active');
         //при клике на информационныю ссылку
-        if ($(this).hasClass('info')){
-            $('#tabs_manage_block ul').append('<li class="active" id="tab_' + $(this).attr('id') + '" ><a>'+$(this).html()+'</a><div class="closeTab info"></div></li>');
-        //при клике на остальные ссылки
+        if (type == 'info'){
+            $('#tabs_manage_block ul').append('<li class="active" id="tab_' + object_id + '" ><a>'+obj.html()+'</a><div class="closeTab info"></div></li>');
+            //при клике на остальные ссылки
         }else{
             //добавляем элемент вкладки
-            $('#tabs_manage_block ul').append('<li class="active" id="tab_' + $(this).attr('id') + '" ><a>'+$(this).html()+'</a><div class="closeTab"></div></li>');
-            $('#tabs_content_block').append('<div class="tabs tab_'+$(this).attr('id')+'"> </div>');
+            $('#tabs_manage_block ul').append('<li class="active" id="tab_' + object_id + '" ><a>'+obj.html()+'</a><div class="closeTab"></div></li>');
+            $('#tabs_content_block').append('<div class="tabs tab_'+object_id+'"> </div>');
             //если открываем требование
-            if($(this).hasClass('reqs')){
-                showRequirementInTab($(this).attr('id'));
-            //если открываем узел, т.е. бизнес-требование
-            }else if($(this).hasClass('open_tie_in_tab')){
-                showNodeInTab($(this).attr('id'));
-            //если открываем статус
+            if(type =='reqs'){
+                showRequirementInTab(object_id);
+                //если открываем узел, т.е. бизнес-требование
+            }else if(type = 'open_tie_in_tab'){
+                showNodeInTab(object_id);
+                //если открываем статус
             }else{
-                var parent = $(this).parent().parent().parent().parent().parent();
+                var parent = obj.parent().parent().parent().parent().parent();
                 var name = parent.children('div').children('p').children('span').children('a.open_tie_in_tab').html();
-                $('#tabs_manage_block ul li#tab_'+$(this).attr('id')+' a').html(name + ': status');
+                $('#tabs_manage_block ul li#tab_'+object_id+' a').html(name + ': status');
                 showNodeStatusInTab(parent.attr('id'));
             }
         }
@@ -146,11 +165,11 @@ $('a.open_tab.reqs, a.open_tie_in_tab, a.open_tab.info, a.open_tab.status').live
         tabsWidthDetect();
     }else{
         $('#tabs_manage_block ul li').removeClass('active');
-        $('#tabs_manage_block ul li#tab_' + $(this).attr('id')).addClass('active');
+        $('#tabs_manage_block ul li#tab_' + object_id).addClass('active');
     }
     //показываем содержимое в активной вкладе
-    showTabContent('tab_'+$(this).attr('id'));
-});
+    showTabContent('tab_'+ object_id);
+}
 
 //получить статус бизнес-требования и вставить в Tab
 function showNodeStatusInTab(node_id){
@@ -186,6 +205,7 @@ function showRequirementInTab(id_req){
         }
     });
 }
+
 //Создаем редакторы из текстовых полей на странице
 function makeEditors(ib_tab){
     $("#tabs_content_block div.tabs.tab_" + ib_tab + " textarea.big_text").each(function(n, obj) {
@@ -205,11 +225,13 @@ function makeEditors(ib_tab){
         fck.ReplaceTextarea() ;
     });
 }
+
 //Закрыть вкладку и удалить ее содержимое со страницы
 $('.closeTab').live('click', function(){
     //удаляем содержимое вкладки, только если это не общая информационная вкладка
     if (!$(this).hasClass('info')){$('#tabs_content_block div.'+ $(this).parent().attr('id')).remove();}
     else{$('#tabs_content_block div.'+ $(this).parent().attr('id')).hide();}
+    location.hash = '';
     //если есть следующая вкладка, то при закрытии текущей, она станет активной
     if ($(this).parent().hasClass('active') && $(this).parent().next().length > 0){
         $('#tabs_manage_block ul li').removeClass('active');
