@@ -48,6 +48,17 @@ def getNodeDescription(request):
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request))
 
 @csrf_exempt
+def saveRequirementEdition(request):
+    if request.method == 'POST':
+        print request.POST.lists
+        for i in request.POST:
+            print i + '  ' + request.POST[i]
+        return HttpResponse(request.POST.getlist('req_files'))
+
+    #дописать сохранение требования
+
+
+@csrf_exempt
 def saveNodeEdition(request):
     nodes = Node.objects.all()
     if request.method == 'POST':
@@ -88,7 +99,6 @@ def saveNodeEdition(request):
         )
         new_node.files = set_of_files
         new_node.save()
-
 
         #        files.append(FileInNodes.objects.get(id = request.POST.getlist('node_files')[i].))
         return render_to_response('index.html',{'media':media, 'nodes':nodes,'user':request.user})
