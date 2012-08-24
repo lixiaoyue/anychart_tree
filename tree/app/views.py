@@ -51,20 +51,41 @@ def getNodeDescription(request):
 def saveNodeEdition(request):
     if request.method == 'POST':
         print request.POST.lists
-        list = {}
+        for i in request.POST:
+            print i + '  ' + request.POST[i]
         get_node = Node.objects.get(id=str(request.POST['node']))
-        node = NodeEditionHistory.objects.filter(node = get_node).order_by('-redaction_date')[0]
-        node = change(node, request.POST)
-        print node.description
+        prev_node = NodeEditionHistory.objects.filter(node = get_node).order_by('-redaction_date')[0]
+        curr_description = request.POST['edit_description']
+        curr_reason = request.POST['reason']
+
+        #файлы
+        set_of_files= []
+        print type(request.POST.getlist('node_files'))
+        for i in request.POST.getlist('node_files'):
+            print 'in'
+            get_id = i.split('_')
+            set_of_files.append( FileInNodes.objects.get(id = get_id[-1]))
+
+        #редактируемое БТ + релиз
+        curr_bus_req = prev_node.node
+        curr_release_name = request.POST['release']
+        curr_release = Release.objects.get(name = curr_release_name)
+
+        #задание
+        task_id = request.POST['cur_task'].split('_')[-1]
+        curr_task = CurrentTask.objects.get(id = task_id)
+        node = NodeEditionHistory.objects.create(description = curr_description,
+            reason = curr_reason,
+            node = curr_bus_req,
+            edit_description = curr_description,
+            user = request.user,
+            cur_task = curr_task,
+            release = curr_release)
+        node.files = set_of_files
+
+        #        files.append(FileInNodes.objects.get(id = request.POST.getlist('node_files')[i].))
         return HttpResponse(str(request.POST.getlist('node_files')))
 
-def change(obj, request):
-    for i in request:
-        if hasattr(obj,i):
-            field = getattr(obj,i)
-            setattr(obj, field, request[])
-            print field
-    return obj
 
 
 
