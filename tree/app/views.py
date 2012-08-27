@@ -56,7 +56,7 @@ def saveRequirementEdition(request):
 
         get_requirement = Requirement.objects.get(id=str(request.POST['req']))
         prev_req = RequirementsEdition.objects.filter(requirement = get_requirement).order_by('-redaction_date')[0]
-        curr_description = request.POST['description'][3: len(request.POST['description'])-4]
+        curr_description = request.POST['description']
         curr_reason = request.POST['reason']
 
         set_of_files= []
@@ -75,7 +75,7 @@ def saveRequirementEdition(request):
             description = curr_description,
             reason = curr_reason,
             requirement = curr_req,
-            edit_description = request.POST['edit_description'][3: len(request.POST['edit_description'])-4],
+            edit_description = request.POST['edit_description'],
             user = request.user,
             deadline = curr_deadline,
             cur_task = curr_task,
@@ -93,7 +93,7 @@ def saveNodeEdition(request):
     if request.method == 'POST':
         get_node = Node.objects.get(id=str(request.POST['node']))
         prev_node = NodeEditionHistory.objects.filter(node = get_node).order_by('-redaction_date')[0]
-        curr_description = request.POST['description'][3: len(request.POST['description'])-4]
+        curr_description = request.POST['description']
         curr_reason = request.POST['reason']
 
         #файлы
@@ -117,7 +117,7 @@ def saveNodeEdition(request):
             description = curr_description,
             reason = curr_reason,
             node = curr_bus_req,
-            edit_description = request.POST['edit_description'][3: len(request.POST['edit_description'])-4],
+            edit_description = request.POST['edit_description'],
             user = request.user,
             cur_task = curr_task,
             release = curr_release,
