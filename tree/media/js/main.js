@@ -271,5 +271,5 @@ $('#files_redaction input[type=checkbox]').live('click', function(){
    }
 });
 
-//TODO: добавить новое требование
+//TODO: добавить новое бизнес-требование
 
