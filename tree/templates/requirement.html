@@ -1,3 +1,4 @@
+
 <div class='table edit'>
     <form method="post" action="/saveRequirementEdition/">{% csrf_token %}
         <div>
@@ -28,11 +29,17 @@
                 <textarea id="req_descr_{{ req.id }}" class="big_text" name='description'>{{req.description}}</textarea>
             </div>
         </div>
+        <div id='data'>
+            <div><label for='req_data_{{ req.id }}'>Введи дату выполнения (YYYY-MM-DD):</label></div>
+            <div id='datatime'>
+                <input type="text" id = 'req_time_'{{ req.id }} name = 'req_deadline'/>
+            </div>
+        </div>
         <div id='redaction'>
             <div id='files'>Файлы:</div>
             <div id='files_redaction'>
                 {% for i in req.files.all %}
-                    <div id="new_line"></div><input type="checkbox" id="file_{{ i.id }}" value="file_{{ i.id }}">
+                    <div id="new_line"></div><input type="checkbox" name='req_files' id="file_{{ i.id }}" value="file_{{ i.id }}">
                     <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
                 {% endfor %}
             </div>
@@ -48,11 +55,6 @@
                 <div class="hidden">
                     <input type="text" name='req' value="{{req.requirement.id}}"/>
                     <input type="text" name='release' value="{{req.release}}"/>
-                    <select size="5" multiple="true" name='req_files' id='files_sel'>
-                        {% for i in req.files.all %}
-                            <option value="file_{{ i.id }}" selected>{{ i.id }}</option>
-                        {% endfor %}
-                    </select>
                 </div>
             </div>
             <div><input type="submit" value="Сохранить редакцию"></div>
@@ -75,7 +77,7 @@
     {% endif %}
     <div>
         <div>Задача:</div>
-        <div>
+        <div> {{ req.cur_task }}
         </div>
     </div>
     {% if req.description %}
