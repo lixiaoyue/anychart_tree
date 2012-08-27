@@ -32,9 +32,12 @@
         <div id='files'>Файлы:</div>
         <div id='files_redaction'>
             {% for i in node.files.all %}
-                <div id="new_line"></div><input type="checkbox" id="file_{{ i.id }}" value="file_{{ i.id }}">
+                <div id="new_line"></div><input type="checkbox" id="file_{{ i.id }}" name="node_files" value="file_{{ i.id }}">
                 <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
             {% endfor %}
+        </div>
+        <div id='add'>
+            <input type='button' name='adding_files' value='добавить файл'>
         </div>
     </div>
     <div id='reason_of_redaction'>
@@ -48,11 +51,6 @@
             <div class="hidden">
                 <input type="text" name='node' value="{{node.node.id}}"/>
                 <input type="text" name='release' value="{{node.release}}"/>
-                <select size="5" multiple="true" name='node_files' id='files_sel'>
-                    {% for i in node.files.all %}
-                        <option value="file_{{ i.id }}" selected>{{ i.id }}</option>
-                    {% endfor %}
-                </select>
             </div>
         </div>
         <div><input type="submit" value="Сохранить редакцию"></div>
@@ -75,7 +73,7 @@
     {% endif %}
         <div>
             <div>Задача:</div>
-            <div>
+            <div> {{ node.cur_task }}
             </div>
         </div>
     {% if node.description %}

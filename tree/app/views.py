@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response
 from django.conf import settings
 from django.template.context import RequestContext
 from app.models import *
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 
 from django.views.decorators.csrf import csrf_exempt
 media = settings.MEDIA_URL
@@ -53,7 +53,36 @@ def saveRequirementEdition(request):
         print request.POST.lists
         for i in request.POST:
             print i + '  ' + request.POST[i]
-        return HttpResponse(request.POST.getlist('req_files'))
+
+        get_requirement = Requirement.objects.get(id=str(request.POST['req']))
+        prev_req = RequirementsEdition.objects.filter(requirement = get_requirement).order_by('-redaction_date')[0]
+        curr_description = request.POST['description'][3: len(request.POST['description'])-4]
+        curr_reason = request.POST['reason']
+
+        set_of_files= []
+        for i in request.POST.getlist('req_files'):
+            get_id = i.split('_')
+            set_of_files.append( FileInNodes.objects.get(id = get_id[-1]))
+
+        prev_req.requirement.name = request.POST['name']
+        prev_req.requirement.save()
+        curr_req = prev_req.requirement
+        curr_deadline = request.POST['req_deadline']
+        task_id = request.POST['cur_task'].split('_')[-1]
+        curr_task = CurrentTask.objects.get(id = task_id)
+
+        new_requirement = RequirementsEdition.objects.create(
+            description = curr_description,
+            reason = curr_reason,
+            requirement = curr_req,
+            edit_description = request.POST['edit_description'][3: len(request.POST['edit_description'])-4],
+            user = request.user,
+            deadline = curr_deadline,
+            cur_task = curr_task,
+        )
+        new_requirement.files = set_of_files
+        new_requirement.save()
+        return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_req_' + request.POST['req'])
 
     #дописать сохранение требования
 
@@ -62,17 +91,13 @@ def saveRequirementEdition(request):
 def saveNodeEdition(request):
     nodes = Node.objects.all()
     if request.method == 'POST':
-        print request.POST.lists
-        for i in request.POST:
-            print i + '  ' + request.POST[i]
         get_node = Node.objects.get(id=str(request.POST['node']))
         prev_node = NodeEditionHistory.objects.filter(node = get_node).order_by('-redaction_date')[0]
-        curr_description = request.POST['edit_description']
+        curr_description = request.POST['description'][3: len(request.POST['description'])-4]
         curr_reason = request.POST['reason']
 
         #файлы
         set_of_files= []
-        print type(request.POST.getlist('node_files'))
         for i in request.POST.getlist('node_files'):
             get_id = i.split('_')
             set_of_files.append( FileInNodes.objects.get(id = get_id[-1]))
@@ -92,7 +117,7 @@ def saveNodeEdition(request):
             description = curr_description,
             reason = curr_reason,
             node = curr_bus_req,
-            edit_description = request.POST['edit_description'],
+            edit_description = request.POST['edit_description'][3: len(request.POST['edit_description'])-4],
             user = request.user,
             cur_task = curr_task,
             release = curr_release,
@@ -101,4 +126,4 @@ def saveNodeEdition(request):
         new_node.save()
 
         #        files.append(FileInNodes.objects.get(id = request.POST.getlist('node_files')[i].))
-        return render_to_response('index.html',{'media':media, 'nodes':nodes,'user':request.user})
+        return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_description_tie_' + request.POST['node'])
