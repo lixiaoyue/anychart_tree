@@ -18,7 +18,7 @@ ul {margin-bottom: 1.5em;}
 ul h4 {	margin-bottom: 0.35em;}
 .box {overflow: hidden;	margin-bottom: 1em;}
 .date {	background: #6E6E6E;padding: 5px 6px 5px 6px;margin: 0 6px 0 0;	color: #FFFFFF;	font-size: 0.8em;border-radius: 2px;}
-.table div.hidden{display: none}
+.table div.hidden, div.hidden{display: none}
 #wrapper {
     position: relative;
     width: 100%;

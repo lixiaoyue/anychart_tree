@@ -4,6 +4,7 @@ from django.conf import settings
 from django.template.context import RequestContext
 from app.models import *
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response
 
 from django.views.decorators.csrf import csrf_exempt
 media = settings.MEDIA_URL
@@ -127,3 +128,15 @@ def saveNodeEdition(request):
 
         #        files.append(FileInNodes.objects.get(id = request.POST.getlist('node_files')[i].))
         return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_description_tie_' + request.POST['node'])
+
+
+@csrf_exempt
+def addingFiles(request):
+    new_file = FileInNodes.objects.create(
+        file=request.FILES['added_file'],
+        name = request.FILES['added_file'].name
+    )
+    new_file.save()
+    curr_req_editor = RequirementsEdition.objects.get(id=request.POST['req_id'])
+    curr_req_editor.files.add(new_file)
+    return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_req_' + request.POST['req_id'])
