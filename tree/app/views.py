@@ -139,4 +139,4 @@ def addingFiles(request):
     new_file.save()
     curr_req_editor = RequirementsEdition.objects.get(id=request.POST['req_id'])
     curr_req_editor.files.add(new_file)
-    return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_req_' + request.POST['req_id'])
+    return HttpResponseRedirect(request.META["HTTP_REFERER"])
