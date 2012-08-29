@@ -1,15 +1,15 @@
 <div class='table edit'>
     <form method="post" action="/addNode/">{% csrf_token %}
         <div>
-            <div id='name'><label for='req_name_{{ node.id }}'>Имя:</label></div>
+            <div id='name'><label for='node_name_{{ node.id }}'>Имя:</label></div>
             <div id='name_redaction'>
-                <input type='text' id='req_name_{{ node.id }}' name='name' value="{{ node.name }}"/>
+                <input type='text' id='node_name_{{ node.id }}' name='name' value="{{ node.name }}"/>
             </div>
         </div>
         <div id='purpose'>
-            <div><label for='req_purpose_{{ node.id }}'>Цель создания:</label></div>
-            <div id='req_purpose'>
-                <input type="text" id="req_purpose_{{ node.id }}" name='reason' value="{{node.purpose}}"/>
+            <div><label for='node_purpose_{{ node.id }}'>Цель создания:</label></div>
+            <div id='node_purpose'>
+                <input type="text" id="node_purpose_{{ node.id }}" name='reason' value="{{node.purpose}}"/>
             </div>
         </div>
         <div id='description'>
@@ -28,6 +28,11 @@
                 <input type='button' name='adding_files' value='добавить файл'>
             </div>
         </div>
+        <div id='release'>
+            <div>выбери релиз:</div>
+
+        </div>
+
         <div id='authors'>
             <div><label for='authors_{{ node.id }}'>Добавить авторов:</label></div>
             <div >
@@ -39,7 +44,7 @@
             </div>
         </div>
         <div id='authors'>
-            <div><label for='redactors_{{ node.id }}'>Добавить авторов:</label></div>
+            <div><label for='redactors_{{ node.id }}'>Добавить редакторов:</label></div>
             <div class='wide'>
                 <select MULTIPLE  name="redactors" id='redactors_' size='10'>
                     {% for i in people %}
@@ -52,6 +57,7 @@
             <div>
                 <div class="hidden">
                     <input type="text" name='parentId' value="{{parent.id}}"/>
+                    <input type="text" name='node' value="{{node.id}}"/>
                 </div>
             </div>
             <div><input type="submit" value="Сохранить"></div>

@@ -64,19 +64,22 @@ def showAddNodeForm(request):
 
 @csrf_exempt
 def addNode(request):
-    if request.is_ajax():
+    if request.method == 'POST':
         print request.POST.lists
-#        if request.method == 'POST':
-
-#            parent_node_id = request.POST['parentId'].replace('description_tie_','')
-#            parent = Node.objects.get(id = parent_node_id)
-#            node = Node.objects.create(
-#                name = u'',
-#                parent = parent
-#            )
-#            people = User.objects.all()
-#            return render_to_response("add_node.html", {'parent':parent, 'node':node, 'people':people,})
-    return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST['parentId']))
+        node = Node.objects.get(id = request.POST['node'])
+        node.name = request.POST['name']
+        node.save()
+        node_editor = NodeEditionHistory.objects.create(
+            reason = request.POST['reason'],
+            node = node,
+            release = Release.objects.get(id=2),
+            edit_description = 'только создано',
+            user = request.user,
+            cur_task = CurrentTask.objects.get(id=1),
+            description = request.POST['description']
+        )
+        return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_description_tie_' + str(node_editor.id))
+    return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST))
 
 @csrf_exempt
 def saveRequirementEdition(request):
