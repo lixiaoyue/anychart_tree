@@ -10,15 +10,22 @@
     <script type="text/javascript" src="{{ media }}js/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="{{ media }}js/jquery.dropotron-1.0.js"></script>
     <script type="text/javascript" src="{{ media }}js/main.js"></script>
+    <script type="text/javascript" src="{{ media }}js/datepicker.translate.js"></script>
+    <script type="text/javascript" src="{{ media }}js/ui.datepicker.js"></script>
     <script type="text/javascript" src="{{ media }}fckeditor/fckeditor.js"></script>
 </head>
 <body>
+<div class="shadow" onclick="showPopup(false)"></div>
+<div class="popup">
+            <div class="popupContent" ></div>
+</div>
 <div id="wrapper">
 <div id="header">
     <div id="logo">
         <h1><a href="/">AnyChart requirements tree</a></h1>
     </div>
 </div>
+
 <div id="menu">
     <ul>
         <li><span class="opener">Режимы просмотра дерева<b></b></span>

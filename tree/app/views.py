@@ -123,7 +123,6 @@ def saveRequirementEdition(request):
 
 @csrf_exempt
 def saveNodeEdition(request):
-    nodes = Node.objects.all()
     if request.method == 'POST':
         get_node = Node.objects.get(id=str(request.POST['node']))
         prev_node = NodeEditionHistory.objects.filter(node = get_node).order_by('-redaction_date')[0]
@@ -170,6 +169,14 @@ def addingFiles(request):
         name = request.FILES['added_file'].name
     )
     new_file.save()
+    print request
     curr_req_editor = RequirementsEdition.objects.get(id=request.POST['req_id'])
     curr_req_editor.files.add(new_file)
-    return HttpResponseRedirect(request.META["HTTP_REFERER"])
+    files = curr_req_editor.files
+    return HttpResponse(files)
+
+@csrf_exempt
+def getFiles(request):
+    if request.method == 'POST':
+        get_id = request.POST['id']
+        return HttpResponse('trg')

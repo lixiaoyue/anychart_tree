@@ -32,7 +32,7 @@
         <div id='files'>Файлы:</div>
         <div id='files_redaction'>
             {% for i in node.files.all %}
-                <div id="new_line"></div><input type="checkbox" id="file_{{ i.id }}" name="node_files" value="file_{{ i.id }}">
+                <div id="new_line"></div><input type="checkbox" checked="true" id="file_{{ i.id }}" name="node_files" value="file_{{ i.id }}">
                 <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
             {% endfor %}
         </div>

@@ -152,6 +152,7 @@ function turnOnActiveTab (tab_id){
 //Открываем вкладку по id вкладки и по типу (reqs, open_tie_in_tab, info, status)
 function openTab(type, object_id){
     var obj = $('a#'+object_id);
+    console.log('id = ' + object_id, obj);
     if ($('#tabs_manage_block ul li#tab_' + object_id).length <= 0){
         $('#tabs_manage_block ul li').removeClass('active');
         //при клике на информационныю ссылку
@@ -161,6 +162,7 @@ function openTab(type, object_id){
             //при клике на остальные ссылки
         }else{
             //добавляем название вкладки
+            console.log(object_id, obj, obj.html());
             addTabNameToManageBlock(object_id, obj.html(),'');
             addBlockForTabContent(object_id);
             //если открываем требование
@@ -310,3 +312,42 @@ $('span.add.node').live('click', function(){
         });
     }
 });
+$('#example').live('click', function(){
+    $('#example').attachDatepicker();
+});
+
+$('#exampleRange').live('click', function(){
+    $('#exampleRange').attachDatepicker({
+        rangeSelect: true,
+        yearRange: '2000:2010',
+        firstDay: 1
+    });
+});
+
+$('#add_file_button').live('click', function(){
+    console.log($('#form_to_upload_files').html());
+    $('div.popup div.popupContent').html($('#form_to_upload_files').html());
+    showPopup(true);
+});
+
+function showPopup(bool){
+    if(bool){
+        $('div.popupContent, div.popup, .shadow').show();
+    }else{
+        $('div.popupContent').html('');
+        $('div.popup.popupContent, div.popup, .shadow').hide();
+    }
+}
+function submiting_adding_file(){
+    $.ajax({
+        type: "POST",
+        url: "/getFiles/",
+        data: {id: $('#req_id').val(),
+        success: function(html){console.log(html)}}
+    });
+//    $('#files_redaction').prepend('<div id="new_line"></div>\
+//        <input type="checkbox" checked="true" name="req_files"\
+//        id="file_'+ file_id +'" value="file_'+ file_id +'" >' +
+//        ' <a target="_blank" href="/media/'+ file_path+'"> '+ file_name +'</a>');
+    showPopup(false);
+}

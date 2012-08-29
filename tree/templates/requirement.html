@@ -33,6 +33,8 @@
         <div id='data'>
             <div><label for='req_data_{{ req.id }}'>Введи дату выполнения (YYYY-MM-DD):</label></div>
             <div id='datatime'>
+                <input type="text" id='example'/>
+                <input type="text" id='exampleRange'/>
                 <input type="text" id = 'req_time_'{{ req.id }} name = 'req_deadline'/>
             </div>
         </div>
@@ -46,9 +48,10 @@
             <div id='files'>Файлы:</div>
             <div id='files_redaction'>
                 {% for i in req.files.all %}
-                    <div id="new_line"></div><input type="checkbox" name='req_files' id="file_{{ i.id }}" value="file_{{ i.id }}">
+                    <div id="new_line"></div><input type="checkbox" checked="true" name='req_files' id="file_{{ i.id }}" value="file_{{ i.id }}">
                     <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
                 {% endfor %}
+            <input type="button" id='add_file_button' value='просто добавь воды!'>
             </div>
         </div>
         <div>
@@ -61,14 +64,16 @@
             <div><input type="submit" value="Сохранить редакцию"></div>
         </div>
     </form>
-<form target="upload_frame" enctype="multipart/form-data" action="/addingFiles/" method="post">{% csrf_token %}
-    <div class='hidden'>
-        <input type="text" name='req_id' id='req_id' value="{{ req.id }}">
+    <div id='form_to_upload_files' class="hidden">
+        <form target="upload_frame" enctype="multipart/form-data" action="/addingFiles/" method="post">{% csrf_token %}
+            <div class='hidden'>
+                <input type="text" name='req_id' id='req_id' value="{{ req.id }}">
+            </div>
+                <input id="added_file" type="file" class="file" name="added_file" >
+                <input type="submit" class="submit" value="Upload" id='submiting_adding_file'>
+                <iframe id="upload_frame" name="upload_frame" style="display: none"></iframe>
+        </form>
     </div>
-        <input id="added_file" type="file" class="file" name="added_file" >
-        <input type="submit" class="submit" value="Upload">
-        <iframe id="upload_frame" name="upload_frame" style="display: none"></iframe>
-    </form>
 </div>
 <div class='table read'>
     <div>
