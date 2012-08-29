@@ -28,13 +28,15 @@ $(function(){
     $('#tabs_content_block').css('height', $(window).height()-205);
     //проверяем выполнена ли регистрация
     if ($('ul.registration').hasClass('true')) {LOGGED_IN = true}
-    //если регистрация не выполнена делаем невозможным выбор режима редастирования
+    //если регистрация не выполнена делаем невозможным выбор режима редактирования
     if (!LOGGED_IN){
         $('input[name=mode]:checked').val('view');
-        $('input[name=mode]').attr('disabled',true)
+        $('input[name=mode]').attr('disabled',true);
+    //если регистрация выполнена, включаем режим редактирования
+    } else{
+        $('input[name=mode]:checked').val('edit');
+        MODE_EDITION = true;
     }
-    //проверяем какой выбран режим - просмотра или редастирования,
-    if ($('input[name=mode]:checked').val() == 'edit') {MODE_EDITION = true}
     //менеям интерфейс в соответствии с режимом
     switch_mode(MODE_EDITION);
     //определяем ширину вкладок
@@ -134,6 +136,19 @@ $('a.open_tab.reqs, a.open_tie_in_tab, a.open_tab.info, a.open_tab.status').live
     openTab(type, $(this).attr('id'));
 });
 
+//добавляем название вкладки
+function addTabNameToManageBlock(id, tab_name, closeClass){
+    $('#tabs_manage_block ul').append('<li class="active" id="tab_' + id + '" ><a>'+tab_name+'</a><div class="closeTab' + closeClass + '"></div></li>');
+}
+//добавляем блок для содержимого вкладки
+function addBlockForTabContent(block_id){
+    $('#tabs_content_block').append('<div class="tabs tab_'+block_id+'"> </div>');
+}
+//переключаем активню вкладку
+function turnOnActiveTab (tab_id){
+    $('#tabs_manage_block ul li').removeClass('active');
+    $('#tabs_manage_block ul li#tab_' + tab_id).addClass('active');
+}
 //Открываем вкладку по id вкладки и по типу (reqs, open_tie_in_tab, info, status)
 function openTab(type, object_id){
     var obj = $('a#'+object_id);
@@ -141,12 +156,13 @@ function openTab(type, object_id){
         $('#tabs_manage_block ul li').removeClass('active');
         //при клике на информационныю ссылку
         if (type == 'info'){
-            $('#tabs_manage_block ul').append('<li class="active" id="tab_' + object_id + '" ><a>'+obj.html()+'</a><div class="closeTab info"></div></li>');
+            //добавляем название вкладки
+            addTabNameToManageBlock(object_id, obj.html(),' info');
             //при клике на остальные ссылки
         }else{
-            //добавляем элемент вкладки
-            $('#tabs_manage_block ul').append('<li class="active" id="tab_' + object_id + '" ><a>'+obj.html()+'</a><div class="closeTab"></div></li>');
-            $('#tabs_content_block').append('<div class="tabs tab_'+object_id+'"> </div>');
+            //добавляем название вкладки
+            addTabNameToManageBlock(object_id, obj.html(),'');
+            addBlockForTabContent(object_id);
             //если открываем требование
             if(type =='reqs'){
                 showRequirementInTab(object_id);
@@ -164,8 +180,8 @@ function openTab(type, object_id){
         //Определяем ширину вкладок
         tabsWidthDetect();
     }else{
-        $('#tabs_manage_block ul li').removeClass('active');
-        $('#tabs_manage_block ul li#tab_' + object_id).addClass('active');
+        //включа активню вкладку
+        turnOnActiveTab(object_id);
     }
     //показываем содержимое в активной вкладе
     showTabContent('tab_'+ object_id);
@@ -271,5 +287,25 @@ $('#files_redaction input[type=checkbox]').live('click', function(){
    }
 });
 
-//TODO: добавить новое требование
+//TODO: добавить новое бизнес-требование
+$('span.add.node').live('click', function(){
+    var parent_id = $(this).prev().children('a').attr('id');
 
+
+
+    showFormToAddNode(parent_id);
+    function showFormToAddNode(id_parent_node){
+        console.log(id_parent_node);
+        $.ajax({
+            type: "POST",
+            url: "/showAddNodeForm/",
+            data: {parentId: id_parent_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(html){
+                $('#tabs_content_block div.tabs.tab_'+id_parent_node).html(html);
+//                addTabNameToManageBlock();
+//                addBlockForTabContent();
+                makeEditors(id_parent_node);
+            }
+        });
+    }
+});

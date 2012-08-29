@@ -26,7 +26,7 @@ def getRequirements(request):
             reqs = Requirement.objects.filter(node = tie_id)
             for req in reqs:
                 message += '''<li><div><p>
-                        <a id="req_%d" class="open_tab reqs"><span></span> %s </a><span class="edit"></span><span class="delete"></span>
+                        <a id="req_%d" class="open_tab reqs"><span></span> %s </a><span class="edit req"></span><span class="delete req"></span>
                         </p></div></li>''' %(req.id, req.name)
     return HttpResponse(message)
 
@@ -47,6 +47,36 @@ def getNodeDescription(request):
             node = NodeEditionHistory.objects.filter(node = node_id).order_by('-redaction_date')[0]
             return render_to_response("node.html", {'node':node, 'tasks': CurrentTask.objects.all()[0:2]})
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request))
+
+@csrf_exempt
+def showAddNodeForm(request):
+    if request.is_ajax():
+        if request.method == 'POST':
+            parent_node_id = request.POST['parentId'].replace('description_tie_','')
+            parent = Node.objects.get(id = parent_node_id)
+            node = Node.objects.create(
+                name = u'',
+                parent = parent
+            )
+            people = User.objects.all()
+            return render_to_response("add_node.html", {'parent':parent, 'node':node, 'people':people,})
+    return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request))
+
+@csrf_exempt
+def addNode(request):
+    if request.is_ajax():
+        print request.POST.lists
+#        if request.method == 'POST':
+
+#            parent_node_id = request.POST['parentId'].replace('description_tie_','')
+#            parent = Node.objects.get(id = parent_node_id)
+#            node = Node.objects.create(
+#                name = u'',
+#                parent = parent
+#            )
+#            people = User.objects.all()
+#            return render_to_response("add_node.html", {'parent':parent, 'node':node, 'people':people,})
+    return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST['parentId']))
 
 @csrf_exempt
 def saveRequirementEdition(request):

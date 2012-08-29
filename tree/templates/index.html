@@ -72,13 +72,13 @@
                 {% recursetree nodes %}
                 <li id="tree_tie_{{ node.id }}" class="cl">
                     <div><p><a href="#" class="sc close_tie"></a> <span><a id="description_tie_{{ node.id }}" class="open_tie_in_tab">{{ node.name }}</a></span>
-                        <span class="add"></span><span class="edit"></span><span class="delete"></span></p></div>
+                        <span class="add node"></span><span class="edit node"></span><span class="delete node"></span></p></div>
                     <ul>
 
                         <li id="req_tie_{{ node.id }}" class="cl req">
                             <div>
                                 <p>
-                                    <a href="#" class="sc close_req"></a>  <span class="right_active req">Требования</span> <span class="add"></span>
+                                    <a href="#" class="sc close_req"></a>  <span class="right_active req">Требования</span> <span class="add req"></span>
                                 </p>
                             </div>
                             <ul></ul>
