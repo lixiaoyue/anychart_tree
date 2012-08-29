@@ -396,7 +396,7 @@ ul.notification_list li input{
     float: left;
     margin: 5px 5px 0 0;
 }
-#descr_redaction {
+div.wide, #descr_redaction{
     width:80%;
 }
 .table #redaction{

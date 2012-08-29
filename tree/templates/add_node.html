@@ -1,0 +1,61 @@
+<div class='table edit'>
+    <form method="post" action="/addNode/">{% csrf_token %}
+        <div>
+            <div id='name'><label for='req_name_{{ node.id }}'>Имя:</label></div>
+            <div id='name_redaction'>
+                <input type='text' id='req_name_{{ node.id }}' name='name' value="{{ node.name }}"/>
+            </div>
+        </div>
+        <div id='purpose'>
+            <div><label for='req_purpose_{{ node.id }}'>Цель создания:</label></div>
+            <div id='req_purpose'>
+                <input type="text" id="req_purpose_{{ node.id }}" name='reason' value="{{node.purpose}}"/>
+            </div>
+        </div>
+        <div id='description'>
+            <div><label for='req_descr_{{ node.id }}'>Описание:</label></div>
+            <div id='req_description'>
+                <textarea id="req_descr_{{ node.id }}" class="big_text" name='description'>{{node.description}}</textarea>
+            </div>
+        </div>
+        <div id='redaction'>
+            <div id='files'>Файлы:</div>
+            <div id='files_redaction'>
+                {% for i in node.files.all %}
+                    <div id="new_line"></div><input type="checkbox" id="file_{{ i.id }}" name="node_files" value="file_{{ i.id }}">
+                    <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
+                {% endfor %}
+                <input type='button' name='adding_files' value='добавить файл'>
+            </div>
+        </div>
+        <div id='authors'>
+            <div><label for='authors_{{ node.id }}'>Добавить авторов:</label></div>
+            <div >
+                <select MULTIPLE name="authors" id='authors_' size='10'>
+                    {% for i in people %}
+                        <option value="author_{{ i.id }}">{{ i.username }} {{ i.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div id='authors'>
+            <div><label for='redactors_{{ node.id }}'>Добавить авторов:</label></div>
+            <div class='wide'>
+                <select MULTIPLE  name="redactors" id='redactors_' size='10'>
+                    {% for i in people %}
+                        <option value="redactor_{{ i.id }}">{{ i.username }} {{ i.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div>
+            <div>
+                <div class="hidden">
+                    <input type="text" name='parentId' value="{{parent.id}}"/>
+                </div>
+            </div>
+            <div><input type="submit" value="Сохранить"></div>
+        </div>
+    </form>
+</div>
+
