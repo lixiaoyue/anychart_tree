@@ -33,9 +33,6 @@ $(function(){
         $('input[name=mode]:checked').val('view');
         $('input[name=mode]').attr('disabled',true);
     //если регистрация выполнена, включаем режим редактирования
-    } else{
-        $('input[name=mode]:checked').val('edit');
-        MODE_EDITION = true;
     }
     //менеям интерфейс в соответствии с режимом
     switch_mode(MODE_EDITION);
