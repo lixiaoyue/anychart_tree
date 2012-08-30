@@ -312,20 +312,12 @@ $('span.add.node').live('click', function(){
         });
     }
 });
-$('#example').live('click', function(){
-    $('#example').attachDatepicker();
-});
 
-$('#exampleRange').live('click', function(){
-    $('#exampleRange').attachDatepicker({
-        rangeSelect: true,
-        yearRange: '2000:2010',
-        firstDay: 1
-    });
+$('#add_data').live('click', function(){
+    $("#add_data").datepicker({dateFormat: "yy-mm-dd"});
 });
 
 $('#add_file_button').live('click', function(){
-    console.log($('#form_to_upload_files').html());
     $('div.popup div.popupContent').html($('#form_to_upload_files').html());
     showPopup(true);
 });

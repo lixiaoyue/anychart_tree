@@ -116,6 +116,7 @@ def saveRequirementEdition(request):
         )
         new_requirement.files = set_of_files
         new_requirement.save()
+        print new_requirement.deadline
         return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_req_' + request.POST['req'])
 
     #дописать сохранение требования

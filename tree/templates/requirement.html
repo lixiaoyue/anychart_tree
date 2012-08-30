@@ -31,11 +31,9 @@
             </div>
         </div>
         <div id='data'>
-            <div><label for='req_data_{{ req.id }}'>Введи дату выполнения (YYYY-MM-DD):</label></div>
+            <div><label for='req_data_{{ req.id }}'>Введи дату выполнения:</label></div>
             <div id='datatime'>
-                <input type="text" id='example'/>
-                <input type="text" id='exampleRange'/>
-                <input type="text" id = 'req_time_'{{ req.id }} name = 'req_deadline'/>
+                <input type="label" id='add_data' name="req_deadline" value={{ req.deadline }}/>
             </div>
         </div>
         <div id='reason_of_redaction'>
@@ -51,7 +49,6 @@
                     <div id="new_line"></div><input type="checkbox" checked="true" name='req_files' id="file_{{ i.id }}" value="file_{{ i.id }}">
                     <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
                 {% endfor %}
-            <input type="button" id='add_file_button' value='просто добавь воды!'>
             </div>
         </div>
         <div>
@@ -61,6 +58,7 @@
                     <input type="text" name='release' value="{{req.release}}"/>
                 </div>
             </div>
+            <div><input type="button" id='add_file_button' value='просто добавь воды!' style="width: 21%"></div>
             <div><input type="submit" value="Сохранить редакцию"></div>
         </div>
     </form>
