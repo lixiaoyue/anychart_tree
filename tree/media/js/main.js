@@ -315,6 +315,19 @@ $('span.delete.node').live('click', function(){
     });
 });
 
+$('span.delete.req').live('click', function(){
+//    var select_node = $(this).parent().firstChild.id;
+    var parent = $(this).offsetParent();
+    console.log(parent.find('a').attr('id'));
+//    select_node = select_node.split('_')[2];
+//    $.ajax({
+//        type: "POST",
+//        url: "/deleteNode/",
+//        data: {node: select_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
+//        success: function(html){ }
+//    });
+});
+
 $('span.add.req').live('click', function(){
     var parent_id = $(this).parents('li:first').attr('id');
     showFormToAddReq(parent_id);
