@@ -63,6 +63,22 @@ def showAddNodeForm(request):
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request))
 
 @csrf_exempt
+def showAddReqForm(request):
+    if request.is_ajax():
+        if request.method == 'POST':
+            print request.POST.lists
+            parent_node_id = request.POST['parentId'].replace('req_tie_','')
+            node = Node.objects.get(id = parent_node_id)
+            req = Requirement.objects.create(
+                name = u'',
+                node = node,
+                release = Release.objects.get(id=2)
+            )
+            people = User.objects.all()
+            return render_to_response("add_req.html", {'parent':node, 'req':req, 'people':people,})
+    return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST.lists))
+
+@csrf_exempt
 def addNode(request):
     if request.method == 'POST':
         print request.POST.lists
@@ -79,6 +95,25 @@ def addNode(request):
             description = request.POST['description']
         )
         return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_description_tie_' + str(node_editor.id))
+    return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST))
+
+@csrf_exempt
+def addRequirement(request):
+    if request.method == 'POST':
+        print request.POST.lists
+        req = Requirement.objects.get(id = request.POST['node'])
+        req.name = request.POST['name']
+        req.save()
+        requirement_editor = RequirementsEdition.objects.create(
+            reason = request.POST['reason'],
+            requirement = req,
+            edit_description = 'только создано',
+            user = request.user,
+            deadline = request.POST['req_deadline'],
+            cur_task = CurrentTask.objects.get(id=1),
+            description = request.POST['description']
+        )
+        return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_description_tie_' + str(requirement_editor.id))
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST))
 
 @csrf_exempt

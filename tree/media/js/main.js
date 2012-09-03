@@ -310,6 +310,32 @@ $('span.add.node').live('click', function(){
     }
 });
 
+$('span.add.req').live('click', function(){
+    var parent_id = $(this).parents('li:first').attr('id');
+    showFormToAddReq(parent_id);
+    function showFormToAddReq(id_parent_node){
+        console.log(id_parent_node);
+        $.ajax({
+            type: "POST",
+            url: "/showAddReqForm/",
+            data: {parentId: id_parent_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(html){
+                $('#hidden_block').html(html);
+                console.log($('#hidden_block').html(html));
+                var node_id = $('#hidden_block div#name_redaction input[type=text]').attr('id');
+                node_id = node_id.replace('node_name_', 'description_tie_');
+                addTabNameToManageBlock(node_id, $('#' + id_parent_node).html() + ': новый сынок', '');
+                addBlockForTabContent(node_id);
+                $('#tabs_content_block div.tabs.tab_'+ node_id).html(html);
+                makeEditors(node_id);
+                tabsWidthDetect();
+            }
+        });
+    }
+});
+
+
+
 $('#add_data').live('click', function(){
     $("#add_data").datepicker({dateFormat: "yy-mm-dd"});
 });
