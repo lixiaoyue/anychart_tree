@@ -98,6 +98,24 @@ def addNode(request):
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST))
 
 @csrf_exempt
+def deleteNode(request):
+    if request.method == 'POST':
+        id = request.POST['node']
+        delete_node_babies(id)
+        parent = Node.objects.get(id=id).parent
+        parent_editor = NodeEditionHistory.objects.filter(node = parent.id).order_by('-redaction_date')[0]
+        Node.objects.get(id=id).delete()
+        return render_to_response("node.html", {'node':parent_editor, 'tasks': CurrentTask.objects.all()[0:2]})
+    return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST))
+
+def delete_node_babies(node_id):
+    babies = Node.objects.filter(parent=node_id)
+    print babies
+    for i in babies:
+        delete_node_babies(i.id)
+        Node.objects.get(id=i.id).delete()
+
+@csrf_exempt
 def addRequirement(request):
     if request.method == 'POST':
         print request.POST.lists

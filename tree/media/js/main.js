@@ -281,13 +281,6 @@ $('ul.notification_list li input[type=checkbox]').live('click', function(){
     }
 });
 
-$('#files_redaction input[type=checkbox]').live('click', function(){
-   if ($(this).attr('checked')){
-
-   }
-});
-
-//TODO: добавить новое бизнес-требование
 $('span.add.node').live('click', function(){
     var parent_id = $(this).prev().children('a').attr('id');
     showFormToAddNode(parent_id);
@@ -309,6 +302,17 @@ $('span.add.node').live('click', function(){
             }
         });
     }
+});
+
+$('span.delete.node').live('click', function(){
+    var select_node = $(this).prevAll()[2].firstChild.id;
+    select_node = select_node.split('_')[2];
+    $.ajax({
+        type: "POST",
+        url: "/deleteNode/",
+        data: {node: select_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){ }
+    });
 });
 
 $('span.add.req').live('click', function(){
@@ -335,7 +339,6 @@ $('span.add.req').live('click', function(){
     }
 });
 
-
 $('#add_data').live('click', function(){
     $.datepicker.setDefaults({ dateFormat: 'dd.mm.yy'});
     $("#add_data").datepicker();
@@ -353,17 +356,4 @@ function showPopup(bool){
         $('div.popupContent').html('');
         $('div.popup.popupContent, div.popup, .shadow').hide();
     }
-}
-function submiting_adding_file(){
-    $.ajax({
-        type: "POST",
-        url: "/getFiles/",
-        data: {id: $('#req_id').val(),
-        success: function(html){console.log(html)}}
-    });
-//    $('#files_redaction').prepend('<div id="new_line"></div>\
-//        <input type="checkbox" checked="true" name="req_files"\
-//        id="file_'+ file_id +'" value="file_'+ file_id +'" >' +
-//        ' <a target="_blank" href="/media/'+ file_path+'"> '+ file_name +'</a>');
-    showPopup(false);
 }
