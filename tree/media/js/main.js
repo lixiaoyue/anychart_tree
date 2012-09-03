@@ -202,6 +202,7 @@ function showNodeInTab(id_node){
             $('#tabs_content_block div.tabs.tab_'+id_node).html(html);
             makeEditors(id_node);
             switch_mode(MODE_EDITION);
+
         }
     });
 }
@@ -335,9 +336,9 @@ $('span.add.req').live('click', function(){
 });
 
 
-
 $('#add_data').live('click', function(){
-    $("#add_data").datepicker({dateFormat: "yy-mm-dd"});
+    $.datepicker.setDefaults({ dateFormat: 'dd.mm.yy'});
+    $("#add_data").datepicker();
 });
 
 $('#add_file_button').live('click', function(){

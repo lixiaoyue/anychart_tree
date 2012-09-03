@@ -137,6 +137,7 @@ def saveRequirementEdition(request):
         prev_req.requirement.save()
         curr_req = prev_req.requirement
         curr_deadline = request.POST['req_deadline']
+        set = '-'.join(reversed(curr_deadline.split('.')))
         task_id = request.POST['cur_task'].split('_')[-1]
         curr_task = CurrentTask.objects.get(id = task_id)
 
@@ -146,7 +147,7 @@ def saveRequirementEdition(request):
             requirement = curr_req,
             edit_description = request.POST['edit_description'],
             user = request.user,
-            deadline = curr_deadline,
+            deadline = set,
             cur_task = curr_task,
         )
         new_requirement.files = set_of_files
