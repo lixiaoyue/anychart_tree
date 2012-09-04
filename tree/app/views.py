@@ -45,7 +45,12 @@ def getNodeDescription(request):
         if request.method == 'POST':
             node_id = request.POST['nodeId'].replace('description_tie_','')
             node = NodeEditionHistory.objects.filter(node = node_id).order_by('-redaction_date')[0]
-            return render_to_response("node.html", {'node':node, 'tasks': CurrentTask.objects.all()[0:2]})
+            authors =[]
+            correctors =[]
+            if PersonRoleDetection.objects.filter(node = node_id):
+                authors = PersonRoleDetection.objects.filter(node = node_id).all().filter(role = PersonRole.objects.get(role = 'author'))[0].persons.all()
+                correctors = PersonRoleDetection.objects.filter(node = node_id).all().filter(role = PersonRole.objects.get(role = 'corrector'))[0].persons.all()
+            return render_to_response("node.html", {'node':node, 'tasks': CurrentTask.objects.all()[0:2], 'authors': authors, 'correctors': correctors})
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request))
 
 @csrf_exempt
