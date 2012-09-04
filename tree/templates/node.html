@@ -9,7 +9,7 @@
     <div id='purpose'>
         <div><label for='req_purpose_{{ node.id }}'>Цель создания:</label></div>
         <div id='req_purpose'>
-            <input type="text" id="req_purpose_{{ node.id }}" name='reason' value="{{node.purpose}}"/>
+            <input type="text" id="req_purpose_{{ node.id }}" name='purpose' value="{{node.purpose}}"/>
         </div>
     </div>
     <div>
@@ -35,9 +35,6 @@
                 <div id="new_line"></div><input type="checkbox" checked="true" id="file_{{ i.id }}" name="node_files" value="file_{{ i.id }}">
                 <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
             {% endfor %}
-        </div>
-        <div id='add'>
-            <input type='button' name='adding_files' value='добавить файл'>
         </div>
     </div>
     <div id='reason_of_redaction'>
@@ -68,6 +65,13 @@
         <div >
             <div>Цель создания:</div>
             <div>{{node.purpose}}
+            </div>
+        </div>
+    {% endif %}
+    {% if node.release %}
+        <div >
+            <div>Релиз:</div>
+            <div>{{node.release}}
             </div>
         </div>
     {% endif %}

@@ -52,6 +52,7 @@ def getNodeDescription(request):
 def showAddNodeForm(request):
     if request.is_ajax():
         if request.method == 'POST':
+            releases = Release.objects.all()
             parent_node_id = request.POST['parentId'].replace('description_tie_','')
             parent = Node.objects.get(id = parent_node_id)
             node = Node.objects.create(
@@ -59,7 +60,7 @@ def showAddNodeForm(request):
                 parent = parent
             )
             people = User.objects.all()
-            return render_to_response("add_node.html", {'parent':parent, 'node':node, 'people':people,})
+            return render_to_response("add_node.html", {'parent':parent, 'node':node, 'people':people, 'releases': releases})
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request))
 
 @csrf_exempt
@@ -88,7 +89,7 @@ def addNode(request):
         node_editor = NodeEditionHistory.objects.create(
             reason = request.POST['reason'],
             node = node,
-            release = Release.objects.get(id=2),
+            release = Release.objects.get(id=request.POST['releases']),
             edit_description = 'только создано',
             user = request.user,
             cur_task = CurrentTask.objects.get(id=1),
@@ -194,7 +195,7 @@ def saveNodeEdition(request):
         get_node = Node.objects.get(id=str(request.POST['node']))
         prev_node = NodeEditionHistory.objects.filter(node = get_node).order_by('-redaction_date')[0]
         curr_description = request.POST['description']
-        curr_reason = request.POST['reason']
+        curr_purpose = request.POST['purpose']
 
         #файлы
         set_of_files= []
@@ -215,7 +216,7 @@ def saveNodeEdition(request):
 
         new_node = NodeEditionHistory.objects.create(
             description = curr_description,
-            reason = curr_reason,
+            purpose = curr_purpose,
             node = curr_bus_req,
             edit_description = request.POST['edit_description'],
             user = request.user,

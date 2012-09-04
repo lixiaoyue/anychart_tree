@@ -43,6 +43,15 @@
                 <textarea id="reason_of_redaction_req_{{ req.id }}" class="small_text" name='edit_description'>{{req.edit_description}}</textarea>
             </div>
         </div>
+        <div id='redaction'>
+            <div id='files'>Файлы:</div>
+            <div id='files_redaction'>
+                {% for i in req.files.all %}
+                    <div id="new_line"></div><input type="checkbox" checked="true" name='req_files' id="file_{{ i.id }}" value="file_{{ i.id }}">
+                    <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
+                {% endfor %}
+            </div>
+        </div>
         <div>
             <div>
                 <div class="hidden">
@@ -58,15 +67,6 @@
         <form target="upload_frame" enctype="multipart/form-data" action="/addingFiles/" method="post">{% csrf_token %}
             <div class='hidden'>
                 <input type="text" name='req_id' id='req_id' value="{{ req.id }}">
-            </div>
-            <div id='redaction'>
-                <div id='files'>Файлы:</div>
-                <div id='files_redaction'>
-                    {% for i in req.files.all %}
-                        <div id="new_line"></div><input type="checkbox" checked="true" name='req_files' id="file_{{ i.id }}" value="file_{{ i.id }}">
-                        <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
-                    {% endfor %}
-                </div>
             </div>
                 <input id="added_file" type="file" class="file" name="added_file" >
                 <input type="submit" class="submit" value="Upload" id='submiting_adding_file'>
