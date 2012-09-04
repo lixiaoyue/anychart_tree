@@ -108,6 +108,16 @@ def deleteNode(request):
         return render_to_response("node.html", {'node':parent_editor, 'tasks': CurrentTask.objects.all()[0:2]})
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST))
 
+@csrf_exempt
+def deleteRequirement(request):
+    if request.is_ajax():
+        if request.method == 'POST':
+            req_id = request.POST['req']
+            Requirement.objects.get(id = req_id).delete()
+            editor = NodeEditionHistory.objects.filter(id = request.POST['node']).order_by('-redaction_date')[0]
+            return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_description_tie_' + str(editor.id))
+    return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST.lists))
+
 def delete_node_babies(node_id):
     babies = Node.objects.filter(parent=node_id)
     print babies
@@ -122,12 +132,14 @@ def addRequirement(request):
         req = Requirement.objects.get(id = request.POST['node'])
         req.name = request.POST['name']
         req.save()
+        curr_deadline = request.POST['req_deadline']
+        curr_deadline = '-'.join(reversed(curr_deadline.split('.')))
         requirement_editor = RequirementsEdition.objects.create(
             reason = request.POST['reason'],
             requirement = req,
             edit_description = 'только создано',
             user = request.user,
-            deadline = request.POST['req_deadline'],
+            deadline = curr_deadline,
             cur_task = CurrentTask.objects.get(id=1),
             description = request.POST['description']
         )
@@ -155,7 +167,7 @@ def saveRequirementEdition(request):
         prev_req.requirement.save()
         curr_req = prev_req.requirement
         curr_deadline = request.POST['req_deadline']
-        set = '-'.join(reversed(curr_deadline.split('.')))
+        curr_deadline = '-'.join(reversed(curr_deadline.split('.')))
         task_id = request.POST['cur_task'].split('_')[-1]
         curr_task = CurrentTask.objects.get(id = task_id)
 
@@ -165,7 +177,7 @@ def saveRequirementEdition(request):
             requirement = curr_req,
             edit_description = request.POST['edit_description'],
             user = request.user,
-            deadline = set,
+            deadline = curr_deadline,
             cur_task = curr_task,
         )
         new_requirement.files = set_of_files

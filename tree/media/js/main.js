@@ -316,16 +316,17 @@ $('span.delete.node').live('click', function(){
 });
 
 $('span.delete.req').live('click', function(){
-//    var select_node = $(this).parent().firstChild.id;
     var parent = $(this).offsetParent();
-    console.log(parent.find('a').attr('id'));
-//    select_node = select_node.split('_')[2];
-//    $.ajax({
-//        type: "POST",
-//        url: "/deleteNode/",
-//        data: {node: select_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
-//        success: function(html){ }
-//    });
+    var req_id = parent.find('a').attr('id').split('_')[1];
+//    console.log($(this).parents('li:first').attr('id'));
+    var node_id = $(this).parents('li.req').attr('id');
+    node_id = node_id.split('_')[2];
+    $.ajax({
+        type: "POST",
+        url: "/deleteRequirement/",
+        data: {req: req_id, node: node_id, csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){ }
+    });
 });
 
 $('span.add.req').live('click', function(){
