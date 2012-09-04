@@ -59,27 +59,6 @@
                 </select>
             </div>
         </div>
-        <div id='implementers'>
-            <div><label for='implementers_{{ node.id }}'>Добавить исполнителей:</label></div>
-            <div class='wide'>
-                <select MULTIPLE  name="implementers" id='implementers_' size='10'>
-                    {% for i in people %}
-                        <option value="implementer_{{ i.id }}">{{ i.username }} {{ i.last_name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <div id='testers'>
-            <div><label for='testers_{{ node.id }}'>Добавить тестировщиков:</label></div>
-            <div class='wide'>
-                <select MULTIPLE  name="testers" id='testers_' size='10'>
-                    {% for i in people %}
-                        <option value="tester_{{ i.id }}">{{ i.username }} {{ i.last_name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-
         <div>
             <div>
                 <div class="hidden">

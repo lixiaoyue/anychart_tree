@@ -21,7 +21,7 @@
         <div id='data'>
             <div><label for='req_data_{{ req.id }}'>Введи дату выполнения:</label></div>
             <div id='datatime'>
-                <input type="label" id='add_data' name="req_deadline" value={{ req.deadline }}/>
+                <input type="label" id='add_data'  name="req_deadline" value={{ req.deadline }}>
             </div>
         </div>
         <div id='redaction'>
@@ -34,12 +34,9 @@
                 <input type='button' name='adding_files' value='добавить файл'>
             </div>
         </div>
-        <div id='release'>
-            <div>выбери релиз:</div>
-        </div>
 
         <div id='authors'>
-            <div><label for='authors_{{ req.id }}'>Добавить авторов:</label></div>
+            <div><label for='authors_{{ node.id }}'>Добавить авторов:</label></div>
             <div >
                 <select MULTIPLE name="authors" id='authors_' size='10'>
                     {% for i in people %}
@@ -48,12 +45,32 @@
                 </select>
             </div>
         </div>
-        <div id='authors'>
-            <div><label for='redactors_{{ req.id }}'>Добавить редакторов:</label></div>
+        <div id='redactors'>
+            <div><label for='redactors_{{ node.id }}'>Добавить редакторов:</label></div>
             <div class='wide'>
                 <select MULTIPLE  name="redactors" id='redactors_' size='10'>
                     {% for i in people %}
                         <option value="redactor_{{ i.id }}">{{ i.username }} {{ i.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div id='implementers'>
+            <div><label for='implementers_{{ node.id }}'>Добавить исполнителей:</label></div>
+            <div class='wide'>
+                <select MULTIPLE  name="implementers" id='implementers_' size='10'>
+                    {% for i in people %}
+                        <option value="implementer_{{ i.id }}">{{ i.username }} {{ i.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div id='testers'>
+            <div><label for='testers_{{ node.id }}'>Добавить тестировщиков:</label></div>
+            <div class='wide'>
+                <select MULTIPLE  name="testers" id='testers_' size='10'>
+                    {% for i in people %}
+                        <option value="tester_{{ i.id }}">{{ i.username }} {{ i.last_name }}</option>
                     {% endfor %}
                 </select>
             </div>

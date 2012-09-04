@@ -33,7 +33,7 @@
         <div id='data'>
             <div><label for='req_data_{{ req.id }}'>Введи дату выполнения:</label></div>
             <div id='datatime'>
-                <input type="label" id='add_data' name="req_deadline" value={{ req.deadline|date:"SHORT_DATE_FORMAT"}}/>
+                <input type="label" id='add_data' name="req_deadline" value={{ req.deadline|date:"SHORT_DATE_FORMAT"}}>
             </div>
             <input type="text" id='get_data' value="{{ req.deadline }}"/>
         </div>
