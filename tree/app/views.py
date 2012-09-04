@@ -86,6 +86,7 @@ def addNode(request):
         node = Node.objects.get(id = request.POST['node'])
         node.name = request.POST['name']
         node.save()
+        print add_persons(request, node)
         node_editor = NodeEditionHistory.objects.create(
             reason = request.POST['reason'],
             node = node,
@@ -97,6 +98,28 @@ def addNode(request):
         )
         return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_description_tie_' + str(node_editor.id))
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST))
+
+def add_persons(request, node):
+    add_author = PersonRoleDetection.objects.create(
+        node = node,
+        role = PersonRole.objects.get(role = 'author'),
+    )
+    for i in getIDSet(request.POST.getlist('authors')):
+        add_author.persons.add(User.objects.get(id = i))
+
+    add_corrector = PersonRoleDetection.objects.create(
+        node = node,
+        role = PersonRole.objects.get(role = 'corrector'),
+    )
+    for i in getIDSet(request.POST.getlist('redactors')):
+        add_corrector.persons.add(User.objects.get(id = i))
+    return [add_author, add_corrector]
+
+def getIDSet(data):
+    set = []
+    for i in data:
+        set.append(i.split('_')[-1])
+    return set
 
 @csrf_exempt
 def deleteNode(request):
