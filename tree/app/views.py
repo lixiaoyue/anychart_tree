@@ -296,13 +296,14 @@ def saveNodeEdition(request):
 
 @csrf_exempt
 def addingFiles(request):
-    print '43'
     new_file = FileInNodes.objects.create(
         file=request.FILES['added_file'],
         name = request.FILES['added_file'].name
     )
+    if request.POST['file_name']!=u'введи новое имя файла':
+        extension = new_file.name.split('.')[-1]
+        new_file.name = new_file.name.replace(new_file.name[:new_file.name.find(extension)-1], request.POST['file_name'])
     new_file.save()
-    print request
     curr_req_editor = RequirementsEdition.objects.get(id=request.POST['req_id'])
     curr_req_editor.files.add(new_file)
     files = curr_req_editor.files
@@ -314,6 +315,9 @@ def addingFilesInNodes(request):
         file=request.FILES['added_file'],
         name = request.FILES['added_file'].name
     )
+    if request.POST['file_name']!=u'введи новое имя файла':
+        extension = new_file.name.split('.')[-1]
+        new_file.name = new_file.name.replace(new_file.name[:new_file.name.find(extension)-1], request.POST['file_name'])
     new_file.save()
     curr_node_editor = NodeEditionHistory.objects.get(id=request.POST['node_id'])
     curr_node_editor.files.add(new_file)

@@ -60,6 +60,7 @@
                 <input type="text" name='node_id' id='node_id' value="{{ node.id }}">
             </div>
             <input id="added_file" type="file" class="file" name="added_file" >
+            <br><input type="text" value="введи новое имя файла" id="file_name" name="file_name" onclick="if(this.value=='введи новое имя файла'){this.value=''}" onblur="if(this.value==''){this.value='введи новое имя файла';this.style.color='';}"/>
             <input type="submit" class="submit" value="Upload" id='submiting_adding_file'>
             <iframe id="upload_frame" name="upload_frame" style="display: none"></iframe>
         </form>
