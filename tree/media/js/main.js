@@ -294,7 +294,7 @@ $('span.add.node').live('click', function(){
                 $('#hidden_block').html(html);
                 var node_id = $('#hidden_block div#name_redaction input[type=text]').attr('id');
                 node_id = node_id.replace('node_name_', 'description_tie_');
-                addTabNameToManageBlock(node_id, $('#' + id_parent_node).html() + ': новая дочка', '');
+                addTabNameToManageBlock(node_id, $('#' + id_parent_node).html() + ': new', '');
                 addBlockForTabContent(node_id);
                 $('#tabs_content_block div.tabs.tab_'+ node_id).html(html);
                 makeEditors(node_id);
@@ -341,12 +341,12 @@ $('span.add.req').live('click', function(){
             success: function(html){
                 $('#hidden_block').html(html);
                 console.log($('#hidden_block').html(html));
-                var node_id = $('#hidden_block div#name_redaction input[type=text]').attr('id');
-                node_id = node_id.replace('node_name_', 'description_tie_');
-                addTabNameToManageBlock(node_id, $('#' + id_parent_node).html() + ': новый сынок', '');
-                addBlockForTabContent(node_id);
-                $('#tabs_content_block div.tabs.tab_'+ node_id).html(html);
-                makeEditors(node_id);
+                var req_id = $('#hidden_block div#name_redaction input[type=text]').attr('id');
+                req_id = req_id.replace('req_name_', 'description_tie_');
+                addTabNameToManageBlock(req_id, $('#' + id_parent_node).html() + ': new', '');
+                addBlockForTabContent(req_id);
+                $('#tabs_content_block div.tabs.tab_'+ req_id).html(html);
+                makeEditors(req_id);
                 tabsWidthDetect();
             }
         });

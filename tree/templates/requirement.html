@@ -35,7 +35,6 @@
             <div id='datatime'>
                 <input type="label" id='add_data' name="req_deadline" value={{ req.deadline|date:"SHORT_DATE_FORMAT"}}>
             </div>
-            <input type="text" id='get_data' value="{{ req.deadline }}"/>
         </div>
         <div id='reason_of_redaction'>
             <div><label for='reason_of_redaction_req_{{ req.id }}'>Обоснование внесения изменений:</label></div>
@@ -96,6 +95,42 @@
         <div>
             <div>Описание:</div>
             <div>{{req.description|safe}}
+            </div>
+        </div>
+    {% endif %}
+    {% if authors %}
+        <div >
+            <div> авторы </div>
+            <div>
+                {% for i in authors %}
+                    {{ i }}<br/>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    {% if correctors %}
+        <div >
+            <div> редакторы </div>
+            <div>
+                {% for i in correctors %}{{ i }}<br/>{% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    {% if implementers %}
+        <div >
+            <div> исполнители: </div>
+            <div>
+                {% for i in implementers %}
+                    {{ i }}<br/>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    {% if testers %}
+        <div >
+            <div> тестировщики: </div>
+            <div>
+                {% for i in testers %}{{ i }}<br/>{% endfor %}
             </div>
         </div>
     {% endif %}

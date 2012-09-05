@@ -34,6 +34,16 @@
                 <input type='button' name='adding_files' value='добавить файл'>
             </div>
         </div>
+        <div id='release'>
+            <div>выбери релиз:</div>
+            <div id='release_choosing'>
+                <select name="releases" size="2" id='releases'>
+                    {% for i in releases %}
+                        <option value="{{ i.id }}">{{ i.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
 
         <div id='authors'>
             <div><label for='authors_{{ node.id }}'>Добавить авторов:</label></div>

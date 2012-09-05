@@ -68,24 +68,6 @@
             </div>
         </div>
     {% endif %}
-    распределение обязанностей:
-    {% if authors %}
-        <div >
-            <div> авторы </div>
-            <div>
-                {% for i in authors %}
-                    <label>{{ i }}</label>
-                {% endfor %}
-            </div>
-        </div>
-    {% endif %}
-    {% if correctors %}
-        <div >
-            <div> редакторы </div>
-            <br/>{% for corr in correctors %}{{ corr }}<br/>{% endfor %}
-            </div>
-        </div>
-    {% endif %}
 
     {% if node.release %}
         <div >
@@ -103,6 +85,24 @@
         <div>
             <div>Описание:</div>
             <div>{{node.description|safe}}
+            </div>
+        </div>
+    {% endif %}
+    {% if authors %}
+        <div >
+            <div> авторы </div>
+            <div>
+                {% for i in authors %}
+                    <label>{{ i }}<br/></label>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    {% if correctors %}
+        <div >
+            <div> редакторы </div>
+            <div>
+                {% for corr in correctors %}{{ corr }}<br/>{% endfor %}
             </div>
         </div>
     {% endif %}
