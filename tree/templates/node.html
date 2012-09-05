@@ -1,15 +1,15 @@
 <div class='table edit'>
 <form method="post" action="/saveNodeEdition/">{% csrf_token %}
     <div>
-        <div id='name'><label for='req_name_{{ node.id }}'>Имя:</label></div>
+        <div id='name'><label for='node_name_{{ node.id }}'>Имя:</label></div>
         <div id='name_redaction'>
-            <input type='text' id='req_name_{{ node.id }}' name='name' value="{{ node.node.name }}"/>
+            <input type='text' id='node_name_{{ node.id }}' name='name' value="{{ node.node.name }}"/>
         </div>
     </div>
     <div id='purpose'>
-        <div><label for='req_purpose_{{ node.id }}'>Цель создания:</label></div>
-        <div id='req_purpose'>
-            <input type="text" id="req_purpose_{{ node.id }}" name='purpose' value="{{node.purpose}}"/>
+        <div><label for='node_purpose_{{ node.id }}'>Цель создания:</label></div>
+        <div id='node_purpose'>
+            <input type="text" id="node_purpose_{{ node.id }}" name='purpose' value="{{node.purpose}}"/>
         </div>
     </div>
     <div>
@@ -23,9 +23,9 @@
         </div>
     </div>
     <div id='description'>
-        <div><label for='req_descr_{{ node.id }}'>Описание:</label></div>
+        <div><label for='node_descr_{{ node.id }}'>Описание:</label></div>
         <div id='req_description'>
-            <textarea id="req_descr_{{ node.id }}" class="big_text" name='description'>{{node.description}}</textarea>
+            <textarea id="node_descr_{{ node.id }}" class="big_text" name='description'>{{node.description}}</textarea>
         </div>
     </div>
     <div id='redaction'>
@@ -35,12 +35,13 @@
                 <div id="new_line"></div><input type="checkbox" checked="true" id="file_{{ i.id }}" name="node_files" value="file_{{ i.id }}">
                 <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
             {% endfor %}
+            <div><input type="button" id='add_file_in_node' value='добавить файл'></div>
         </div>
     </div>
     <div id='reason_of_redaction'>
-        <div><label for='reason_of_redaction_req_{{ node.id }}'>Обоснование внесения изменений:</label></div>
+        <div><label for='reason_of_redaction_node_{{ node.id }}'>Обоснование внесения изменений:</label></div>
         <div id='descr_redaction'>
-            <textarea id="reason_of_redaction_req_{{ node.id }}" class="small_text" name='edit_description'>{{node.edit_description}}</textarea>
+            <textarea id="reason_of_redaction_node_{{ node.id }}" class="small_text" name='edit_description'>{{node.edit_description}}</textarea>
         </div>
     </div>
     <div>
@@ -53,6 +54,16 @@
         <div><input type="submit" value="Сохранить редакцию"></div>
     </div>
 </form>
+    <div id='form_to_upload_files_in_node' class="hidden">
+        <form target="upload_frame" enctype="multipart/form-data" action="/addingFilesInNodes/" method="post">{% csrf_token %}
+            <div class='hidden'>
+                <input type="text" name='node_id' id='node_id' value="{{ node.id }}">
+            </div>
+            <input id="added_file" type="file" class="file" name="added_file" >
+            <input type="submit" class="submit" value="Upload" id='submiting_adding_file'>
+            <iframe id="upload_frame" name="upload_frame" style="display: none"></iframe>
+        </form>
+    </div>
 </div>
 
 <div class='table read'>

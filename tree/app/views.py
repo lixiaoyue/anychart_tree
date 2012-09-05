@@ -254,9 +254,6 @@ def saveRequirementEdition(request):
         print new_requirement.deadline
         return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_req_' + request.POST['req'])
 
-    #дописать сохранение требования
-
-
 @csrf_exempt
 def saveNodeEdition(request):
     if request.method == 'POST':
@@ -297,9 +294,9 @@ def saveNodeEdition(request):
         #        files.append(FileInNodes.objects.get(id = request.POST.getlist('node_files')[i].))
         return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_description_tie_' + request.POST['node'])
 
-
 @csrf_exempt
 def addingFiles(request):
+    print '43'
     new_file = FileInNodes.objects.create(
         file=request.FILES['added_file'],
         name = request.FILES['added_file'].name
@@ -312,7 +309,13 @@ def addingFiles(request):
     return HttpResponse(files)
 
 @csrf_exempt
-def getFiles(request):
-    if request.method == 'POST':
-        get_id = request.POST['id']
-        return HttpResponse('trg')
+def addingFilesInNodes(request):
+    new_file = FileInNodes.objects.create(
+        file=request.FILES['added_file'],
+        name = request.FILES['added_file'].name
+    )
+    new_file.save()
+    curr_node_editor = NodeEditionHistory.objects.get(id=request.POST['node_id'])
+    curr_node_editor.files.add(new_file)
+    files = curr_node_editor.files
+    return HttpResponse(files)

@@ -363,6 +363,11 @@ $('#add_file_button').live('click', function(){
     showPopup(true);
 });
 
+$('#add_file_in_node').live('click', function(){
+    $('div.popup div.popupContent').html($('#form_to_upload_files_in_node').html());
+    showPopup(true);
+});
+
 function showPopup(bool){
     if(bool){
         $('div.popupContent, div.popup, .shadow').show();
