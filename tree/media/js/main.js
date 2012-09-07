@@ -281,75 +281,99 @@ $('ul.notification_list li input[type=checkbox]').live('click', function(){
     }
 });
 
+$('span.add').live('click', function(){
+    $.ajax({
+        type: "POST",
+        url: "/showAddNodeForm/",
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){
+            $('#hidden_block').html(html);
+            var node_id = $('#hidden_block div#name_redaction input[type=text]').attr('id');
+            node_id = node_id.replace('node_name_', 'description_tie_');
+            addTabNameToManageBlock(node_id, 'new requirement', '');
+            addBlockForTabContent(node_id);
+            $('#tabs_content_block div.tabs.tab_'+ node_id).html(html);
+            makeEditors(node_id);
+            tabsWidthDetect();
+        }
+    });
+});
+
 $('span.add.node').live('click', function(){
-    var parent_id = $(this).prev().children('a').attr('id');
-    showFormToAddNode(parent_id);
-    function showFormToAddNode(id_parent_node){
-        console.log(id_parent_node);
-        $.ajax({
-            type: "POST",
-            url: "/showAddNodeForm/",
-            data: {parentId: id_parent_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
-            success: function(html){
-                $('#hidden_block').html(html);
-                var node_id = $('#hidden_block div#name_redaction input[type=text]').attr('id');
-                node_id = node_id.replace('node_name_', 'description_tie_');
-                addTabNameToManageBlock(node_id, $('#' + id_parent_node).html() + ': new', '');
-                addBlockForTabContent(node_id);
-                $('#tabs_content_block div.tabs.tab_'+ node_id).html(html);
-                makeEditors(node_id);
-                tabsWidthDetect();
-            }
-        });
+    if (confirm("Вы действительно хотите создать бизнес требование?")) {
+        var parent_id = $(this).prev().children('a').attr('id');
+        showFormToAddNode(parent_id);
+        function showFormToAddNode(id_parent_node){
+            $.ajax({
+                type: "POST",
+                url: "/showAddNodeForm/",
+                data: {parentId: id_parent_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
+                success: function(html){
+                    $('#hidden_block').html(html);
+                    var node_id = $('#hidden_block div#name_redaction input[type=text]').attr('id');
+                    node_id = node_id.replace('node_name_', 'description_tie_');
+                    addTabNameToManageBlock(node_id, $('#' + id_parent_node).html() + ': new', '');
+                    addBlockForTabContent(node_id);
+                    $('#tabs_content_block div.tabs.tab_'+ node_id).html(html);
+                    makeEditors(node_id);
+                    tabsWidthDetect();
+                }
+            });
+        }
     }
 });
 
 $('span.delete.node').live('click', function(){
-    var select_node = $(this).prevAll()[2].firstChild.id;
-    select_node = select_node.split('_')[2];
-    $.ajax({
-        type: "POST",
-        url: "/deleteNode/",
-        data: {node: select_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
-        success: function(html){ }
-    });
+    if (confirm("Вы действительно хотите удалить бизнес требование?")) {
+        var select_node = $(this).prevAll()[2].firstChild.id;
+        select_node = select_node.split('_')[2];
+        $.ajax({
+            type: "POST",
+            url: "/deleteNode/",
+            data: {node: select_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(html){ }
+        });
+    }
 });
 
 $('span.delete.req').live('click', function(){
-    var parent = $(this).offsetParent();
-    var req_id = parent.find('a').attr('id').split('_')[1];
-//    console.log($(this).parents('li:first').attr('id'));
-    var node_id = $(this).parents('li.req').attr('id');
-    node_id = node_id.split('_')[2];
-    $.ajax({
-        type: "POST",
-        url: "/deleteRequirement/",
-        data: {req: req_id, node: node_id, csrfmiddlewaretoken: '{{ csrf_token }}'},
-        success: function(html){ }
-    });
+    if (confirm("Вы действительно хотите удалить требование?")) {
+        var parent = $(this).offsetParent();
+        var req_id = parent.find('a').attr('id').split('_')[1];
+    //    console.log($(this).parents('li:first').attr('id'));
+        var node_id = $(this).parents('li.req').attr('id');
+        node_id = node_id.split('_')[2];
+        $.ajax({
+            type: "POST",
+            url: "/deleteRequirement/",
+            data: {req: req_id, node: node_id, csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(html){ }
+        });
+    }
 });
 
 $('span.add.req').live('click', function(){
-    var parent_id = $(this).parents('li:first').attr('id');
-    showFormToAddReq(parent_id);
-    function showFormToAddReq(id_parent_node){
-        console.log(id_parent_node);
-        $.ajax({
-            type: "POST",
-            url: "/showAddReqForm/",
-            data: {parentId: id_parent_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
-            success: function(html){
-                $('#hidden_block').html(html);
-                console.log($('#hidden_block').html(html));
-                var req_id = $('#hidden_block div#name_redaction input[type=text]').attr('id');
-                req_id = req_id.replace('req_name_', 'description_tie_');
-                addTabNameToManageBlock(req_id, $('#' + id_parent_node).html() + ': new', '');
-                addBlockForTabContent(req_id);
-                $('#tabs_content_block div.tabs.tab_'+ req_id).html(html);
-                makeEditors(req_id);
-                tabsWidthDetect();
-            }
-        });
+    if (confirm("Вы действительно хотите создать новое требование?")) {
+        var parent_id = $(this).parents('li:first').attr('id');
+        showFormToAddReq(parent_id);
+        function showFormToAddReq(id_parent_node){
+            $.ajax({
+                type: "POST",
+                url: "/showAddReqForm/",
+                data: {parentId: id_parent_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
+                success: function(html){
+                    $('#hidden_block').html(html);
+                    console.log($('#hidden_block').html(html));
+                    var req_id = $('#hidden_block div#name_redaction input[type=text]').attr('id');
+                    req_id = req_id.replace('req_name_', 'description_tie_');
+                    addTabNameToManageBlock(req_id, $('#' + id_parent_node).html() + ': new', '');
+                    addBlockForTabContent(req_id);
+                    $('#tabs_content_block div.tabs.tab_'+ req_id).html(html);
+                    makeEditors(req_id);
+                    tabsWidthDetect();
+                }
+            });
+        }
     }
 });
 

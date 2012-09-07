@@ -69,14 +69,25 @@ def showAddNodeForm(request):
     if request.is_ajax():
         if request.method == 'POST':
             releases = Release.objects.all()
-            parent_node_id = request.POST['parentId'].replace('description_tie_','')
-            parent = Node.objects.get(id = parent_node_id)
-            node = Node.objects.create(
-                name = u'',
-                parent = parent
-            )
             people = User.objects.all()
-            return render_to_response("add_node.html", {'parent':parent, 'node':node, 'people':people, 'releases': releases})
+            try:
+                parent = request.POST['parentId']
+            except:
+                print '!!'
+                node = Node.objects.create(
+                    name = u'',
+                )
+                return render_to_response("add_node.html", {'node':node, 'people':people, 'releases': releases})
+            else:
+                print 'wrong'
+                parent_node_id = request.POST['parentId'].replace('description_tie_','')
+                parent = Node.objects.get(id = parent_node_id)
+                node = Node.objects.create(
+                    name = u'',
+                    parent = parent
+                )
+                return render_to_response("add_node.html", {'parent':parent, 'node':node, 'people':people, 'releases': releases})
+
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request))
 
 @csrf_exempt
@@ -109,7 +120,7 @@ def addNode(request):
             release = Release.objects.get(id=request.POST['releases']),
             edit_description = 'только создано',
             user = request.user,
-            cur_task = CurrentTask.objects.get(id=1),
+            cur_task = CurrentTask.objects.get(id=2 ),
             description = request.POST['description']
         )
         return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_description_tie_' + str(node_editor.id))
@@ -141,10 +152,15 @@ def deleteNode(request):
     if request.method == 'POST':
         id = request.POST['node']
         delete_node_babies(id)
-        parent = Node.objects.get(id=id).parent
-        parent_editor = NodeEditionHistory.objects.filter(node = parent.id).order_by('-redaction_date')[0]
-        Node.objects.get(id=id).delete()
-        return render_to_response("node.html", {'node':parent_editor, 'tasks': CurrentTask.objects.all()[0:2]})
+        try:
+            parent = Node.objects.get(id=id).parent
+        except ():
+            Node.objects.get(id=id).delete()
+            return render_to_response("node.html", {'node': Node.objects.get(id=id+1), 'tasks': CurrentTask.objects.all()[0:2]})
+        else:
+            parent_editor = NodeEditionHistory.objects.filter(node = parent.id).order_by('-redaction_date')[0]
+            Node.objects.get(id=id).delete()
+            return render_to_response("node.html", {'node':parent_editor, 'tasks': CurrentTask.objects.all()[0:2]})
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST))
 
 @csrf_exempt
@@ -159,7 +175,6 @@ def deleteRequirement(request):
 
 def delete_node_babies(node_id):
     babies = Node.objects.filter(parent=node_id)
-    print babies
     for i in babies:
         delete_node_babies(i.id)
         Node.objects.get(id=i.id).delete()
@@ -180,7 +195,7 @@ def addRequirement(request):
             edit_description = 'только создано',
             user = request.user,
             deadline = curr_deadline,
-            cur_task = CurrentTask.objects.get(id=1),
+            cur_task = CurrentTask.objects.get(id=2),
             description = request.POST['description']
         )
         return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_description_tie_' + str(requirement_editor.id))
@@ -218,10 +233,6 @@ def add_persons_in_requirement(request, req):
 @csrf_exempt
 def saveRequirementEdition(request):
     if request.method == 'POST':
-        print request.POST.lists
-        for i in request.POST:
-            print i + '  ' + request.POST[i]
-
         get_requirement = Requirement.objects.get(id=str(request.POST['req']))
         prev_req = RequirementsEdition.objects.filter(requirement = get_requirement).order_by('-redaction_date')[0]
         curr_description = request.POST['description']
@@ -235,8 +246,7 @@ def saveRequirementEdition(request):
         prev_req.requirement.name = request.POST['name']
         prev_req.requirement.save()
         curr_req = prev_req.requirement
-        curr_deadline = request.POST['req_deadline']
-        curr_deadline = '-'.join(reversed(curr_deadline.split('.')))
+        curr_deadline = '-'.join(reversed(request.POST['req_deadline'].split('.')))
         task_id = request.POST['cur_task'].split('_')[-1]
         curr_task = CurrentTask.objects.get(id = task_id)
 
@@ -262,36 +272,26 @@ def saveNodeEdition(request):
         curr_description = request.POST['description']
         curr_purpose = request.POST['purpose']
 
-        #файлы
         set_of_files= []
         for i in request.POST.getlist('node_files'):
             get_id = i.split('_')
             set_of_files.append( FileInNodes.objects.get(id = get_id[-1]))
 
-        #редактируемое БТ + релиз
         prev_node.node.name = request.POST['name']
         prev_node.node.save()
-        curr_bus_req = prev_node.node
-
-        curr_release = Release.objects.get(name = request.POST['release'])
-
-        #задание
         task_id = request.POST['cur_task'].split('_')[-1]
-        curr_task = CurrentTask.objects.get(id = task_id)
 
         new_node = NodeEditionHistory.objects.create(
             description = curr_description,
             purpose = curr_purpose,
-            node = curr_bus_req,
+            node = prev_node.node,
             edit_description = request.POST['edit_description'],
             user = request.user,
-            cur_task = curr_task,
-            release = curr_release,
+            cur_task = CurrentTask.objects.get(id = task_id),
+            release = Release.objects.get(name = request.POST['release']),
         )
         new_node.files = set_of_files
         new_node.save()
-
-        #        files.append(FileInNodes.objects.get(id = request.POST.getlist('node_files')[i].))
         return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_description_tie_' + request.POST['node'])
 
 @csrf_exempt
