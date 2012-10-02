@@ -2,19 +2,8 @@ from app.models import *
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
 
-class UserRoleAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-
 class NodeAdmin(MPTTModelAdmin):
     mptt_level_indent = 20
-
-class PersonRoleAdmin(admin.ModelAdmin):
-    list_display = ('role',)
-
-class PersonRoleDetectionAdmin(admin.ModelAdmin):
-    filter_horizontal = ('persons',)
-    list_display = ('role','node')
-    raw_id_fields  = ('node',)
 
 class ReleaseAdmin(admin.ModelAdmin):
     list_display = ('name',)
@@ -43,6 +32,9 @@ class NodeEditionHistoryAdmin(admin.ModelAdmin):
 class TypeOfNodesRelationshipAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
+class StatusAdmin(admin.ModelAdmin):
+    list_display = ('title', 'color',)
+
 class RequirementAdmin(admin.ModelAdmin):
     list_display = ('name','release')
     raw_id_fields = ('node',)
@@ -53,21 +45,11 @@ class RequirementsEditionAdmin(admin.ModelAdmin):
     filter_horizontal = ('files',)
     list_filter =('requirement',)
 
-class PersonRoleRequirementDetectionAdmin(admin.ModelAdmin):
-    filter_horizontal = ('persons',)
-    list_display = ('role','req')
-    raw_id_fields  = ('req',)
-
-admin.site.register(UserRole, UserRoleAdmin)
 admin.site.register(Node, NodeAdmin)
-admin.site.register(PersonRole, PersonRoleAdmin)
-admin.site.register(PersonRoleDetection, PersonRoleDetectionAdmin)
 admin.site.register(Release, ReleaseAdmin)
 admin.site.register(Status ,StatusAdmin)
-admin.site.register(CurrentTask, CurrentTaskAdmin)
 admin.site.register(FileInNodes, FileInNodesAdmin)
 admin.site.register(NodeEditionHistory, NodeEditionHistoryAdmin)
 admin.site.register(TypeOfNodesRelationship, TypeOfNodesRelationshipAdmin)
 admin.site.register(Requirement, RequirementAdmin)
 admin.site.register(RequirementsEdition, RequirementsEditionAdmin)
-admin.site.register(PersonRoleRequirementDetection, PersonRoleRequirementDetectionAdmin)

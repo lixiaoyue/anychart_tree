@@ -4,17 +4,11 @@ from mptt.models import MPTTModel, TreeForeignKey
 from django.contrib.auth.models import User
 from django.db import models
 
-class UserRole(models.Model):
-    name = models.CharField(max_length=30, verbose_name=u'Роль')
-    def __unicode__(self):
-        return unicode(self.name)
-    class Meta:
-        verbose_name = _(u'Роль пользователя')
-        verbose_name_plural = _(u'Роли пользвателей')
-
 class Node(MPTTModel):
     name = models.CharField(max_length=200, verbose_name=u'Название узла')
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', verbose_name=u'Родительский узел')
+    base = models.BooleanField(default=False)
+    curator = models.ForeignKey(User)
     def __unicode__(self):
         return unicode(self.name)
     class MPTTMeta:
@@ -22,24 +16,6 @@ class Node(MPTTModel):
     class Meta:
         verbose_name = _(u'Бизнес-требование')
         verbose_name_plural = _(u'Бизнес-требования')
-
-class PersonRole(models.Model):
-    role = models.CharField(max_length=200, verbose_name=u'Роль')
-    def __unicode__(self):
-        return self.role
-    class Meta:
-        verbose_name = _(u'Роль')
-        verbose_name_plural = _(u'Роли')
-
-class PersonRoleDetection(models.Model):
-    node = models.ForeignKey('Node')
-    role = models.ForeignKey('PersonRole')
-    persons = models.ManyToManyField(User)
-    def __unicode__(self):
-        return str(self.id)
-    class Meta:
-        verbose_name = _(u'Люди по ролям в узлах')
-        verbose_name_plural = _(u'Люди по ролям в узлах')
 
 class Release(models.Model):
     name = models.CharField(max_length=200, verbose_name=u'Название релиза')
@@ -53,20 +29,12 @@ class Release(models.Model):
 
 class Status(models.Model):
     title = models.CharField(max_length=200, verbose_name=u'Статус')
+    color = models.CharField(max_length=15, verbose_name=u'Цвет статуса')
     def __unicode__(self):
         return self.title
     class Meta:
         verbose_name = _(u'Статус')
-        verbose_name_plural = _(u'Статусы задач')
-
-class CurrentTask(models.Model):
-    title = models.CharField(max_length=200, verbose_name=u'Задача')
-    status = models.ForeignKey(Status, verbose_name=u'Статус')
-    def __unicode__(self):
-        return self.title
-    class Meta:
-        verbose_name = _(u'Задача')
-        verbose_name_plural = _(u'Задачи')
+        verbose_name_plural = _(u'Статусы требований')
 
 class FileInNodes(models.Model):
     name = models.CharField(max_length=200, verbose_name=u'Название файла')
@@ -79,14 +47,12 @@ class FileInNodes(models.Model):
 
 class NodeEditionHistory(models.Model):
     description = models.TextField(blank=True, verbose_name=u'Описание узла')
-    purpose = models.CharField(max_length=300, blank=True, verbose_name=u'Цель создания элемента')
-    reason = models.CharField(max_length=300,  verbose_name=u'Источник вдохвения на создание')
     redaction_date = models.DateTimeField(auto_now=True)
     node = models.ForeignKey('Node', verbose_name=u'Редактируемый узел')
     release = models.ForeignKey('Release', verbose_name=u'Релиз')
     edit_description = models.TextField(verbose_name=u'Обоснование редакции')
     user = models.ForeignKey(User)
-    cur_task = models.ForeignKey(CurrentTask)
+    status = models.ForeignKey(Status)
     files = models.ManyToManyField('FileInNodes',blank=True, null=True, verbose_name=u'Файлы')
     def __unicode__(self):
         return '%s: %s' % (self.edit_description, self.redaction_date)
@@ -115,6 +81,7 @@ class Requirement(models.Model):
     name = models.CharField(max_length=200)
     node = models.ForeignKey(Node, blank=True,null=True)
     release = models.ForeignKey(Release)
+    curator = models.ForeignKey(User)
     def __unicode__(self):
         return unicode(self.name)
     class Meta:
@@ -131,21 +98,11 @@ class RequirementsEdition(models.Model):
     redaction_date = models.DateTimeField(auto_now=True)
     edit_description = models.TextField(verbose_name=u'Обоснование редакции')
     user = models.ForeignKey(User)
-    cur_task = models.ForeignKey(CurrentTask)
+    status = models.ForeignKey(Status)
     def __unicode__(self):
         return unicode(self.requirement)
     class Meta:
         verbose_name = _(u'История редактирования требований')
         verbose_name_plural = _(u'История редактирования требований')
 
-class PersonRoleRequirementDetection(models.Model):
-    req = models.ForeignKey('Requirement')
-    role = models.ForeignKey('PersonRole')
-    persons = models.ManyToManyField(User)
-    def __unicode__(self):
-        return str(self.id)
-#        return '%s - %s' % (self.req, self.role)
-    class Meta:
-        verbose_name = _(u'Люди по ролям в требованиях')
-        verbose_name_plural = _(u'Люди по ролям в требованиях')
 
