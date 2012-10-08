@@ -8,18 +8,12 @@
                 <input type='text' id='req_name_{{ req.id }}' name='name' value="{{ req.requirement.name }}"/>
             </div>
         </div>
-        <div id='purpose'>
-            <div><label for='req_purpose_{{ req.id }}'>Цель создания:</label></div>
-            <div id='req_purpose'>
-                <input type="text" id="req_purpose_{{ req.id }}" name='reason' value="{{req.purpose}}"/>
-            </div>
-        </div>
         <div>
-            <div><label for='select_task'> Задача:</label></div>
+            <div><label for='select_curator'> Куратор:</label></div>
             <div style="border: 1px">
-                <select name="cur_task" id='select_task'>
-                    {% for i in task.all %}
-                        <option value="task_{{ i.id }}">{{ i.title }}</option>
+                <select name="curator" id='select_curator'>
+                    {% for i in people.all %}
+                        <option value="curator_{{ i.id }}">{{ i.username }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -80,58 +74,10 @@
         <div>{{ req.requirement.name }}
         </div>
     </div>
-    {% if req.purpose %}
-        <div >
-            <div>Цель создания:</div>
-            <div>{{req.purpose}}
-            </div>
-        </div>
-    {% endif %}
-    <div>
-        <div>Задача:</div>
-        <div> {{ req.cur_task }}
-        </div>
-    </div>
     {% if req.description %}
         <div>
             <div>Описание:</div>
             <div>{{req.description|safe}}
-            </div>
-        </div>
-    {% endif %}
-    {% if authors %}
-        <div >
-            <div> авторы </div>
-            <div>
-                {% for i in authors %}
-                    {{ i }}<br/>
-                {% endfor %}
-            </div>
-        </div>
-    {% endif %}
-    {% if correctors %}
-        <div >
-            <div> редакторы </div>
-            <div>
-                {% for i in correctors %}{{ i }}<br/>{% endfor %}
-            </div>
-        </div>
-    {% endif %}
-    {% if implementers %}
-        <div >
-            <div> исполнители: </div>
-            <div>
-                {% for i in implementers %}
-                    {{ i }}<br/>
-                {% endfor %}
-            </div>
-        </div>
-    {% endif %}
-    {% if testers %}
-        <div >
-            <div> тестировщики: </div>
-            <div>
-                {% for i in testers %}{{ i }}<br/>{% endfor %}
             </div>
         </div>
     {% endif %}

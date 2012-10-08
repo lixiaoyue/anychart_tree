@@ -32,22 +32,11 @@ def getRequirements(request):
 
 @csrf_exempt
 def getRequirementDescription(request):
-    tasks = CurrentTask.objects.all()
     if request.is_ajax():
         if request.method == 'POST':
             req_id = request.POST['reqId'].replace('req_','')
             req = RequirementsEdition.objects.filter(requirement = req_id).order_by('-redaction_date')[0]
-            authors=[]
-            correctors=[]
-            implementers=[]
-            testers=[]
-            if PersonRoleRequirementDetection.objects.filter(req = req_id):
-                authors = PersonRoleRequirementDetection.objects.filter(req = req_id).all().filter(role = PersonRole.objects.get(role = 'author'))[0].persons.all()
-                correctors = PersonRoleRequirementDetection.objects.filter(req = req_id).all().filter(role = PersonRole.objects.get(role = 'corrector'))[0].persons.all()
-                implementers = PersonRoleRequirementDetection.objects.filter(req = req_id).all().filter(role = PersonRole.objects.get(role = 'implementer'))[0].persons.all()
-                testers = PersonRoleRequirementDetection.objects.filter(req = req_id).all().filter(role = PersonRole.objects.get(role = 'tester'))[0].persons.all()
-
-            return render_to_response("requirement.html", {'req':req, 'task': tasks, 'authors': authors, 'correctors': correctors, 'implementers': implementers, 'testers': testers})
+            return render_to_response("requirement.html", {'req':req})
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request))
 
 @csrf_exempt
@@ -56,12 +45,7 @@ def getNodeDescription(request):
         if request.method == 'POST':
             node_id = request.POST['nodeId'].replace('description_tie_','')
             node = NodeEditionHistory.objects.filter(node = node_id).order_by('-redaction_date')[0]
-            authors =[]
-            correctors =[]
-            if PersonRoleDetection.objects.filter(node = node_id):
-                authors = PersonRoleDetection.objects.filter(node = node_id).all().filter(role = PersonRole.objects.get(role = 'author'))[0].persons.all()
-                correctors = PersonRoleDetection.objects.filter(node = node_id).all().filter(role = PersonRole.objects.get(role = 'corrector'))[0].persons.all()
-            return render_to_response("node.html", {'node':node, 'tasks': CurrentTask.objects.all()[0:2], 'authors': authors, 'correctors': correctors})
+            return render_to_response("node.html", {'node':node})
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request))
 
 @csrf_exempt
@@ -72,6 +56,7 @@ def showAddNodeForm(request):
             people = User.objects.all()
             try:
                 parent = request.POST['parentId']
+                print 'parent - ' + parent
             except:
                 print '!!'
                 node = Node.objects.create(
@@ -79,16 +64,23 @@ def showAddNodeForm(request):
                 )
                 return render_to_response("add_node.html", {'node':node, 'people':people, 'releases': releases})
             else:
-                print 'wrong'
                 parent_node_id = request.POST['parentId'].replace('description_tie_','')
                 parent = Node.objects.get(id = parent_node_id)
+                print parent
                 node = Node.objects.create(
                     name = u'',
-                    parent = parent
+                    parent = parent,
+                    curator = User.objects.get(id=1),
+                    base = False
                 )
-                return render_to_response("add_node.html", {'parent':parent, 'node':node, 'people':people, 'releases': releases})
+                print node
+                return render_to_response("add_node.html", {'parent':parent, 'node':node, 'releases': releases, 'people': people})
 
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request))
+
+@csrf_exempt
+def nodeRepeal(request):
+    print request.POST.lists
 
 @csrf_exempt
 def showAddReqForm(request):
@@ -100,10 +92,9 @@ def showAddReqForm(request):
             req = Requirement.objects.create(
                 name = u'',
                 node = node,
-                release = Release.objects.get(id=2)
+                release = Release.objects.get(id=1)
             )
-            people = User.objects.all()
-            return render_to_response("add_req.html", {'parent':node, 'req':req, 'people':people, 'releases': releases})
+            return render_to_response("add_req.html", {'parent':node, 'req':req, 'releases': releases})
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST.lists))
 
 @csrf_exempt
@@ -111,35 +102,19 @@ def addNode(request):
     if request.method == 'POST':
         print request.POST.lists
         node = Node.objects.get(id = request.POST['node'])
+        node.curator = User.objects.get(id = request.POST['curator'])
         node.name = request.POST['name']
+        node.status = Status.objects.get(id = 1)
         node.save()
-        add_persons_in_node(request, node)
         node_editor = NodeEditionHistory.objects.create(
-            reason = request.POST['reason'],
             node = node,
+            status = Status.objects.get(id = 1),
             release = Release.objects.get(id=request.POST['releases']),
             edit_description = 'только создано',
-            user = request.user,
-            cur_task = CurrentTask.objects.get(id=2 ),
             description = request.POST['description']
         )
         return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_description_tie_' + str(node_editor.id))
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST))
-
-def add_persons_in_node(request, node):
-    add_author = PersonRoleDetection.objects.create(
-        node = node,
-        role = PersonRole.objects.get(role = 'author'),
-    )
-    for i in getIDSet(request.POST.getlist('authors')):
-        add_author.persons.add(User.objects.get(id = i))
-
-    add_corrector = PersonRoleDetection.objects.create(
-        node = node,
-        role = PersonRole.objects.get(role = 'corrector'),
-    )
-    for i in getIDSet(request.POST.getlist('redactors')):
-        add_corrector.persons.add(User.objects.get(id = i))
 
 def getIDSet(data):
     set = []
@@ -156,11 +131,11 @@ def deleteNode(request):
             parent = Node.objects.get(id=id).parent
         except ():
             Node.objects.get(id=id).delete()
-            return render_to_response("node.html", {'node': Node.objects.get(id=id+1), 'tasks': CurrentTask.objects.all()[0:2]})
+            return render_to_response("node.html", {'node': Node.objects.get(id=id+1)})
         else:
             parent_editor = NodeEditionHistory.objects.filter(node = parent.id).order_by('-redaction_date')[0]
             Node.objects.get(id=id).delete()
-            return render_to_response("node.html", {'node':parent_editor, 'tasks': CurrentTask.objects.all()[0:2]})
+            return render_to_response("node.html", {'node':parent_editor})
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST))
 
 @csrf_exempt
@@ -184,9 +159,9 @@ def addRequirement(request):
     if request.method == 'POST':
         print request.POST.lists
         req = Requirement.objects.get(id = request.POST['node'])
+        curator = User.objects.get(id = request.POST['curator'])
         req.name = request.POST['name']
         req.save()
-        add_persons_in_requirement(request, req)
         curr_deadline = request.POST['req_deadline']
         curr_deadline = '-'.join(reversed(curr_deadline.split('.')))
         requirement_editor = RequirementsEdition.objects.create(
@@ -195,40 +170,11 @@ def addRequirement(request):
             edit_description = 'только создано',
             user = request.user,
             deadline = curr_deadline,
-            cur_task = CurrentTask.objects.get(id=2),
+            curator = curator,
             description = request.POST['description']
         )
         return HttpResponseRedirect(request.META["HTTP_REFERER"] + '#tab_description_tie_' + str(requirement_editor.id))
     return HttpResponse('Error: Does\'n get ajax. request is: \n' + str(request.POST))
-
-def add_persons_in_requirement(request, req):
-    add_author = PersonRoleRequirementDetection.objects.create(
-        req = req,
-        role = PersonRole.objects.get(role = 'author'),
-    )
-    for i in getIDSet(request.POST.getlist('authors')):
-        add_author.persons.add(User.objects.get(id = i))
-
-    add_corrector = PersonRoleRequirementDetection.objects.create(
-        req = req,
-        role = PersonRole.objects.get(role = 'corrector'),
-    )
-    for i in getIDSet(request.POST.getlist('redactors')):
-        add_corrector.persons.add(User.objects.get(id = i))
-
-    add_implementers = PersonRoleRequirementDetection.objects.create(
-        req = req,
-        role = PersonRole.objects.get(role = 'implementer')
-    )
-    for i in getIDSet(request.POST.getlist('implementers')):
-        add_implementers.persons.add(User.objects.get(id = i))
-
-    add_testers = PersonRoleRequirementDetection.objects.create(
-        req = req,
-        role = PersonRole.objects.get(role = 'tester')
-    )
-    for i in getIDSet(request.POST.getlist('testers')):
-        add_testers.persons.add(User.objects.get(id = i))
 
 @csrf_exempt
 def saveRequirementEdition(request):
@@ -242,22 +188,19 @@ def saveRequirementEdition(request):
         for i in request.POST.getlist('req_files'):
             get_id = i.split('_')
             set_of_files.append( FileInNodes.objects.get(id = get_id[-1]))
-
+        curator = User.objects.get(id = request.POST['curator'])
         prev_req.requirement.name = request.POST['name']
         prev_req.requirement.save()
         curr_req = prev_req.requirement
         curr_deadline = '-'.join(reversed(request.POST['req_deadline'].split('.')))
-        task_id = request.POST['cur_task'].split('_')[-1]
-        curr_task = CurrentTask.objects.get(id = task_id)
 
         new_requirement = RequirementsEdition.objects.create(
             description = curr_description,
-            reason = curr_reason,
             requirement = curr_req,
             edit_description = request.POST['edit_description'],
             user = request.user,
             deadline = curr_deadline,
-            cur_task = curr_task,
+            curator = curator,
         )
         new_requirement.files = set_of_files
         new_requirement.save()
@@ -279,16 +222,15 @@ def saveNodeEdition(request):
 
         prev_node.node.name = request.POST['name']
         prev_node.node.save()
-        task_id = request.POST['cur_task'].split('_')[-1]
-
+        curator = request.POST['curator']
         new_node = NodeEditionHistory.objects.create(
             description = curr_description,
-            purpose = curr_purpose,
             node = prev_node.node,
             edit_description = request.POST['edit_description'],
             user = request.user,
-            cur_task = CurrentTask.objects.get(id = task_id),
             release = Release.objects.get(name = request.POST['release']),
+            curator = curator,
+            base = False
         )
         new_node.files = set_of_files
         new_node.save()

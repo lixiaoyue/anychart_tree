@@ -6,22 +6,6 @@
             <input type='text' id='node_name_{{ node.id }}' name='name' value="{{ node.node.name }}"/>
         </div>
     </div>
-    <div id='purpose'>
-        <div><label for='node_purpose_{{ node.id }}'>Цель создания:</label></div>
-        <div id='node_purpose'>
-            <input type="text" id="node_purpose_{{ node.id }}" name='purpose' value="{{node.purpose}}"/>
-        </div>
-    </div>
-    <div>
-        <div><label for='select_task'> Задача:</label></div>
-        <div style="border: 1px">
-            <select name="cur_task" id='select_task'>
-                {% for i in tasks.all %}
-                    <option value="task_{{ i.id }}">{{ i.title }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
     <div id='description'>
         <div><label for='node_descr_{{ node.id }}'>Описание:</label></div>
         <div id='req_description'>
@@ -42,6 +26,12 @@
         <div><label for='reason_of_redaction_node_{{ node.id }}'>Обоснование внесения изменений:</label></div>
         <div id='descr_redaction'>
             <textarea id="reason_of_redaction_node_{{ node.id }}" class="small_text" name='edit_description'>{{node.edit_description}}</textarea>
+        </div>
+    </div>
+    <div id='curator'>
+        <div><label for='curator_of_{{ node.id }}'>Назначить нового куратора:</label></div>
+        <div id='curator_edition'>
+            <textarea id="curator_edition_{{ node.id }}" class="small_text" name='curator'>{{node.edit_description}}</textarea>
         </div>
     </div>
     <div>
@@ -73,10 +63,18 @@
         <div>{{ node.node.name }}
         </div>
     </div>
-    {% if node.purpose %}
+    {% if node.status %}
         <div >
-            <div>Цель создания:</div>
-            <div>{{node.purpose}}
+            <div>Текущий статус:</div>
+            <div>{{node.status}}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if node.curator %}
+        <div >
+            <div>Куратор:</div>
+            <div>{{node.curator}}
             </div>
         </div>
     {% endif %}
@@ -88,33 +86,11 @@
             </div>
         </div>
     {% endif %}
-        <div>
-            <div>Задача:</div>
-            <div> {{ node.cur_task }}
-            </div>
-        </div>
+
     {% if node.description %}
         <div>
             <div>Описание:</div>
             <div>{{node.description|safe}}
-            </div>
-        </div>
-    {% endif %}
-    {% if authors %}
-        <div >
-            <div> авторы </div>
-            <div>
-                {% for i in authors %}
-                    <label>{{ i }}<br/></label>
-                {% endfor %}
-            </div>
-        </div>
-    {% endif %}
-    {% if correctors %}
-        <div >
-            <div> редакторы </div>
-            <div>
-                {% for corr in correctors %}{{ corr }}<br/>{% endfor %}
             </div>
         </div>
     {% endif %}

@@ -6,12 +6,6 @@
                 <input type='text' id='node_name_{{ node.id }}' name='name' value="{{ node.name }}"/>
             </div>
         </div>
-        <div id='purpose'>
-            <div><label for='node_purpose_{{ node.id }}'>Цель создания:</label></div>
-            <div id='node_purpose'>
-                <input type="text" id="node_purpose_{{ node.id }}" name='reason' value="{{node.purpose}}"/>
-            </div>
-        </div>
         <div id='description'>
             <div><label for='req_descr_{{ node.id }}'>Описание:</label></div>
             <div id='req_description'>
@@ -32,32 +26,24 @@
             <div>выбери релиз:</div>
             <div id='release_choosing'>
                 <select name="releases" size="2" id='releases'>
-                {% for i in releases %}
-                    <option value="{{ i.id }}">{{ i.name }}</option>
-                {% endfor %}
-                </select>
-            </div>
-        </div>
-        <div id='authors'>
-            <div><label for='authors_{{ node.id }}'>Добавить авторов:</label></div>
-            <div >
-                <select MULTIPLE name="authors" id='authors_' size='10'>
-                    {% for i in people %}
-                        <option value="author_{{ i.id }}">{{ i.username }} {{ i.last_name }}</option>
+                    {% for i in releases %}
+                        <option value="{{ i.id }}">{{ i.name }}</option>
                     {% endfor %}
                 </select>
             </div>
         </div>
-        <div id='redactors'>
-            <div><label for='redactors_{{ node.id }}'>Добавить редакторов:</label></div>
-            <div class='wide'>
-                <select MULTIPLE  name="redactors" id='redactors_' size='10'>
+
+        <div id='curators'>
+            <div>назначь куратора:</div>
+            <div id='curator_choosing'>
+                <select name="curator" size="10" id='curator'>
                     {% for i in people %}
-                        <option value="redactor_{{ i.id }}">{{ i.username }} {{ i.last_name }}</option>
+                        <option value="{{ i.id }}">{{ i.username }}</option>
                     {% endfor %}
                 </select>
             </div>
         </div>
+
         <div>
             <div>
                 <div class="hidden">
@@ -66,6 +52,7 @@
                 </div>
             </div>
             <div><input type="submit" value="Сохранить"></div>
+            <div><input type="button" value="Отмена" id='cancel'/></div>
         </div>
     </form>
 </div>

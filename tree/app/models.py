@@ -51,8 +51,6 @@ class NodeEditionHistory(models.Model):
     node = models.ForeignKey('Node', verbose_name=u'Редактируемый узел')
     release = models.ForeignKey('Release', verbose_name=u'Релиз')
     edit_description = models.TextField(verbose_name=u'Обоснование редакции')
-    user = models.ForeignKey(User)
-    status = models.ForeignKey(Status)
     files = models.ManyToManyField('FileInNodes',blank=True, null=True, verbose_name=u'Файлы')
     def __unicode__(self):
         return '%s: %s' % (self.edit_description, self.redaction_date)
@@ -91,14 +89,10 @@ class Requirement(models.Model):
 class RequirementsEdition(models.Model):
     requirement = models.ForeignKey(Requirement)
     description = models.TextField(blank=True, verbose_name=u'Описание требования')
-    purpose = models.CharField(max_length=300, blank=True, verbose_name=u'Цель создания элемента')
-    reason = models.CharField(max_length=300, verbose_name=u'Источник вдохвения на создание')
     deadline = models.DateField()
-    files = models.ManyToManyField(FileInNodes, blank=True, null= True)
+    files = models.ManyToManyField(FileInNodes, blank=True, null=True)
     redaction_date = models.DateTimeField(auto_now=True)
     edit_description = models.TextField(verbose_name=u'Обоснование редакции')
-    user = models.ForeignKey(User)
-    status = models.ForeignKey(Status)
     def __unicode__(self):
         return unicode(self.requirement)
     class Meta:

@@ -302,6 +302,7 @@ $('span.add').live('click', function(){
 $('span.add.node').live('click', function(){
     if (confirm("Вы действительно хотите создать бизнес требование?")) {
         var parent_id = $(this).prev().children('a').attr('id');
+        console.log(parent_id);
         showFormToAddNode(parent_id);
         function showFormToAddNode(id_parent_node){
             $.ajax({
@@ -375,6 +376,15 @@ $('span.add.req').live('click', function(){
             });
         }
     }
+});
+
+$('#cancel').live('click', function(){
+    var node_id = $('#hidden_block div#name_redaction input[type=text]').attr('id').split('_')[2];
+    $.ajax({
+        type: "POST",
+        url: "/deleteNode/",
+        data: {node: node_id, csrfmiddlewaretoken: '{{ csrf_token }}'}
+});
 });
 
 $('#add_data').live('click', function(){
