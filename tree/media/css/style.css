@@ -216,6 +216,13 @@ label.menu{
     list-style-type: none;
 }
 .treeview ul ul { overflow: visible; width: auto; margin: 0 0 0 0; padding: 0 0 0 0.75em; }
+.treeview ul ul ul li:last-child ul{
+    overflow: visible;
+    width: auto;
+    margin: 0 0 0 -1px;
+    padding: 0 0 0 0.75em;
+    border-left: white 1px solid;}
+
 .treeview ul.l { border-left: 1px solid; margin-left: -1px; }
 .treeview li.cl ul { display: none; }
 .treeview li { margin: 0; padding: 0; }

@@ -68,14 +68,7 @@
 <div id="sidebar">
 <div class="treeview">
     {% load mptt_tags %}
-    <ul>
-        <li>
-            <div>
-                <p>
-                    <a href="#" class="sc close_tie"></a>  <span >Requirement tree</span><span class="add"></span>
-                </p>
-            </div>
-            <ul>
+           <ul>
                 {% recursetree nodes %}
                 <li id="tree_tie_{{ node.id }}" class="cl">
                     <div><p><a href="#" class="sc close_tie"></a> <span><a id="description_tie_{{ node.id }}" class="open_tie_in_tab">{{ node.name }}</a></span>
@@ -121,9 +114,6 @@
                 </div>
             </li>
             </ul>
-        </li>
-    </ul>
-
 </div>
 </div>
 <div id="content">
