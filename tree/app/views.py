@@ -193,7 +193,46 @@ def saveNode(request):
 
 @csrf_exempt
 def addingFilesInNodes(request):
-    return HttpResponse('POST : ' + str(request.POST) + ' FILE : ' + str(request.FILES))
+    try:
+        new_file = File.objects.create(
+            file=request.FILES['file'],
+            name = request.FILES['file'].name
+        )
+        if request.POST['name']!=u'Как называется твой новый файл?':
+            extension = new_file.name.split('.')[-1]
+            new_file.name = new_file.name.replace(new_file.name[:new_file.name.find(extension)-1], request.POST['name'])
+        new_file.save()
+        node = Node.objects.get(id = request.POST['node'])
+        node.files.add(new_file)
+        return HttpResponse('<a id="file_%s" href="/media%s">%s</a>' %(new_file.id, new_file.file, new_file.name))
+    except Exception as e:
+        return HttpResponse('Message from adding file is : \n' + e.message)
+
+@csrf_exempt
+def getFiles(request):
+    if request.method == 'POST':
+        try:
+            node = Node.objects.get(id = request.POST['node'])
+            message= ''
+            for file in node.files.all():
+                message += '<span class="file"><a id="f_%s" href="/media/%s" target="_blank">%s</a><span class="delete" id ="file_%s"></span>;</span> ' %(file.id, file.file, file.name, file.id)
+            return HttpResponse(message)
+        except Exception as e:
+            return HttpResponse('Message from get Files is : \n' + str(e.args))
+    return HttpResponse('Not POST type of ajax : \n' + str(request.method))
+
+@csrf_exempt
+def deleteFile(request):
+    if request.method == 'POST':
+        try:
+            file = File.objects.get(id = request.POST['file_id'])
+            file.delete()
+            return HttpResponse('File deleted')
+        except Exception as e:
+            return HttpResponse('Message from get Files is : \n' + str(e.args))
+    return HttpResponse('Not POST type of ajax : \n' + str(request.method))
+
+
 
 
 
@@ -201,37 +240,6 @@ def addingFilesInNodes(request):
 #def checking(request):
 #    return HttpResponse(str(NOT_AVAILABLE_NODES))
 
-##TODO: add Files
-#@csrf_exempt
-#def addingFiles(request):
-#    new_file = FileInNodes.objects.create(
-#        file=request.FILES['added_file'],
-#        name = request.FILES['added_file'].name
-#    )
-#    if request.POST['file_name']!=u'введи новое имя файла':
-#        extension = new_file.name.split('.')[-1]
-#        new_file.name = new_file.name.replace(new_file.name[:new_file.name.find(extension)-1], request.POST['file_name'])
-#    new_file.save()
-#    curr_req_editor = RequirementsEdition.objects.get(id=request.POST['req_id'])
-#    curr_req_editor.files.add(new_file)
-#    files = curr_req_editor.files
-#    return HttpResponse(files)
-#
-##TODO: add Files in Node
-#@csrf_exempt
-#def addingFilesInNodes(request):
-#    new_file = FileInNodes.objects.create(
-#        file=request.FILES['added_file'],
-#        name = request.FILES['added_file'].name
-#    )
-#    if request.POST['file_name']!=u'введи новое имя файла':
-#        extension = new_file.name.split('.')[-1]
-#        new_file.name = new_file.name.replace(new_file.name[:new_file.name.find(extension)-1], request.POST['file_name'])
-#    new_file.save()
-#    curr_node_editor = NodeEditionHistory.objects.get(id=request.POST['node_id'])
-#    curr_node_editor.files.add(new_file)
-#    files = curr_node_editor.files
-#    return HttpResponse(files)
 
 
 

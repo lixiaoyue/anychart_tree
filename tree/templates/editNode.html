@@ -11,7 +11,6 @@
             <span>Изменено: </span>{{ node.last_modified_date }}
         </div>
     </div>
-
     <div class="tools" id='{{ node.id }}'>
         <div class="edit button" onclick="saveNode($(this).parent().attr('id'))">
             <span class="edit node"></span>
@@ -28,6 +27,7 @@
 
 <div class='content_node'>
     <div class='table editable'>
+
         <div>
             <div class="title">Title: </div><div><input type="text" name='title' id='nodeTitle' value="{{ node.title }}"></div>
         </div> {# Название #}
@@ -112,36 +112,44 @@
             <div>Описание: </div><div><textarea id='content_textArea' class="big_text" name='description_content'>{{ node.content|safe }}</textarea></div>
         </div> {# Требование (content) #}
         <div>
-            <div>Файлы: </div>
-            <div class="node_files">
+            <div><p style="margin: 0">Файлы:</p>
+                <span class="file">
+                <a onclick="ShowAddfileForm()">Добавить файл</a>
                 <span class="add file" onclick="ShowAddfileForm()"></span>
+            </span> </div>
+            <div class="node_files">
                 {% for file in node.files.all %}
-                    <a id='file_{{ file.id }}' href="/media/{{ file.file }}">{{ file.name }}</a>;
+                    <span class="file"><a id='f_{{ file.id }}' href="/media/{{ file.file }}" target="_blank">{{ file.name }}</a><span id='file_{{ file.id }}' class="delete"></span>;</span>
                 {% endfor %}
             </div>
-        </div>
+        </div> {# Файлы #}
 
         <textarea class="hidden" name='product' id='release_comment' ></textarea>
         <textarea class="hidden" name='product' id='status_comment' ></textarea>
+        <input type=text class="hidden" id='cur_node_id' value="{{ node.id }}">
     </div>
 </div>
 
 <div class='hidden add_file_form' >
     <div class="cover_form" >
-            <input type='text' id='node_id' value="{{ node.id }}" class="hidden" >
-            <input type='text' id='add_file_name_text' value='Как называется твой новый файл?'>
-            <input type="file" id="id_file">
+        <iframe class="hidden" id=hiddenframe name=hiddenframe style="width:0; height:0; border:0"></iframe>
+        <form enctype=multipart/form-data action='/addFileToNode/' method=post name=load_file id='loadingFile' target=hiddenframe>
+            <input type=hidden name='size' value=64000>
+            <input type='text' name='node' id='node_id' value="{{ node.id }}" class="hidden" >
+            <input type='text' name='name' id='add_file_name_text' value='Как называется твой новый файл?'>
+            <input type="file" name='file' id="id_file">
 
             <div class="cancel button" onclick="showPopup(false)">
                 <span class="delete"></span>
-                    Отменить
+                Отменить
                 <span class="end_button"></span>
             </div>
-            <div class="confirm button" onclick="SaveFile()">
+            <div class="confirm button"  onclick="SaveFile()">
                 <span class="status_5"></span>
                     <input type='submit' value="Добавить">
                 <span class="end_button"></span>
             </div>
+        </form>
     </div>
 </div>
 

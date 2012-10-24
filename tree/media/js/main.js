@@ -14,7 +14,7 @@ $(function(){
 
     //устанавливаем высоту объектов в зависимости от высоты экрана
     $('#page').css('height',$(window).height()-45);
-    $('#tabs_content_block').css('height', $(window).height()-160);
+    $('#tabs_content_block').css('height', $(window).height()-129);
 
     //проверяем выполнена ли регистрация
     if ($('ul.registration').hasClass('true')) {LOGGED_IN = true}
@@ -61,7 +61,7 @@ $(function(){
         },bindings: {'create_tie': function() {
             showCreateTieForm(tie_id, 'BR');}
         },
-        menuStyle: {width: 160},
+        menuStyle: {width: 160, cursor:'pointer'},
         itemHoverStyle: {backgroundColor:'none', border:'none'}
     });
     $('span.right_active.req').contextMenu('popup_req_menu',{
@@ -71,7 +71,7 @@ $(function(){
         },bindings: {'add_req': function() {
             showCreateTieForm(tie_id, 'OR');}
         },
-        menuStyle: {width: 160},
+        menuStyle: {width: 160, cursor:'pointer'},
         itemHoverStyle: {backgroundColor:'none', border:'none'}
     });
 });
@@ -79,7 +79,7 @@ $(function(){
 //Реакция на ресайз окна
 window.onresize = function (){
     $('#page').css('height',$(window).height()-45);
-    $('#tabs_content_block').css('height', $(window).height()-160);
+    $('#tabs_content_block').css('height', $(window).height()-129);
 //    tabsWidthDetect();
 };
 
@@ -325,8 +325,15 @@ function editNode(nodeId){
         data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(html){
             $('#tabs_content_block div.tabs.tab_' + getNodeId(nodeId)).html(html);
-            window.setTimeout(function(){makeEditors(getNodeId(nodeId));}, 300);
-            if ($('.table').hasClass('editable')){EDITING = true;}
+
+            if ($('.table').hasClass('editable')){
+                EDITING = true;
+                window.setTimeout(function(){
+                    makeEditors(getNodeId(nodeId));
+                }, 300);
+
+            }
+
         }
     });
 }
@@ -444,29 +451,51 @@ function saveNode(nodeId){
     });
 }
 
-//TODO:показать форму добавления нового файла
+//показать форму добавления нового файла
 function ShowAddfileForm(){
     $('div.popup').html($('.add_file_form').html());
     showPopup(true);
 }
 
+//добавить новый файл к узлу
 function SaveFile(){
+    $("#loadingFile").submit(
+        function(){
+            setTimeout(function(){
+                $.ajax({
+                    type: "POST",
+                    url: "/getFiles/",
+                    data: {
+                        node: $('input#node_id').val(),
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function(html){
+                        $('.node_files').html(html);
+                        showPopup(false);
+                    }
+                });
+            }, 500);
+        });
+}
+$('.file span.delete').live('click', function(){
+    DeleteFile($(this).attr('id').replace('file_',''))
+});
+
+function DeleteFile(file_id){
     $.ajax({
         type: "POST",
-        url: "/addFileToNode/",
+        url: "/deleteFile/",
         data: {
-            nodeId: $('input#node_id').val(),
-            file_name: $('input#add_file_name_text').val(),
-            file:$('input#id_file').val().getAsBinary(),
-            enctype: 'multipart/form-data',
+            file_id: file_id,
             csrfmiddlewaretoken: '{{ csrf_token }}'
         },
         success: function(html){
+            $('span#file_'+file_id).parent().remove();
             console.log(html);
-            showPopup(false);
         }
     });
 }
+
 
 // TODO: Посмотреть историю узла
 function viewNodeHistory(nodeId){

@@ -16,9 +16,14 @@ urlpatterns = patterns('',
     url(r'^saveNode/$', saveNode),
     url(r'^cancelEditNode/$', cancelEditNode),
     url(r'^addReleaseToNode/$', addingReleaseInNode),
-    url(r'^addFileToNode/$', addingFilesInNodes),
 
+
+    url(r'^addFileToNode/$', addingFilesInNodes),
+    url(r'^getFiles/$', getFiles),
+    url(r'^deleteFile/$', deleteFile),
 #    url(r'^check/$', checking),
+
+
     url(r'^accounts/', include('registration.urls')),
     url(r'^accounts/profile/$', homePage),
     url(r'^admin/', include(admin.site.urls)),

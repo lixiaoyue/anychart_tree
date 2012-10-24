@@ -628,7 +628,17 @@ div.wide, #descr_redaction{
 .closeTab:hover{
     background-position: -85px center;
 }
-
+.node_files{
+    position: relative;
+}
+span.file {
+    display: block;
+    float: left;
+    margin-right: 10px;
+}
+span.file a{
+    float: left;
+}
 ul.notification_list{
     list-style: none;
 }
