@@ -1,30 +1,26 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 from app.views import *
-
+from django.views.generic.simple import direct_to_template
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url('^$', home_page),
-    url('^home/$', home_page),
-    url(r'^any/$', any),
+    url('^$', homePage),
+    url('^home/$', homePage),
     url(r'^getRequirements/$', getRequirements),
-    url(r'^getRequirementDescription/$', getRequirementDescription),
-    url(r'^getNodeDescription/$', getNodeDescription),
-    url(r'^saveNodeEdition/$', saveNodeEdition),
-    url(r'^nodeRepeal/$', deleteNode),
-    url(r'^addingFiles/$', addingFiles),
-    url(r'^addingFilesInNodes/$', addingFilesInNodes),
-    url(r'^saveRequirementEdition/$', saveRequirementEdition),
-    url(r'^showAddNodeForm/$', showAddNodeForm),
-    url(r'^showAddReqForm/$', showAddReqForm),
-    url(r'^addNode/$', addNode),
+    url(r'^getNode/$', getNodeDescription),
     url(r'^deleteNode/$', deleteNode),
-    url(r'^deleteRequirement/$', deleteRequirement),
-    url(r'^addRequirement/$', addRequirement),
-    url(r'^accounts/', include('registration.backends.default.urls')),
-    url('^accounts/profile/$', home_page),
+    url(r'^addNode/$', addNode),
+    url(r'^editNode/$', editNode),
+    url(r'^saveNode/$', saveNode),
+    url(r'^cancelEditNode/$', cancelEditNode),
+    url(r'^addReleaseToNode/$', addingReleaseInNode),
+    url(r'^addFileToNode/$', addingFilesInNodes),
+
+#    url(r'^check/$', checking),
+    url(r'^accounts/', include('registration.urls')),
+    url(r'^accounts/profile/$', homePage),
     url(r'^admin/', include(admin.site.urls)),
 )
 if settings.DEBUG:

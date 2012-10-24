@@ -1,163 +1,148 @@
 <!doctype html>
-
 <html>
 <head>
     <meta name="description" content="" />
     <meta name="keywords" content="" />
     <title>AnyChart live tree</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" type="text/css" href="{{ media }}css/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ media }}css/ui-lightness/jquery-ui-1.8.23.custom.css" />
-    <script type="text/javascript" src="{{ media }}js/jquery-1.8.0.min.js"></script>
-    <script type="text/javascript" src="{{ media }}js/jquery.dropotron-1.0.js"></script>
-    <script type="text/javascript" src="{{ media }}js/main.js"></script>
-    <script type="text/javascript" src="{{ media }}js/jquery-ui-1.8.23.custom.min.js"></script>
-    <script type="text/javascript" src="{{ media }}fckeditor/fckeditor.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ media }}css/style.css" />{# Стили #}
+    <script type="text/javascript" src="{{ media }}js/jquery-1.8.0.min.js"></script>{# JQuery #}
+    <script type="text/javascript" src="{{ media }}js/jquery.dropotron-1.0.js"></script>{# Красивое меню наверху #}
+    <script type="text/javascript" src="{{ media }}fckeditor/fckeditor.js"></script>{# Делаем из texarea редактор #}
+    <script type="text/javascript" src="{{ media }}js/jquery.contextmenu.js"></script> {#Для реакции на правую кнопку мыши#}
+    <script type="text/javascript" src="{{ media }}js/main.js"></script> {# Файл с обработкой всех остальных событий - самый главный файл#}
+
 </head>
 <body>
-<div class="shadow" onclick="showPopup(false)"></div>
-<div class="popup">
-            <div class="popupContent" ></div>
-</div>
-<div id="wrapper">
-<div id="header">
-    <div id="logo">
-        <h1><a href="/">AnyChart requirements tree</a></h1>
+    <div class="shadow" onclick="showPopup(false)"></div>
+    <div class="popup"></div>
+    <div class='hidden add_node_form'>
+        <div class="cover_form small">
+            <input type='text' id='add_node_name_text' value='Как называется твой новый узел?'>
+            <div class="cancel button" onclick="showPopup(false)">
+                <span class="delete"></span>
+                Отменить
+                <span class="end_button"></span>
+            </div>
+            <div class="confirm button" onclick="CreateTie($(this).parent().attr('id'), $(this).attr('id'), $('#add_node_name_text').val())">
+                <span class="status_5"></span>
+                Создать
+                <span class="end_button"></span>
+            </div>
+        </div>
     </div>
-</div>
-
-<div id="menu">
-    <ul>
-        <li><span class="opener">Режимы просмотра дерева<b></b></span>
-            <ul>
-                <li>
-                    <span>Показать<b></b></span>
-                    <ul>
-                        <li><input type="checkbox" id="show_req" checked><label class="menu" for="show_req">Требования</label></li>
-                        <li><input type="checkbox" id="show_notices" checked><label class="menu" for="show_notices">Статусы</label></li>
-                    </ul>
-                </li>
-                <li><input type="radio" name="mode" value="view" id="mode_view" checked="true"><label class="menu" for="mode_view">Режим просмотра</label></li>
-                <li><input type="radio" name="mode" value="edit" id="mode_edit"><label class="menu" for="mode_edit">Режим редактирования</label></li>
-            </ul>
-        </li>
-        <li>
-            <span class="opener">Поддержка<b></b></span>
-            <ul>
-                <li><a href="#">Написать письмо Галине</a></li>
-            </ul>
-        </li>
-        <li><a href="#">О системе</a></li>
-    </ul>
-    {% if user.is_authenticated %}
-        <ul class="registration true">
-            <li>Здравствуйте, {{ user.username }}</li>
-            <li><a class="registration" href="{% url auth_logout %}">Выйти</a></li>
-        </ul>
-    {% else %}
-        <ul class="registration false">
-            <li><a class="registration" href="{% url auth_login %}">Log in</a></li>
-            <li><a class="registration" href="{% url registration_register %}">Регистрация</a></li>
-        </ul>
-    {% endif %}
-
-    <br class="clearfix" />
-</div>
-
-<div id="page">
-<div id="sidebar">
-<div class="treeview">
-    {% load mptt_tags %}
-           <ul>
-                {% recursetree nodes %}
-                <li id="tree_tie_{{ node.id }}" class="cl">
-                    <div><p><a href="#" class="sc close_tie"></a> <span><a id="description_tie_{{ node.id }}" class="open_tie_in_tab">{{ node.name }}</a></span>
-                        <span class="add node"></span><span class="edit node"></span><span class="delete node"></span></p></div>
-                    <ul>
-
-                        <li id="req_tie_{{ node.id }}" class="cl req">
-                            <div>
-                                <p>
-                                    <a href="#" class="sc close_req"></a>  <span class="right_active req">Требования</span> <span class="add req"></span>
-                                </p>
-                            </div>
-                            <ul></ul>
-                        </li>
-
-                    {% if not node.is_leaf_node %}
-                            {{ children }}
+    <div id="wrapper">
+        <div id="header">
+            <div id="logo">
+                <h1><a href="/">AnyChart requirements tree</a></h1>
+            </div>
+            <div id="menu">
+                <div id='login_space'>
+                    {% if user.is_authenticated %}
+                        Hi, {{ user.first_name }} {{ user.last_name }}! <a class="registration" href="{% url auth_logout %}">Выйти</a>
+                    {% else %}
+                        <a href="{% url auth_login %}">Log in</a>
                     {% endif %}
+                </div>
+                <ul>
+                    <li><span class="opener">{{ cur_product.title }}<b></b></span>
+                        <ul>
+                            {%  for product in products %}
+                                <li>
+                                    <input type="radio" value="{{ product.id }}" id="product" {% if product == cur_product %} checked {% endif %}>
+                                    <label class="menu" for="product">{{ product.title }}</label>
+                                </li>
+                            {% endfor  %}
+                        </ul>
+                    </li>
+                    <li>
+                        <span class="opener">Справочники<b></b></span>
+                        <ul>
+                            <li><a href="#">Статусы требований </a></li>
+                            <li><a href="#">Источники требований </a></li>
+                            <li><a href="#">Релизы </a></li>
+                            <li><a href="#">Пользователи </a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Статистика</a></li>
+                </ul>
+                <br class="clearfix"/>
+            </div>
+        </div>
+
+        <div id="page">
+            <div id="sidebar">
+                <div class="treeview">
+                    <ul>
+                        <div class="contextMenu" id="popup_tie_menu">
+                            <ul>
+                                <li id="create_tie"><a>Добавить узел</a></li>
+                            </ul>
+                        </div>
+                        <div class="contextMenu" id="popup_req_menu">
+                            <ul>
+                                <li id="add_req"><a>Добавить требование</a></li>
+                            </ul>
+                        </div>
+                        <li>
+                            <div><p><a href="#" class="sc close_req"></a> <span class='folder' style="color: #000;">{{ cur_product.title }}</span></p></div>
+                            {% load mptt_tags %}
+                            <ul>
+                                {% recursetree nodes %}
+                                    {% if node.type == 'NE' %}
+                                        <li id="tree_tie_{{ node.id }}" class="cl">
+                                            <div><p><a href="#" class="sc close_req"></a> <span class='folder right_active tie' style="color: #000;">{{ node.title }}</span></p></div>
+                                            <ul>
+                                                {% if not node.is_leaf_node %}
+                                                    {{ children }}
+                                                {% endif %}
+                                            </ul>
+                                        </li>
+                                    {% else  %}
+                                        <li id="tree_tie_{{ node.id }}" class="cl">
+                                            <div>
+                                                <p><a href="#" class="sc close_tie"></a> <span class="folder right_active tie"><a id="description_tie_{{ node.id }}" class="open_tie_in_tab" style="color: {{ node.cur_status.color }}">
+                                                <span class="status_{{ node.cur_status.id }}"></span>{{ node.title }}</a></span></p>
+                                            </div>
+                                            <ul>
+                                                <li id="req_tie_{{ node.id }}" class="cl req">
+                                                    <div>
+                                                        <p>
+                                                            <a href="#" class="sc close_req"></a>  <span class="right_active req folder">Требования</span>
+                                                        </p>
+                                                    </div>
+                                                    <ul></ul>
+                                                </li>
+
+                                                {% if not node.is_leaf_node %}
+                                                    {{ children }}
+                                                {% endif %}
+                                            </ul>
+                                        </li>
+                                    {% endif %}
+                                {% endrecursetree %}
+                                <li id="backet" class="cl">
+                                    <div><p><a href="#" class="sc trash"></a> <span style="color: #7A7A7A;" class="folder">Корзина</span></p></div>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
-                </li>
-
-            {% endrecursetree %}
-
-            <li>
-                <div>
-                    <p>
-                        <a id="system_1" class="open_tab info "><span></span>О системе "AnyChart requirements tree"</a>
-                    </p>
                 </div>
-            </li>
-            <li>
-                <div>
-                    <p>
-                        <a id="user_guide" class="open_tab info"><span></span>Заметки пользователя системы</a>
-                    </p>
+            </div>
+            <div id="content">
+                <div id="tabs_manage_block">
+                    <ul>
+                        <li class="active"></li>
+                    </ul>
                 </div>
-            </li>
-            <li>
-                <div>
-                    <p>
-                        <a id="system_notices" class="open_tab notification info"><span></span>Замечания по системе</a>
-                    </p>
+                <div id="tabs_content_block"></div>
+                <div id="footer">
+                    Copyright (c) 2012 AnyChart.com. All rights reserved. Developed by AnyChart QA Department.
                 </div>
-            </li>
-            </ul>
-</div>
-</div>
-<div id="content">
-    <div id="tabs_manage_block">
-        <ul>
-        </ul>
-    </div>
-    <div id="tabs_content_block">
-        <div class="tabs tab_system_1">
-            <p> Система (от др.-греч. σύστημα — целое, составленное из частей; соединение) — множество элементов, находящихся в отношениях и связях друг с другом, которое образует определённую целостность, единство[1].
-                В любой системе можно выделить отдельные части, выполняющие некоторые функции и взаимодействующие друг с другом. Любую систему можно рассмотреть как элемент (компонент) более крупной системы — надсистемы, или суперсистемы.
-                Термин «система» обозначает как реальные, так и абстрактные объекты и широко используется для образования других понятий, например, банковская система, информационная система, кровеносная система, политическая система, система уравнений и др.</p>
-            <p><a href="http://www.iconsearch.ru/search/?q=iconset:humano2&page=11">Отсюда беру иконки для проекта</a></p>
-        </div>
-        <div class="tabs tab_user_guide">
-            <p>В дереве выделяют три основные части: <a href="#" title="Корень">корень</a>, <a href="#" title="Ствол (ботаника)">ствол</a> и <a href="#" title="Крона дерева" class="mw-redirect">крона</a>.</p>
-            <p><b>Корень дерева</b> — это, как правило, подземная часть растения. Основные функции&nbsp;— удержание дерева в вертикальном положении, всасывание питательных веществ из <a href="#" title="Почва">почвы</a> и передача их в ствол. Корни имеют большую протяжённость: они могут уходить на глубину до 30 метров и в стороны на расстояние до 100 метров. У некоторых деревьев есть воздушные корни, которые находятся над поверхностью земли, а их функция схожа с функцией листьев.</p>
-            <p><b>Ствол дерева</b> выполняет функцию опоры для кроны, а также осуществляет передачу веществ между корнями и кроной. В зимний период времени выступает в роли хранилища влаги и питательных веществ. Древесный ствол состоит из <a href="#" title="Пороки древесины">сердцевины</a>, <a href="#" title="Древесина">древесины</a>, которая нарастает от <a href="#" title="Камбий">камбия</a> внутрь, образуя <a href="#" title="Годичные кольца">годовые кольца</a>&nbsp;— тёмные и светлые участки, видимые на поперечном спиле дерева. Количество годовых колец в лесах умеренной зоны соответствует возрасту дерева, а их толщина&nbsp;— условиям жизни дерева в каждый конкретный год. В засушливых районах у деревьев могут появляться ложные кольца после выпадения осадков. Снаружи ствол покрыт <a href="#" title="Кора">корой</a>. В течение своей жизни дерево имеет, как правило, единственный ствол. При повреждении (спиливании) главного ствола у некоторых деревьев из спящих почек могут развиваться сестринские стволы.</p>
-            <p><b>Крона дерева</b>&nbsp;— совокупность веток и листьев в верхней части растения, продолжающая ствол от первого разветвления до верхушки дерева или кустарника со всеми боковыми ответвлениями и листвой. Различают такие характеристики, как <i>форма кроны</i>&nbsp;— от колонновидной до раскидистой и <i>плотность кроны</i>&nbsp;— от плотной до редкой, ажурной. Под действием света в листьях в результате <a href="#" title="Фотосинтез">фотосинтеза</a> происходит синтез необходимых веществ.</p>
-        </div>
-        <div class="tabs tab_system_notices">
-            <div class="add_notification_to_list">
-                <input type="text"><input type="button" value="Добавить">
             </div>
             <br class="clearfix" />
-            <ul class="notification_list">
-                <li class="done"><input type="checkbox" id="system_notices_note_1" checked><span class="date">12.03.2013</span><a class="note_author">Виталя</a><span class="writing"> пишет</span>: <label for="system_notices_note_1"><span class="note">Ну пиздец! Всё сломалось!</span> </label> <span class="note_status"> Исправлено (Ольга, 31.03.2013)</span> </li>
-                <li class="active"><input type="checkbox" id="system_notices_note_2"><span class="date">04.10.2012</span><a class="note_author">Тима</a><span class="writing"> пишет</span>: <label for="system_notices_note_2"><span class="note">Ну пиздец! Опять всё сломалось!</span></label> <span class="note_status">Исправлено (Саша, 08.09.2012)</span> </li>
-                <li class="active"><input type="checkbox" id="system_notices_note_3"><span class="date">31.01.2013</span><a class="note_author">Андрей</a><span class="writing"> пишет</span>: <label for="system_notices_note_3"><span class="note">Ну пиздец! И снова всё сломалось!</span></label> <span class="note_status"> Исправлено (Ольга, 01.04.2013)</span></li>
-            </ul>
-            <br class="clearfix" />
         </div>
-
+        <div class='hidden' id="hidden_block"></div>
     </div>
-
-    <div id="footer">
-        Copyright (c) 2012 AnyChart.com. All rights reserved. Developed by AnyChart QA Department.
-        <!--Design by <a href="mailto:olga@irnok.net">Olga</a>.-->
-    </div>
-</div>
-<br class="clearfix" />
-</div>
-<div class='hidden' id="hidden_block">
-</div>
-</div>
 </body>
 </html>

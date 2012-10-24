@@ -1,68 +1,113 @@
+//------------------ОБЩЕЕ-----------------------//
 
-var MODE_EDITION = false; // по умолчанию, выбран режим просмотра
 var LOGGED_IN = false; // если false,  то никто не залогинен
+var EDITING = false; // если false, но все можно нажимать, никакой узел не находиться в состоянии редактирования.
 
-//функция, выполняемая сразу при загрузке страницы
+//выполняем сразу при загрузке страницы:
 $(function(){
     //делаем меню красивым
     $('#menu > ul').dropotron({
         mode: 'fade',
-        globalOffsetY: 11,
+        globalOffsetY: 6,
         offsetY: -15
     });
-    //Показываем вкладку которая в hash
-    if (location.hash.length>2){
-        var tab_id = location.hash.substr(5);
-        if (tab_id.substr(0, 3)=='req'){
-            openTab('reqs', tab_id);
-        }else if(tab_id.substr(0, 15)=='description_tie'){
-            openTab('open_tie_in_tab', tab_id);
-        }else if (tab_id.substr(0, 16)=='notification_tie'){
-            openTab('status', tab_id);
-        }else{
-            openTab('info', tab_id);
-        }
-    }
+
     //устанавливаем высоту объектов в зависимости от высоты экрана
-    $('#page').css('height',$(window).height()-95);
-    $('#tabs_content_block').css('height', $(window).height()-205);
+    $('#page').css('height',$(window).height()-45);
+    $('#tabs_content_block').css('height', $(window).height()-160);
+
     //проверяем выполнена ли регистрация
     if ($('ul.registration').hasClass('true')) {LOGGED_IN = true}
+
     //если регистрация не выполнена делаем невозможным выбор режима редактирования
     if (!LOGGED_IN){
         $('input[name=mode]:checked').val('view');
         $('input[name=mode]').attr('disabled',true);
-    //если регистрация выполнена, включаем режим редактирования
     }
-    //менеям интерфейс в соответствии с режимом
-    switch_mode(MODE_EDITION);
-    //определяем ширину вкладок
-    tabsWidthDetect();
-    //показываем содержимое активной вкладки
-    showTabContent($('#tabs_manage_block ul li.active').attr('id'));
+
+    //Показываем вкладку которая в hash
+    if (location.hash.length>2){
+        var tab_id = location.hash.substr(5);
+        var req_data = location.hash.substr(1);
+        if (req_data.substr(0, 3)=='tie'){
+            var tieId = req_data.split(':')[0];
+            var reqId = req_data.split(':')[1];
+            $('body').queue(function () {
+                pasteRequirements('req_' + tieId);
+            });
+            $('body').queue(function () {
+                openTree('description_' + tieId);
+                openTree('req_' + tieId);
+                openTab(reqId);
+                pickNodeInTree($('#'+reqId));
+                $('body').dequeue();
+            });
+        }else if( tab_id.substr(0, 15)=='description_tie'){
+            openTab(tab_id);
+            openTree(tab_id);
+        }
+    }
+
+    var tie_id; //идентификатор узла, по которому щелкнули правой кнопкой мыши
+    //Вспомогательные меню на правую кнопку мыши
+    $('span.right_active.tie').contextMenu('popup_tie_menu',{
+        onContextMenu: function(e) {
+            if ($(e.target).parent().parent().parent('li').length > 0){
+                tie_id = $(e.target).parent().parent().parent('li').attr('id').replace('tree_tie_','');
+            }else{
+                tie_id = $(e.target).attr('id').replace('description_tie_','');
+            }
+            return true;
+        },bindings: {'create_tie': function() {
+            showCreateTieForm(tie_id, 'BR');}
+        },
+        menuStyle: {width: 160},
+        itemHoverStyle: {backgroundColor:'none', border:'none'}
+    });
+    $('span.right_active.req').contextMenu('popup_req_menu',{
+        onContextMenu: function(e) {
+            tie_id = $(e.target).parent().parent().parent().attr('id').replace('req_tie_','');
+            return true;
+        },bindings: {'add_req': function() {
+            showCreateTieForm(tie_id, 'OR');}
+        },
+        menuStyle: {width: 160},
+        itemHoverStyle: {backgroundColor:'none', border:'none'}
+    });
 });
 
-//Включить, выключить режим просмотра
-function switch_mode(is_editable){
-    if (is_editable){
-        $('.treeview span.add, .treeview span.edit, .treeview span.delete').show();
-        $('.table.read').hide();
-        $('.table.edit').show();
+//Реакция на ресайз окна
+window.onresize = function (){
+    $('#page').css('height',$(window).height()-45);
+    $('#tabs_content_block').css('height', $(window).height()-160);
+//    tabsWidthDetect();
+};
+
+
+//------------------ДЕРЕВО-----------------------//
+
+//Развернуть дерево до нужного узла
+function openTree(tab_id){
+    if ($('li#'+tab_id).hasClass('req')){
+        var liId = tab_id;
+        $('li#req_'+tab_id + ' div:first p a.sc').removeClass('close_req').addClass('open_req');
     }else{
-        $('.treeview span.add, .treeview span.edit, .treeview span.delete').hide();
-        $('.table.read').show();
-        $('.table.edit').hide();
+        liId = $('#'+tab_id).parent().parent().parent().parent().attr('id');
+        pickNodeInTree($('#'+tab_id));
     }
+    do
+    {
+        if ($('li#'+liId).hasClass('cl')){
+            $('li#'+liId).removeClass('cl');
+            $('li#'+liId + ' div:first p a.sc').removeClass('close_tie').addClass('open_tie');
+        }
+        liId = $('li#'+liId).parent().parent().attr('id')
+    }
+    while (liId);
 }
 
-//Обработка выбора режима просмотра в меню (радио-баттон)
-$('input[name=mode]').live('change', function() {
-    if($('input[name=mode]:checked').val()=='view'){MODE_EDITION = false}else{MODE_EDITION = true}
-    switch_mode(MODE_EDITION);
-});
-
 //Сворачиваем, разварачиваем деверо
-$('a.sc').live('click', function(){
+$('a.sc, span.req, span.folder').live('click', function(){
     var liId = $(this).parent().parent().parent().attr('id');
     //если узел свернут, разварачиваем
     if ($('li#'+liId).hasClass('cl')){
@@ -92,149 +137,97 @@ function pasteRequirements(liId){
         data: {liId: liId, csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(html){
             $('li#' + liId + ' ul').html(html);
+            $('body').dequeue();
         }
     });
 }
 
-//Реакция на ресайз окна
-window.onresize = function (){
-    $('#page').css('height',$(window).height()-112);
-    $('#tabs_content_block').css('height', $(window).height()-225);
-    //Определяем ширину вкладок
-    tabsWidthDetect();
-};
+//Открываем вкладку при клике по дереву
+$('a.open_tab.reqs, a.open_tie_in_tab').live('click', function(){
+    if (EDITING){
+        console.log('Отмена редактирования узла ' + location.hash.substr(1).replace('req_','').replace('tab_description_tie_',''));
+        cancelEditNode(location.hash.substr(1).replace('req_','').replace('tab_description_tie_',''));
+    }
+    openTab($(this).attr('id'));
+    pickNodeInTree($(this));
 
-//Определяем ширину вкладок
-function tabsWidthDetect(){
-    $('#tabs_manage_block ul li').css('width', (parseInt($('#tabs_manage_block ul').css('width')) - 1)/$('#tabs_manage_block ul li').length - 20);
+});
+
+//Выделить открытый узел в дереве
+function pickNodeInTree(a_object){
+    $('.treeview p').removeClass('active');
+    a_object.parent('p').addClass('active');
+    a_object.parent().parent('p').addClass('active');
 }
 
-//При клике по вкладке
-$('#tabs_manage_block ul li a').live('click', function(){
-    $('#tabs_manage_block ul li').removeClass('active');
-    $(this).parent().addClass('active');
-    //Показваем содержимое вкладки
-    showTabContent($(this).parent().attr('id'));
-});
+//------------------ОТКРЫТИЕ ВКЛАДОК-----------------------//
+
+//Открываем вкладку по id вкладки и по типу (reqs, open_tie_in_tab)
+function openTab(object_id){
+    var obj = $('a#'+object_id);
+    addBlockForTabContent(object_id);
+    addTabNameToManageBlock(obj.html());
+    showTabContent('tab_'+ object_id);
+    getNodeContent(object_id);
+}
+
+//получаем данные по узлу
+function getNodeContent(object_id){
+    $.ajax({
+        type: "POST",
+        url: "/getNode/",
+        data: {nodeId: object_id, csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){
+            $('#tabs_content_block div.tabs.tab_'+object_id).html(html);
+        }
+    });
+}
+
+//добавляем блок для содержимого вкладки
+function addBlockForTabContent(block_id){
+    if ($('.tabs.tab_'+block_id).length <=0){
+        $('#tabs_content_block').append('<div class="tabs tab_'+block_id+'"> </div>');
+    }
+
+}
+
+//добавляем название вкладки
+function addTabNameToManageBlock(tab_name){
+    $('#tabs_manage_block ul li.active').html(tab_name);
+    $('#tabs_manage_block li.active span').remove();
+}
 
 //Показать содержимое вкладки
 function showTabContent(tabId){
-    if (tabId != undefined){location.hash = tabId;}
+    if (tabId != undefined){
+        if (tabId.substr(0, 7)=='tab_req'){
+            var reqId = tabId.replace('tab_', '');
+            var tieId = $('#'+reqId).parent().parent().parent().parent().parent().attr('id').replace('req_', '');
+            location.hash = tieId + ':' + reqId;
+        }else{
+            location.hash = tabId;
+        }
+    }
     $('#tabs_content_block div.tabs').hide();
     $('#tabs_content_block div.'+tabId).show();
 }
 
-//Открываем вкладку при клике по дереву
-$('a.open_tab.reqs, a.open_tie_in_tab, a.open_tab.info, a.open_tab.status').live('click', function(){
-    if($(this).hasClass('reqs')){var type = 'reqs'}
-    else if($(this).hasClass('open_tie_in_tab')){type = 'open_tie_in_tab'}
-    else if($(this).hasClass('info')){type = 'info'}
-    else {type = 'status'}
-    openTab(type, $(this).attr('id'));
-});
 
-//добавляем название вкладки
-function addTabNameToManageBlock(id, tab_name, closeClass){
-    $('#tabs_manage_block ul').append('<li class="active" id="tab_' + id + '" ><a>'+tab_name+'</a><div class="closeTab' + closeClass + '"></div></li>');
-}
-//добавляем блок для содержимого вкладки
-function addBlockForTabContent(block_id){
-    $('#tabs_content_block').append('<div class="tabs tab_'+block_id+'"> </div>');
-}
-//переключаем активню вкладку
-function turnOnActiveTab (tab_id){
-    $('#tabs_manage_block ul li').removeClass('active');
-    $('#tabs_manage_block ul li#tab_' + tab_id).addClass('active');
-}
-//Открываем вкладку по id вкладки и по типу (reqs, open_tie_in_tab, info, status)
-function openTab(type, object_id){
-    var obj = $('a#'+object_id);
-    console.log('id = ' + object_id, obj);
-    if ($('#tabs_manage_block ul li#tab_' + object_id).length <= 0){
-        $('#tabs_manage_block ul li').removeClass('active');
-        //при клике на информационныю ссылку
-        if (type == 'info'){
-            //добавляем название вкладки
-            addTabNameToManageBlock(object_id, obj.html(),' info');
-            //при клике на остальные ссылки
-        }else{
-            //добавляем название вкладки
-            console.log(object_id, obj, obj.html());
-            addTabNameToManageBlock(object_id, obj.html(),'');
-            addBlockForTabContent(object_id);
-            //если открываем требование
-            if(type =='reqs'){
-                showRequirementInTab(object_id);
-                //если открываем узел, т.е. бизнес-требование
-            }else if(type = 'open_tie_in_tab'){
-                showNodeInTab(object_id);
-                //если открываем статус
-            }else{
-                var parent = obj.parent().parent().parent().parent().parent();
-                var name = parent.children('div').children('p').children('span').children('a.open_tie_in_tab').html();
-                $('#tabs_manage_block ul li#tab_'+object_id+' a').html(name + ': status');
-                showNodeStatusInTab(parent.attr('id'));
-            }
-        }
-        //Определяем ширину вкладок
-        tabsWidthDetect();
-    }else{
-        //включа активню вкладку
-        turnOnActiveTab(object_id);
-    }
-    //показываем содержимое в активной вкладе
-    showTabContent('tab_'+ object_id);
-}
-
-//получить статус бизнес-требования и вставить в Tab
-function showNodeStatusInTab(node_id){
-    console.log(node_id);
-    switch_mode(MODE_EDITION);
-}
-
-//получить содержимое бизнес-требования и вставить его описание в таб
-function showNodeInTab(id_node){
-    $.ajax({
-        type: "POST",
-        url: "/getNodeDescription/",
-        data: {nodeId: id_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
-        success: function(html){
-            $('#tabs_content_block div.tabs.tab_'+id_node).html(html);
-            makeEditors(id_node);
-            switch_mode(MODE_EDITION);
-
-        }
-    });
-}
-
-//получить содержимое требования по id и вставить его описание в таб
-function showRequirementInTab(id_req){
-    $.ajax({
-        traditional:true,
-        type: "POST",
-        url: "/getRequirementDescription/",
-        data: {reqId: id_req, csrfmiddlewaretoken: '{{ csrf_token }}'},
-        success: function(html){
-           $('#tabs_content_block div.tabs.tab_'+id_req).html(html);
-            makeEditors(id_req);
-            switch_mode(MODE_EDITION);
-        }
-    });
-}
+//------------------РЕДАКТИРОВАНИЕ УЗЛОВ ДЕРЕВА-----------------------//
 
 //Создаем редакторы из текстовых полей на странице
-function makeEditors(ib_tab){
-    $("#tabs_content_block div.tabs.tab_" + ib_tab + " textarea.big_text").each(function(n, obj) {
-        fck = new FCKeditor(obj.id) ;
+function makeEditors(tab){
+    $("#tabs_content_block div.tabs.tab_" + tab + " textarea.big_text").each(function(n, obj) {
+        var fck = new FCKeditor(obj.id) ;
         fck.ToolbarSet = 'AnyChartTree';
         fck.BasePath = "/media/fckeditor/" ;
         fck.Width = '100%';
         fck.Height = '500';
         fck.ReplaceTextarea() ;
     });
-    $("#tabs_content_block div.tabs.tab_" + ib_tab + " textarea.small_text").each(function(n, obj) {
-        fck = new FCKeditor(obj.id) ;
-        fck.ToolbarSet = 'Basic';
+    $("#tabs_content_block div.tabs.tab_" + tab + " textarea.small_text").each(function(n, obj) {
+        var fck = new FCKeditor(obj.id) ;
+        fck.ToolbarSet = 'AnyChartTree';
         fck.BasePath = "/media/fckeditor/" ;
         fck.Width = '100%';
         fck.Height = '200';
@@ -242,171 +235,245 @@ function makeEditors(ib_tab){
     });
 }
 
-//Закрыть вкладку и удалить ее содержимое со страницы
-$('.closeTab').live('click', function(){
-    //удаляем содержимое вкладки, только если это не общая информационная вкладка
-    if (!$(this).hasClass('info')){$('#tabs_content_block div.'+ $(this).parent().attr('id')).remove();}
-    else{$('#tabs_content_block div.'+ $(this).parent().attr('id')).hide();}
-    location.hash = '';
-    //если есть следующая вкладка, то при закрытии текущей, она станет активной
-    if ($(this).parent().hasClass('active') && $(this).parent().next().length > 0){
-        $('#tabs_manage_block ul li').removeClass('active');
-        $(this).parent().next().addClass('active');
-        //Показываем содежмое активной вкладки
-        showTabContent($(this).parent().next().attr('id'));
-    //если нет следующей, но есть предыдущая вкладка, то при закрытии текущей, она станет активной
-    }else if($(this).parent().hasClass('active') && $(this).parent().prev().length > 0){
-        $('#tabs_manage_block ul li').removeClass('active');
-        $(this).parent().prev().addClass('active');
-        //Показываем содежмое активной вкладки
-        showTabContent($(this).parent().prev().attr('id'));
-    //если удаляем не активную вкладку, то активная остается активной.
-    }else if (!$(this).parent().hasClass('active')){
-        //Показываем содежмое активной вкладки
-        showTabContent($('#tabs_manage_block ul li.active').attr('id'));
-    }
-    $(this).parent().remove();
-    //Определяем ширину вкладок
-    tabsWidthDetect();
+//При клике на форму для комментария удаляем вспомогательный текст
+$('#deletion_comment, #release_description, #change_description').live('click', function(){
+    $(this).text('');
 });
 
-//Зачеркивание замечаний
-$('ul.notification_list li input[type=checkbox]').live('click', function(){
-    if ($(this).attr('checked')){
-        $(this).parent().removeClass('active').addClass('done');
-        $(this).parent().children('span.note_status').show();
+//При клике на форму для комментария удаляем вспомогательный текст
+$('#add_node_name_text, #add_file_name_text, #add_release_name_text, #add_release_number_text, #add_release_date_text').live('click', function(){
+    $(this).val('');
+});
+
+//Показать или сткрыть всплывающее окно
+function showPopup(bool){
+    if(bool){
+        $('div.popup, .shadow').show();
     }else{
-        $(this).parent().removeClass('done').addClass('active');
-        $(this).parent().children('span.note_status').hide();
+        $('div.popup').html('');
+        $('div.popup, .shadow').hide();
     }
-});
+}
 
-$('span.add').live('click', function(){
-    $.ajax({
-        type: "POST",
-        url: "/showAddNodeForm/",
-        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
-        success: function(html){
-            $('#hidden_block').html(html);
-            var node_id = $('#hidden_block div#name_redaction input[type=text]').attr('id');
-            node_id = node_id.replace('node_name_', 'description_tie_');
-            addTabNameToManageBlock(node_id, 'new requirement', '');
-            addBlockForTabContent(node_id);
-            $('#tabs_content_block div.tabs.tab_'+ node_id).html(html);
-            makeEditors(node_id);
-            tabsWidthDetect();
-        }
-    });
-});
+//Всплывающая форма "Вы действительно хотите удалить узел?"
+function showDeleteNodePopup(node_id){
+      $('.deletion_form .cover_form').attr('id', node_id);
+      $('div.popup').html($('.deletion_form').html());
+      showPopup(true);
+}
 
-$('span.add.node').live('click', function(){
-    if (confirm("Вы действительно хотите создать бизнес требование?")) {
-        var parent_id = $(this).prev().children('a').attr('id');
-        console.log(parent_id);
-        showFormToAddNode(parent_id);
-        function showFormToAddNode(id_parent_node){
-            $.ajax({
-                type: "POST",
-                url: "/showAddNodeForm/",
-                data: {parentId: id_parent_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
-                success: function(html){
-                    $('#hidden_block').html(html);
-                    var node_id = $('#hidden_block div#name_redaction input[type=text]').attr('id');
-                    node_id = node_id.replace('node_name_', 'description_tie_');
-                    addTabNameToManageBlock(node_id, $('#' + id_parent_node).html() + ': new', '');
-                    addBlockForTabContent(node_id);
-                    $('#tabs_content_block div.tabs.tab_'+ node_id).html(html);
-                    makeEditors(node_id);
-                    tabsWidthDetect();
-                }
-            });
-        }
-    }
-});
-
-$('span.delete.node').live('click', function(){
-    if (confirm("Вы действительно хотите удалить бизнес требование?")) {
-        var select_node = $(this).prevAll()[2].firstChild.id;
-        select_node = select_node.split('_')[2];
-        $.ajax({
-            type: "POST",
-            url: "/deleteNode/",
-            data: {node: select_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
-            success: function(html){ }
-        });
-    }
-});
-
-$('span.delete.req').live('click', function(){
-    if (confirm("Вы действительно хотите удалить требование?")) {
-        var parent = $(this).offsetParent();
-        var req_id = parent.find('a').attr('id').split('_')[1];
-    //    console.log($(this).parents('li:first').attr('id'));
-        var node_id = $(this).parents('li.req').attr('id');
-        node_id = node_id.split('_')[2];
-        $.ajax({
-            type: "POST",
-            url: "/deleteRequirement/",
-            data: {req: req_id, node: node_id, csrfmiddlewaretoken: '{{ csrf_token }}'},
-            success: function(html){ }
-        });
-    }
-});
-
-$('span.add.req').live('click', function(){
-    if (confirm("Вы действительно хотите создать новое требование?")) {
-        var parent_id = $(this).parents('li:first').attr('id');
-        showFormToAddReq(parent_id);
-        function showFormToAddReq(id_parent_node){
-            $.ajax({
-                type: "POST",
-                url: "/showAddReqForm/",
-                data: {parentId: id_parent_node, csrfmiddlewaretoken: '{{ csrf_token }}'},
-                success: function(html){
-                    $('#hidden_block').html(html);
-                    console.log($('#hidden_block').html(html));
-                    var req_id = $('#hidden_block div#name_redaction input[type=text]').attr('id');
-                    req_id = req_id.replace('req_name_', 'description_tie_');
-                    addTabNameToManageBlock(req_id, $('#' + id_parent_node).html() + ': new', '');
-                    addBlockForTabContent(req_id);
-                    $('#tabs_content_block div.tabs.tab_'+ req_id).html(html);
-                    makeEditors(req_id);
-                    tabsWidthDetect();
-                }
-            });
-        }
-    }
-});
-
-$('#cancel').live('click', function(){
-    var node_id = $('#hidden_block div#name_redaction input[type=text]').attr('id').split('_')[2];
+//Удалить узел
+function DeleteNode(node_id, comment){
+    if (comment=='Оставьте комметарий'){comment=''}
     $.ajax({
         type: "POST",
         url: "/deleteNode/",
-        data: {node: node_id, csrfmiddlewaretoken: '{{ csrf_token }}'}
-});
-});
+        data: {node: node_id, comment:comment, csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(href){
+            showPopup(false);
+            window.location.href = href;
+            window.location.reload();
+        }
+    });
+}
 
-$('#add_data').live('click', function(){
-    $.datepicker.setDefaults({ dateFormat: 'dd.mm.yy'});
-    $("#add_data").datepicker();
-});
-
-$('#add_file_button').live('click', function(){
-    $('div.popup div.popupContent').html($('#form_to_upload_files').html());
+//Показать всплывающую форму "Создать новый узел"
+function showCreateTieForm(parent_id, type){
+    $('.add_node_form .cover_form').attr('id', parent_id);
+    $('.cover_form .confirm.button').attr('id', type);
+    $('div.popup').html($('.add_node_form').html());
     showPopup(true);
-});
+}
 
-$('#add_file_in_node').live('click', function(){
-    $('div.popup div.popupContent').html($('#form_to_upload_files_in_node').html());
-    showPopup(true);
-});
-
-function showPopup(bool){
-    if(bool){
-        $('div.popupContent, div.popup, .shadow').show();
+//Создать новый узел
+function CreateTie(parent_id, type, name){
+    if (name=='Как называется твой новый узел?'){
+        alert('Извините, но вы не можете создать узел без имени.')
     }else{
-        $('div.popupContent').html('');
-        $('div.popup.popupContent, div.popup, .shadow').hide();
+        $.ajax({
+        type: "POST",
+        url: "/addNode/",
+        data: {parent:parent_id, type:type, name:name, product:$('input#product:checked').val(), csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(href){
+            showPopup(false);
+            console.log('LOG is ' + href);
+            window.location.href = href;
+            window.setTimeout(function(){
+                    window.location.reload();
+                }, 100
+            );
+        }
+    });
     }
 }
+
+//Получить идентикатор ссылки в дереве по id узла
+function getNodeId(id){
+    if ($('#tabs_content_block div.tabs.tab_description_tie_'+id).length > 0){
+        var nodeId = 'description_tie_'+id;
+    }else{
+        nodeId = 'req_'+id;
+    }
+    return nodeId;
+}
+
+//Редактировать узел
+function editNode(nodeId){
+    $.ajax({
+        type: "POST",
+        url: "/editNode/",
+        data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){
+            $('#tabs_content_block div.tabs.tab_' + getNodeId(nodeId)).html(html);
+
+            window.setTimeout(function(){makeEditors(getNodeId(nodeId));}, 300);
+            EDITING = true;
+        }
+    });
+}
+
+//Отменить редактирование
+function cancelEditNode(nodeId){
+    $.ajax({
+        type: "POST",
+        url: "/cancelEditNode/",
+        data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(){
+            EDITING = false;
+            window.location.reload();
+        }
+    });
+}
+
+//При смене адреса выйти из режима редактирования.
+window.onbeforeunload = function() {
+    if(EDITING){
+        console.log('Отмена редактирования узла ' + location.hash.substr(1).replace('req_','').replace('tab_description_tie_',''));
+        cancelEditNode(location.hash.substr(1).replace('req_','').replace('tab_description_tie_',''));
+    }
+};
+
+//показать форму добавления нового релиза
+function ShowAddReleaseForm(){
+    $('div.popup').html($('.add_release_form').html());
+    showPopup(true);
+}
+
+//Добавление нового релиза
+function addRelease(){
+    var product = $('input#product:checked').val();
+    var release_name = $('input#add_release_name_text').val();
+    var release_number = $('input#add_release_number_text').val();
+    var release_date = $('input#add_release_date_text').val();
+    var release_description = $('textarea#release_description').val();
+
+    if(release_description == 'Оставьте описание релиза тут'){
+        release_description = '';
+    }
+
+    if (release_name == 'Как называется твой релиз?'){
+        alert('Извините, но вы не можете создать узел без имени.')
+    }else if(release_number == 'Какой номер релиза?'){
+        alert('Извините, но вы не можете создать релиз без номера.')
+    }else if(release_date == 'Год-месяц-день'){
+        alert('Извините, но вы не можете создать релиз без даты выпуска.')
+    }else{
+        $.ajax({
+            type: "POST",
+            url: "/addReleaseToNode/",
+            data: {
+                product:product,
+                name:release_name,
+                number:release_number,
+                date:release_date,
+                description:release_description,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function(html){
+                showPopup(false);
+                $('#selectRelease option').attr('selected', false);
+                $('#selectRelease').append(html);
+            }
+        });
+    }
+}
+
+//Уточнить почему меняется статус или релиз
+function AskWhy(item){
+    $('.ask_why .cover_form').attr('id', item);
+    $('div.popup').html($('.ask_why').html());
+    showPopup(true);
+}
+
+//Записать в скрытом виде комментарий по смене статуса или релиза
+function addComment(item, comment){
+    $('#'+item+'_comment').text(comment);
+    showPopup(false);
+}
+
+//Сохранить отредактированый узел и показать его же с новыми данными
+function saveNode(nodeId){
+    var files = [];
+    $('.node_files a').each(function(){
+        files.push($(this).attr('id'));
+    });
+    $.ajax({
+        type: "POST",
+        url: "/saveNode/",
+        data: {
+            nodeId: nodeId,
+            title:$('#nodeTitle').val(),
+            status:$('#selectStatus').val(),
+            status_comment:$('#status_comment').val(),
+            release:$('#selectRelease').val(),
+            release_comment:$('#release_comment').val(),
+            developer:$('#selectDeveloper').val(),
+            tester:$('#selectTester').val(),
+            source:$('#selectSource').val(),
+            source_desc:$("#source_textArea___Frame").contents().find('#xEditingArea iframe').contents().find('html body').html(),
+            node_desc:$("#content_textArea___Frame").contents().find('#xEditingArea iframe').contents().find('html body').html(),
+            files: files,
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function(html){
+            $('#tabs_content_block div.tabs.tab_' + getNodeId(nodeId)).html(html);
+            EDITING = false;
+        }
+    });
+}
+
+//TODO:показать форму добавления нового файла
+function ShowAddfileForm(){
+    $('div.popup').html($('.add_file_form').html());
+    showPopup(true);
+}
+
+function SaveFile(){
+    $.ajax({
+        type: "POST",
+        url: "/addFileToNode/",
+        data: {
+            nodeId: $('input#node_id').val(),
+            file_name: $('input#add_file_name_text').val(),
+            file:$('input#id_file').val().getAsBinary(),
+            enctype: 'multipart/form-data',
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function(html){
+            console.log(html);
+            showPopup(false);
+        }
+    });
+}
+
+// TODO: Посмотреть историю узла
+function viewNodeHistory(nodeId){
+    console.log(nodeId);
+}
+
+////TODO: Определяем ширину вкладок
+//function tabsWidthDetect(){
+//    $('#tabs_manage_block ul li').css('width', (parseInt($('#tabs_manage_block ul').css('width')) - 1)/$('#tabs_manage_block ul li').length - 20);
+//}
+
+

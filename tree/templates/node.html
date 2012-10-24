@@ -1,105 +1,83 @@
-<div class='table edit'>
-<form method="post" action="/saveNodeEdition/">{% csrf_token %}
-    <div>
-        <div id='name'><label for='node_name_{{ node.id }}'>Имя:</label></div>
-        <div id='name_redaction'>
-            <input type='text' id='node_name_{{ node.id }}' name='name' value="{{ node.node.name }}"/>
+<div class="panel">
+    <div class="current">
+        <div class="status" style="color:{{ node.cur_status.color }}">
+            <span class="status_{{ node.cur_status.id }}"></span>{{ node.cur_status.title }}
+        </div>
+        <br class="clearfix"/>
+        <div class="time" >
+            <span>Создано: </span>{{ node.creation_date.date }}
+        </div>
+        <div class="time" >
+            <span>Изменено: </span>{{ node.last_modified_date }}
         </div>
     </div>
-    <div id='description'>
-        <div><label for='node_descr_{{ node.id }}'>Описание:</label></div>
-        <div id='req_description'>
-            <textarea id="node_descr_{{ node.id }}" class="big_text" name='description'>{{node.description}}</textarea>
+    <div class="tools" id='{{ node.id }}'>
+        <div class="edit button" onclick="editNode($(this).parent().attr('id'))">
+                <span class="edit node"></span>
+                Редактировать
+                <span class="end_button"></span>
         </div>
-    </div>
-    <div id='redaction'>
-        <div id='files'>Файлы:</div>
-        <div id='files_redaction'>
-            {% for i in node.files.all %}
-                <div id="new_line"></div><input type="checkbox" checked="true" id="file_{{ i.id }}" name="node_files" value="file_{{ i.id }}">
-                <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
-            {% endfor %}
-            <div><input type="button" id='add_file_in_node' value='добавить файл'></div>
+        <div class="history button" onclick="viewNodeHistory($(this).parent().attr('id'))">
+            <span class="info node"></span>
+            Посмотреть историю
+            <span class="end_button"></span>
         </div>
-    </div>
-    <div id='reason_of_redaction'>
-        <div><label for='reason_of_redaction_node_{{ node.id }}'>Обоснование внесения изменений:</label></div>
-        <div id='descr_redaction'>
-            <textarea id="reason_of_redaction_node_{{ node.id }}" class="small_text" name='edit_description'>{{node.edit_description}}</textarea>
+        <div class="delete button" onclick="showDeleteNodePopup($(this).parent().attr('id'))">
+            <span class="delete node"></span>
+            Удалить
+            <span class="end_button"></span>
         </div>
-    </div>
-    <div id='curator'>
-        <div><label for='curator_of_{{ node.id }}'>Назначить нового куратора:</label></div>
-        <div id='curator_edition'>
-            <textarea id="curator_edition_{{ node.id }}" class="small_text" name='curator'>{{node.edit_description}}</textarea>
-        </div>
-    </div>
-    <div>
-        <div>
-            <div class="hidden">
-                <input type="text" name='node' value="{{node.node.id}}"/>
-                <input type="text" name='release' value="{{node.release}}"/>
-            </div>
-        </div>
-        <div><input type="submit" value="Сохранить редакцию"></div>
-    </div>
-</form>
-    <div id='form_to_upload_files_in_node' class="hidden">
-        <form target="upload_frame" enctype="multipart/form-data" action="/addingFilesInNodes/" method="post">{% csrf_token %}
-            <div class='hidden'>
-                <input type="text" name='node_id' id='node_id' value="{{ node.id }}">
-            </div>
-            <input id="added_file" type="file" class="file" name="added_file" >
-            <br><input type="text" value="введи новое имя файла" id="file_name" name="file_name" onclick="if(this.value=='введи новое имя файла'){this.value=''}" onblur="if(this.value==''){this.value='введи новое имя файла';this.style.color='';}"/>
-            <input type="submit" class="submit" value="Upload" id='submiting_adding_file'>
-            <iframe id="upload_frame" name="upload_frame" style="display: none"></iframe>
-        </form>
     </div>
 </div>
 
-<div class='table read'>
-    <div>
-        <div>Имя:</div>
-        <div>{{ node.node.name }}
-        </div>
+<div class='content_node'>
+    <div class='table'>
+        {% if  node.cur_release %}
+            <div><div class="release">Релиз: </div><div><a href='#'>{{ node.cur_release }}</a></div></div>
+        {% endif %}
+        {% if  node.source %}
+            <div><div>Источник: </div><div>{{ node.source }}</div></div>
+        {% endif %}
+        {% if  node.source_description %}
+            <div><div>Уточнение источника: </div><div><a href='#'>{{ node.source_description|safe }}</a></div></div>
+        {% endif %}
+        {% if  node.curator %}
+            <div><div>Куратор: </div><div>{{ node.curator.first_name }} {{ node.curator.last_name }}</div></div>
+        {% endif %}
+        {% if  node.developer %}
+            <div><div>Разработчик: </div><div>{{ node.developer.first_name }} {{ node.developer.last_name }}</div></div>
+        {% endif %}
+        {% if  node.tester %}
+            <div><div>Тестировщик: </div><div>{{ node.tester.first_name }} {{ node.tester.last_name }}</div></div>
+        {% endif %}
+        {% if  node.content %}
+            <div><div>Описание: </div><div>{{ node.content|safe }}</div></div>
+        {% endif %}
+        {% if not node.files %}
+            <div>
+                <div>Файлы: </div>
+                <div>
+                    {% for file in node.files.all %}
+                        <a href="/media/{{ file.file }}">{{ file.name }}</a>;
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
     </div>
-    {% if node.status %}
-        <div >
-            <div>Текущий статус:</div>
-            <div>{{node.status}}
-            </div>
-        </div>
-    {% endif %}
+</div>
 
-    {% if node.curator %}
-        <div >
-            <div>Куратор:</div>
-            <div>{{node.curator}}
-            </div>
+<div class='hidden deletion_form'>
+    <div class="cover_form">
+        <textarea id='deletion_comment'>Оставьте комметарий</textarea>
+        <div class="cancel button" onclick="showPopup(false)">
+            <span class="delete"></span>
+            Отменить
+            <span class="end_button"></span>
         </div>
-    {% endif %}
-
-    {% if node.release %}
-        <div >
-            <div>Релиз:</div>
-            <div>{{node.release}}
-            </div>
-        </div>
-    {% endif %}
-
-    {% if node.description %}
-        <div>
-            <div>Описание:</div>
-            <div>{{node.description|safe}}
-            </div>
-        </div>
-    {% endif %}
-    <div>
-        <div>Файлы:</div>
-        <div>
-            {% for i in node.files.all %}
-                <a target="_blank" href='/media/{{ i.file }}' > {{ i.name }}</a>;
-            {% endfor %}
+        <div class="confirm button" onclick="DeleteNode($(this).parent().attr('id'), $('#deletion_comment').val())">
+            <span class="status_5"></span>
+            Удалить
+            <span class="end_button"></span>
         </div>
     </div>
 </div>

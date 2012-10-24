@@ -3,7 +3,7 @@ FOLDER = os.curdir
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-ADMINS = ( ('olga', 'olga@irnok.net'),
+ADMINS = ( #('olga', 'olga@irnok.net'),
     )
 MANAGERS = ADMINS
 
@@ -25,7 +25,7 @@ EMAIL_HOST_USER = 'olga.vorobyeva@anychart.com'
 EMAIL_HOST_PASSWORD = 'terrawyw9y24sbella'
 EMAIL_USE_TLS = True
 
-TIME_ZONE = 'Russia/Irkutsk'
+TIME_ZONE = 'Asia/Irkutsk'
 LANGUAGE_CODE = 'ru-ru'
 SITE_ID = 1
 USE_I18N = True

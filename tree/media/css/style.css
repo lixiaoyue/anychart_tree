@@ -16,9 +16,45 @@ img.pic {padding: 5px;	border: solid 1px #D4D4D4;}
 p {	margin-bottom: 1.5em;}
 ul {margin-bottom: 1.5em;}
 ul h4 {	margin-bottom: 0.35em;}
+.hidden{display: none}
 .box {overflow: hidden;	margin-bottom: 1em;}
 .date {	background: #6E6E6E;padding: 5px 6px 5px 6px;margin: 0 6px 0 0;	color: #FFFFFF;	font-size: 0.8em;border-radius: 2px;}
 .table div.hidden, div.hidden{display: none}
+/* КНОПКА СЕРАЯ*/
+.button {
+    float: left;
+    position: relative;
+    color: #1c1c1c;
+    height: 34px;
+    background: url(../i/button.png) no-repeat;
+    line-height: 32px;
+}
+.button input[type=submit] {
+    border: none;
+    background: none;
+}
+
+.button span.end_button {
+    background: url(../i/button.png) left -90px;
+    height: 34px;
+    width: 24px;
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: -24px;
+    overflow: hidden;
+}
+
+.button:active {
+    background: url(../i/button.png) no-repeat left -49px;
+    color: #1c1c1c;
+}
+
+.button:active span.end_button {
+    background: url(../i/button.png) no-repeat left -139px;
+}
+
 .shadow {
     width: 100%;
     height: 100%;
@@ -37,6 +73,50 @@ ul h4 {	margin-bottom: 0.35em;}
     left: 7%;
     top: 7%;
 }
+.cover_form {
+    margin: 6% auto 0 auto;
+    width: 40%;
+    height: 50%;
+    position: relative;
+    background: gainsboro;
+    border: 1px solid black;
+    padding: 1.5%;
+    font-size: 13px;
+}
+.cover_form.small {
+    margin: 8% auto 0 auto;
+    height: 25%;
+ }
+.cover_form textarea{
+    position: absolute;
+    width: 93%;
+    height: 70%;
+}
+#add_node_name_text, #add_file_name_text {
+    width: 100%;
+    margin: 30px 0;
+}
+
+#add_release_name_text, #add_release_number_text, #add_release_date_text{
+    width: 100%;
+    margin: 10px 0 0 0;
+}
+#release_description{
+    float: left;
+    width: 94%;
+    height: 140px;
+    margin-top: 10px;
+}
+.cover_form .confirm.button{
+    position: absolute;
+    bottom: 10px;
+    right: 7%;
+}
+.cover_form .cancel.button{
+    position: absolute;
+    bottom: 10px;
+    left:3.5%;
+}
 .popupContent {
     margin: 1.5% auto 0 auto;
     width: 95%;
@@ -47,30 +127,38 @@ ul h4 {	margin-bottom: 0.35em;}
     z-index: 600;
     display: none;
     border: 1px solid black;
-    padding: 10px;
+    padding: 1.5%;
     font-size: 13px;
 }
 #wrapper {
     position: relative;
     width: 100%;
     margin: 0;
-    background: #FFFFFF;
     min-width: 900px;
 }
+#header{
+    height: 30px;
+    width: 100%;
+    /*border-top: solid 1px #1874CD;*/
+    border-bottom: solid 10px #104E8B;
+    min-width: 1009px;
+}
 #logo{
-    height: 50px;
+    height: 40px;
+    width: 320px;
+    float: left;
 }
 #logo a {
 	text-decoration: none;
 	text-shadow: 0 1px 1px #3E3E3E;
     color: #6E6E6E;
-    padding-left: 60px;
+    padding-left: 40px;
     background: url(../i/logo.png) no-repeat left center;
 }
 #logo h1 {
-    font-size: 2.0em;
+    font-size: 1.5em;
     padding: 0;
-    margin: 6px 0 0 16px;
+    margin: 2px 0 0 16px;
     float: left;
 }
 
@@ -78,33 +166,41 @@ ul h4 {	margin-bottom: 0.35em;}
 #menu {
 	padding: 0 0 0 0;
 	position: relative;
-	/*background: #209D9D url(images/img02.gif) repeat-x top left;*/
-	background: #104E8B;
 	margin: 0;
-	height: 60px;
-	width: 100%;
-	border-top: solid 1px #1874CD;
-	border-bottom: solid 1px #082747;
+	width: 60%;
+    min-width: 590px;
 	text-shadow: 0 1px 1px #007D7D;
+    float: right;
+    border-bottom: 40px solid #104E8B;
+    border-left: 50px solid transparent;
+    height: 0;
+}
+
+#menu div#login_space{
+    color: pink;
     float: left;
+    padding: 10px 15px 5px 15px;
+}
+#menu div#login_space a{
+    color: #fff;
+    text-decoration: none;
 }
 #menu ul {
 	list-style: none;
-	padding-top: 17px;
+	padding-top: 3px;
 	position: relative;
-	left: 30px;
-    float: left;
+    float: right;
 }
 #menu ul li {
-	padding: 5px 15px 5px 15px;
-	margin-right: 10px;
+	padding: 7px 10px 5px 10px;
+	margin-left: 10px;
 	display: inline-block;
 }
 #menu ul li a, #menu ul li span{
 	text-decoration: none;
 	color: #FFFFFF;
 	letter-spacing: -1px;
-	font-size: 1.25em;
+	font-size: 1.1em;
 }
 #menu ul li span b {
 	display: inline-block;
@@ -189,8 +285,10 @@ label.menu{
 #page {
     position: relative;
     width: 100%;
-    margin: 62px 0 0 0;
+    margin: 0 0 0 0;
     height: 500px;
+    border-top: solid 1px #2C2B2B;;
+    /*background: #104E8B;*/
 }
 #sidebar {
     width: 30%;
@@ -198,6 +296,7 @@ label.menu{
     float:left;
     overflow: scroll;
     height: 100%;
+    background:#ccc;
 }
 #content {
     width: 70%;
@@ -207,7 +306,48 @@ label.menu{
 }
 
 /* <<-- TREE */
-.treeview { padding: 0; clear: both; font-family: Arial, sans-serif; width: 100%; }
+#popup_menu{
+    display: none;
+}
+li#create_tie a,li#create_req a {
+    text-decoration: none;
+    padding-left: 10px;
+}
+li#create_tie a:hover,li#create_req a:hover {
+    text-decoration: none;
+    color: #1C86EE;
+}
+.treeview ul div#popup_menu ul{
+    position: absolute;
+    background: rgba(16, 78, 139, 0.9);
+    border-top: solid 1px #1874CD;
+    border-bottom: solid 1px #1C86EE;
+    text-shadow: 0 1px 1px #007D7D;
+    list-style: none;
+    margin: 10px 0;
+    padding: 15px 10px 15px 10px;
+    min-width: 200px;
+    border-radius: 6px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
+    z-index: 20;
+}
+.treeview ul div#popup_menu ul li a{
+    color: white;
+    text-decoration: none;
+    font-family: Georgia, serif;
+    letter-spacing: -1px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    height: 20px;
+    display: block;
+    cursor: pointer;
+}
+.treeview ul div#popup_menu ul li a:hover{
+    color: #ccc;
+}
+
+.treeview { padding: 10px 0; clear: both; font-family: Arial, sans-serif; width: 100%; }
 .treeview ul{
     overflow: hidden;
     width: 100%;
@@ -216,13 +356,6 @@ label.menu{
     list-style-type: none;
 }
 .treeview ul ul { overflow: visible; width: auto; margin: 0 0 0 0; padding: 0 0 0 0.75em; }
-.treeview ul ul ul li:last-child ul{
-    overflow: visible;
-    width: auto;
-    margin: 0 0 0 -1px;
-    padding: 0 0 0 0.75em;
-    border-left: white 1px solid;}
-
 .treeview ul.l { border-left: 1px solid; margin-left: -1px; }
 .treeview li.cl ul { display: none; }
 .treeview li { margin: 0; padding: 0; }
@@ -235,24 +368,29 @@ label.menu{
     top: 0.8em; //top: 0.65em;left: 1.55em;
     width: 100%;
     margin: 0;
-    border-bottom: 1px dotted lavender;
+    /*border-bottom: 1px dotted lavender;*/
     padding: 0;
 }
-.treeview li p span{margin: 0 5px; float: left}
+.treeview li p span{margin: 2px 3px 0 1px; float: left}
+.treeview li p span.folder{margin: 2px 3px 0 7px; float: left}
 .treeview a {padding: 0.1em 0.2em; white-space: nowrap; //height: 1px; text-decoration: none; }
 .treeview img.i{border-right: 2px solid; border-bottom: 0.5em solid;margin-bottom: -0.5em; vertical-align: middle;}
 .treeview a.sc{position: absolute; top: 0.06em; width: 15px; height: 20px; left: -12px; padding: 0; text-decoration: none;}
 .treeview a.sc.close_tie{background: url(../i/icons.png) no-repeat -18px 3px;}
 .treeview a.sc.open_tie{background: url(../i/icons.png) no-repeat -1px 3px;}
-.treeview a.sc.open_req{background:  url(../i/icons.png) no-repeat -49px center}
-.treeview a.sc.close_req{background:  url(../i/icons.png) no-repeat -66px center}
+.treeview a.sc.open_req{background:  url(../i/icons.png) no-repeat -66px center}
+.treeview a.sc.close_req{background:  url(../i/icons.png) no-repeat -49px center}
+.treeview a.sc.close_req.open_tie{background:   url(../i/icons.png) no-repeat -66px center !important;}
+.treeview a.sc.close_req.close_tie{background:  url(../i/icons.png) no-repeat -49px center !important;}
+.treeview a.sc.trash{background:  url(../i/icons.png) no-repeat -298px center !important;}
+
 .treeview a {
     color: #2C2B2B;
     font-weight: normal;
     float: left
 }
 .treeview li p,.treeview img.i,.treeview .sc{
-    background: #FFF;
+    background: #ccc;
 }
 .treeview li p,.treeview img.i{
     border-color: #E6E6FA;
@@ -269,8 +407,12 @@ label.menu{
     color: #104E8B;
 }
 li.req div p{
-    color: #5C5B5B;
+    color: #000;
     font-weight: normal;
+    cursor: pointer;
+}
+.treeview p.active{
+    background: #D6D6D6;
 }
 ul.registration{
     float: right !important;
@@ -282,20 +424,43 @@ ul.registration li a.registration{
     letter-spacing: 0;
     font-size: 1em !important;
 }
-
-.treeview a.open_tab span{width: 16px; height: 16px; background: url(../i/icons.png) no-repeat -203px top;float: left;}
+.treeview a.open_tab span{width: 16px; height: 16px; float: left;}
 .treeview a.notification span{width: 16px; height: 16px; background: url(../i/icons.png) no-repeat -186px top;float: left;}
 .treeview a.status span{width: 16px; height: 16px; background: url(../i/icons.png) no-repeat -169px top;float: left;}
 
-.treeview span.add, .treeview span.edit, .treeview span.delete{
-    width: 16px; height: 16px;float: left;cursor: pointer; opacity: 0.3; margin: 2px 0 0 5px;
+span.add, span.edit, span.delete, span.info{
+    width: 16px; height: 16px;float: left; opacity: 1; margin: 2px 0 0 5px;
 }
-.treeview span.add:hover, .treeview span.edit:hover, .treeview span.delete:hover{
+
+span.status_1, span.status_2, span.status_3, span.status_4, span.status_5{
+    width: 16px;
+    height: 16px;
+    float: left;
     opacity: 1;
+    margin: 2px 0 0 5px;
+    display: block;
 }
-.treeview span.add{ background: url(../i/icons.png) no-repeat -119px top;}
-.treeview span.edit{background: url(../i/icons.png) no-repeat -137px top;}
-.treeview span.delete{background: url(../i/icons.png) no-repeat -153px top;}
+
+span.add{ background: url(../i/icons.png) no-repeat -119px top;}
+span.edit{background: url(../i/icons.png) no-repeat -137px top;}
+span.delete{background: url(../i/icons.png) no-repeat -153px top;}
+span.info{background: url(../i/icons.png) no-repeat -169px top;}
+span.status_1{background: url(../i/icons.png) no-repeat -218px top;}
+span.status_2{background: url(../i/icons.png) no-repeat -234px top;}
+span.status_3{background: url(../i/icons.png) no-repeat -250px top;}
+span.status_4{background: url(../i/icons.png) no-repeat -266px top;}
+span.status_5{background: url(../i/icons.png) no-repeat -282px top;}
+
+span.add.release{
+    margin-left: 287px;
+    margin-top: -2px;
+    cursor: pointer
+}
+span.add.file{
+    margin-right: 5px;
+    margin-top: 2px;
+    cursor: pointer;
+}
 a.open_tie_in_tab{color: #104E8B; font-weight: bold;}
 
 
@@ -318,8 +483,8 @@ a.open_tie_in_tab{color: #104E8B; font-weight: bold;}
 }
 #tabs_manage_block ul li{
     float: left;
-    width: 243px;
-    padding: 6px 0 10px 10px;
+    min-width: 140px;
+    padding: 6px 10px 10px 10px;
     height: 10px;
     border-top: solid 1px #7E7E7E;
     border-right: solid 1px #7E7E7E;
@@ -336,6 +501,10 @@ a.open_tie_in_tab{color: #104E8B; font-weight: bold;}
 }
 #tabs_manage_block ul li.active{
     background: #6E6E6E;
+    color: #fff;
+}
+#tabs_manage_block ul li.active:hover{
+    background: #6E6E6E;
 }
 #tabs_manage_block ul li:hover{
     background: #DCDCDC;
@@ -347,15 +516,102 @@ a.open_tie_in_tab{color: #104E8B; font-weight: bold;}
     /*color: #0F8C8C;*/
     color: #104E8B;
 }
+/* TABS -->> */
+/* <<-- TABS CONTENT */
+
 #tabs_content_block{
     height: 85%;
-    width: 94%;
-    padding: 1.5%;
+    width: 97%;
     margin: 0 auto;
     border: solid 1px #7E7E7E;
     overflow-y: scroll;
     position: relative;
+    background:#fff;
 }
+.panel{
+    width: 99%;
+    padding: 0 0 0 1%;
+    min-width: 650px;
+    margin: 0;
+    height: 40px;
+    border-bottom: solid 1px #7E7E7E;
+    background: #DCDCDC;
+    position: absolute;
+    top:0;
+}
+.panel span.status_1, .panel span.status_2,.panel span.status_3,.panel span.status_4,.panel span.status_5,.panel span.edit,.panel span.delete{
+    margin: 2px 4px 4px 5px;
+}
+.panel .tools{float: right;}
+.panel .tools div{
+    float: left;
+    margin-top: 3px;
+    margin-right: 30px;
+    cursor: pointer;
+}
+.panel .current{
+    float: left;
+    position: relative;
+}
+.panel .current div.status{
+    float: left;
+    margin-top: 3px;
+}
+.panel .current div.time{
+    font-size: 11px;
+    margin-top: 0;
+    float: left;
+    bottom: 0;
+    margin-left: 7px;
+}
+
+.button span.edit,.button span.delete,.button span.info,.button span.status_5{
+    margin: 8px 4px 4px 8px;
+}
+.content_node {width: 97%; padding: 65px 1% 30px 2%;}
+.table {display:table; border-collapse: collapse; width: 100%;}
+.table div {display:table-row; width: 100%}
+.table div div:first-child {display:table-cell; vertical-align: top; margin:10px; padding:10px 5px; border: 1px solid #1c1c1c; width: 20%}
+.table div div {display:table-cell; vertical-align: top; margin:10px; padding:10px 5px; border: 1px solid #1c1c1c; position: relative;}
+.table.editable div div {border:none;}
+.table div div ul, .table div div ol{margin:10px 0 5px 0; padding-left: 40px; }
+.table div div table {margin:20px 0 20px 40px; border-collapse: collapse;}
+.table div div table tr td {border: 1px solid #888; padding: 5px;}
+
+.table input{width: 98%;
+    padding: 0 1%;
+    height: 33px;
+    margin: -10px 0 0 -5px;
+    position: absolute;
+}
+.table select{width: 98%;
+    padding: 0 1%;
+    height: 33px;
+    margin: -10px 0 0 -5px;
+    position: absolute;
+    width: 30%;
+    min-width:150px;
+}
+.table #files_redaction input{
+    width: auto;
+    float: left;
+    margin: 5px 5px 0 0;
+}
+div.wide, #descr_redaction{
+    width:80%;
+}
+.table #redaction{
+    width:100%
+}
+.table #reason_redaction{
+    width:100%;
+}
+.table input[type=submit]{
+    float:right;
+    width: 200px;
+}
+
+
 #tabs_content_block div.tabs{
     position: relative;
 }
@@ -372,8 +628,7 @@ a.open_tie_in_tab{color: #104E8B; font-weight: bold;}
 .closeTab:hover{
     background-position: -85px center;
 }
-/* TABS -->> */
-/* <<-- TABS CONTENT */
+
 ul.notification_list{
     list-style: none;
 }
@@ -425,28 +680,6 @@ ul.notification_list li input{
 /* FOOTER -->> */
 
 
-.table {display:table; width: 100%}
-.table div {display:table-row}
-.table div div {display:table-cell; vertical-align: top; margin:10px; padding:10px 5px;}
-.table input{width: 98%; border: 1px solid #5C5B5B; padding: 0 1%;}
-.table #files_redaction input{
-    width: auto;
-    float: left;
-    margin: 5px 5px 0 0;
-}
-div.wide, #descr_redaction{
-    width:80%;
-}
-.table #redaction{
-    width:100%
-}
-.table #reason_redaction{
-    width:100%;
-}
-.table input[type=submit]{
-    float:right;
-    width: 200px;
-}
 
 #page-bottom{
 	color: #F5F5F5;
