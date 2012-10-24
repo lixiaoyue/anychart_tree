@@ -325,31 +325,33 @@ function editNode(nodeId){
         data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(html){
             $('#tabs_content_block div.tabs.tab_' + getNodeId(nodeId)).html(html);
-
             window.setTimeout(function(){makeEditors(getNodeId(nodeId));}, 300);
-            EDITING = true;
+            if ($('.table').hasClass('editable')){EDITING = true;}
         }
     });
 }
 
 //Отменить редактирование
 function cancelEditNode(nodeId){
-    $.ajax({
-        type: "POST",
-        url: "/cancelEditNode/",
-        data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
-        success: function(){
-            EDITING = false;
-            window.location.reload();
-        }
-    });
+    if (EDITING){
+        $.ajax({
+            type: "POST",
+            url: "/cancelEditNode/",
+            data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(){
+                EDITING = false;
+                window.location.reload();
+            }
+        });
+    }
 }
 
 //При смене адреса выйти из режима редактирования.
 window.onbeforeunload = function() {
-    if(EDITING){
+    if (EDITING) {
         console.log('Отмена редактирования узла ' + location.hash.substr(1).replace('req_','').replace('tab_description_tie_',''));
         cancelEditNode(location.hash.substr(1).replace('req_','').replace('tab_description_tie_',''));
+        EDITING = false;
     }
 };
 

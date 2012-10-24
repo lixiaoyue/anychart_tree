@@ -157,11 +157,11 @@ def saveNode(request):
         node = Node.objects.get(id = request.POST['nodeId'])
         if node.cur_status != Status.objects.get(id = request.POST['status']):
             changeStatusInNode(node.id, Status.objects.get(id = request.POST['status']),request.POST['status_comment'])
-        if node.cur_release != Release.objects.get(id = request.POST['release']):
-            changeReleaseInNode(node.id, Release.objects.get(id = request.POST['release']), request.POST['release_comment'])
         node.title = request.POST['title']
         if request.POST['release'] != 'None':
-            node.cur_release = Release.objects.get(id = request.POST['release'])
+            if node.cur_release != Release.objects.get(id = request.POST['release']):
+                changeReleaseInNode(node.id, Release.objects.get(id = request.POST['release']), request.POST['release_comment'])
+                node.cur_release = Release.objects.get(id = request.POST['release'])
         else:
             node.cur_release = None
         if request.POST['status'] !='None':
