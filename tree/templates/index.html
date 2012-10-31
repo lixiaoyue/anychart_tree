@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{{ media }}css/style.css" />{# Стили #}
     <script type="text/javascript" src="{{ media }}js/jquery-1.8.0.min.js"></script>{# JQuery #}
     <script type="text/javascript" src="{{ media }}js/jquery.dropotron-1.0.js"></script>{# Красивое меню наверху #}
-    <script type="text/javascript" src="{{ media }}fckeditor/fckeditor.js"></script>{# Делаем из texarea редактор #}
+    <script type="text/javascript" src="{{ media }}ckeditor/ckeditor.js"></script>{# Делаем из texarea редактор #}
     <script type="text/javascript" src="{{ media }}js/jquery.contextmenu.js"></script> {#Для реакции на правую кнопку мыши#}
     <script type="text/javascript" src="{{ media }}js/main.js"></script> {# Файл с обработкой всех остальных событий - самый главный файл#}
 </head>
@@ -120,8 +120,8 @@
                                         </li>
                                     {% endif %}
                                 {% endrecursetree %}
-                                <li id="backet" class="cl">
-                                    <div><p><a href="#" class="sc trash"></a> <span style="color: #7A7A7A;" class="folder">Корзина</span></p></div>
+                                <li id="basket" class="cl hidden">
+                                    <div><p><a href="#" class="sc trash" onclick="openTrash()"></a> <span style="color: #7A7A7A;" class="folder" onclick="openTrash()">Корзина</span></p></div>
                                 </li>
                             </ul>
                         </li>

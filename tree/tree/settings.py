@@ -81,6 +81,7 @@ INSTALLED_APPS = (
     'registration',
     'app',
     'mptt',
+    'ckeditor',
     )
 
 LOGGING = {
@@ -105,4 +106,31 @@ LOGGING = {
             'propagate': True,
             },
         }
-}           
+}
+CKEDITOR_UPLOAD_PATH = os.path.join(FOLDER, 'media', 'files')
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': [
+            [      'Undo', 'Redo',
+                   '-', 'Bold', 'Italic', 'Underline',
+                   '-', 'Link', 'Unlink', 'Anchor',
+                   '-', 'Format',
+                   '-', 'SpellChecker', 'Scayt',
+                   '-', 'Maximize',
+                   '-', 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak',
+                   ],
+            [      'HorizontalRule',
+                   '-', 'Table',
+                   '-', 'BulletedList', 'NumberedList',
+                   '-', 'Cut','Copy','Paste','PasteText','PasteFromWord',
+                   '-', 'SpecialChar',
+                   '-', 'Source',
+                   '-', 'About',
+                   ]
+        ],
+        'width': 840,
+        'height': 300,
+        'toolbarCanCollapse': False,
+        }
+}

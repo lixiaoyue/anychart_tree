@@ -16,13 +16,14 @@ urlpatterns = patterns('',
     url(r'^saveNode/$', saveNode),
     url(r'^cancelEditNode/$', cancelEditNode),
     url(r'^addReleaseToNode/$', addingReleaseInNode),
-
-
     url(r'^addFileToNode/$', addingFilesInNodes),
     url(r'^getFiles/$', getFiles),
     url(r'^deleteFile/$', deleteFile),
-#    url(r'^check/$', checking),
+    url(r'^getNodeHistory/$', nodeHistory),
+    url(r'^openTrash/$', openTrash),
+    url(r'^restoreTrash/$', restoreTrash),
 
+    (r'^ckeditor/', include('ckeditor.urls')),
 
     url(r'^accounts/', include('registration.urls')),
     url(r'^accounts/profile/$', homePage),

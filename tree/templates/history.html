@@ -1,0 +1,60 @@
+<div class="panel">
+    <div class="current">
+        <div class="status" style="color:{{ node.cur_status.color }}">
+            <span class="status_{{ node.cur_status.id }}"></span>{{ node.cur_status.title }}
+        </div>
+        <br class="clearfix"/>
+
+    </div>
+    <ul class="save_tools" id='{{ node.id }}'>
+        <li class="edit " onclick="getNodeContent(getNodeId($(this).parent().attr('id')))">
+            <span class="edit node"></span>
+            Вернуться к просмотру
+        </li>
+    </ul>
+</div>
+<div class="table">
+    <div class='content_node'>
+        {% if statusHistory %}
+            <div class="wideItem statuses">
+                <div style="padding: 5px 0 5px 5px">
+                    История смены статусов:
+                </div>
+            </div>
+
+            <div class="history statuses">
+                {% for item in statusHistory %}
+                    <div class="wideItem underline">
+                        <div class="halfItem">
+                            <div class="halfItem left" style="color:{{ item.id_status.color }} ">  <span class="status_{{ item.id_status.id }}"></span>{{ item.id_status.title }} </div>
+                            <div class="halfItem"> {{ item.date }} </div>
+                        </div>
+                        <div class="halfItem" style="color:#1c1c1c">{{ item.description }} </div>
+                        <br class="clearfix">
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if releaseHistory %}
+            <div class="wideItem releases">
+                <div style="padding: 5px 0 5px 5px">
+                    История смены релизов:
+                </div>
+            </div>
+
+            <div class="history releases">
+                {% for item in releaseHistory %}
+                    <div class="wideItem underline">
+                        <div class="halfItem">
+                            <div class="halfItem left">  {{ item.id_release.name }} </div>
+                            <div class="halfItem"> {{ item.date }} </div>
+                        </div>
+                        <div class="halfItem" style="color:#1c1c1c">{{ item.description }} </div>
+                        <br class="clearfix">
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>

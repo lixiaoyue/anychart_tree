@@ -3,68 +3,44 @@
         <div class="status" style="color:{{ node.cur_status.color }}">
             <span class="status_{{ node.cur_status.id }}"></span>{{ node.cur_status.title }}
         </div>
-        <br class="clearfix"/>
-        <div class="time" >
-            <span>Создано: </span>{{ node.creation_date.date }}
-        </div>
-        <div class="time" >
-            <span>Изменено: </span>{{ node.last_modified_date }}
-        </div>
     </div>
-    <div class="tools" id='{{ node.id }}'>
-        <div class="edit button" onclick="saveNode($(this).parent().attr('id'))">
+    <ul class="save_tools" id='{{ node.id }}'>
+        <li class="edit " onclick="saveNode($(this).parent().attr('id'))">
             <span class="edit node"></span>
             Сохранить
-            <span class="end_button"></span>
-        </div>
-        <div class="delete button" onclick="cancelEditNode($(this).parent().attr('id'))">
+
+        </li>
+        <li class="delete " onclick="cancelEditNode($(this).parent().attr('id'))">
             <span class="delete node"></span>
             Отменить
-            <span class="end_button"></span>
-        </div>
-    </div>
+
+        </li>
+    </ul>
 </div>
 
 <div class='content_node'>
     <div class='table editable'>
 
-        <div>
-            <div class="title">Title: </div><div><input type="text" name='title' id='nodeTitle' value="{{ node.title }}"></div>
-        </div> {# Название #}
-        <div>
-            <div>Куратор: </div><div>{{ node.curator.first_name }} {{ node.curator.last_name }}</div>
-        </div> {# Куратор #}
-        <div><div class="status">Статус: </div>
-            <div>
-                <select id="selectStatus" name="status" onchange="AskWhy('status')">
-                    {% for status in statuses %}
-                        {% if status == node.cur_status %}
-                            <option value="{{ status.id }}" selected="true">{{status.title }} </option>
-                        {% else %}
-                            <option value="{{ status.id }}">{{status.title }} </option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
+
+        <div class="wideItem">
+                Название:
+        </div>
+        <div class="wideItem">
+            <div class="line">
+                <input type="text" name='title' id='nodeTitle' value="{{ node.title }}">
             </div>
-        </div> {# Статус #}
-        <div><div class="release">Релиз: </div>
-            <div>
-                <select id="selectRelease" name="release" onchange="AskWhy('release')">
-                    <option value="None">None</option>
-                    {% for release in releases %}
-                        {% if release == node.cur_release %}
-                            <option value="{{ release.id }}" selected="true">{{release }} </option>
-                        {% else %}
-                            <option value="{{ release.id }}">{{release }} </option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-                <span class="add release" onclick="ShowAddReleaseForm()"></span>
-            </div>
-        </div> {# Релиз #}
-        <div><div>Разработчик: </div>
-            <div>
-                <select id="selectDeveloper" name="developer">
+        </div>
+
+        <div class="margin"></div>
+
+
+        <div class="wideItem">
+            <div class="halfItem">
+                <div class="line">
+                    <div class="halfItem left">Куратор: </div><div class="halfItem">{{ node.curator.first_name }} {{ node.curator.last_name }}</div>
+                </div>
+                <div class="line">
+                    <div class="halfItem left">Разработчик: </div><div class="halfItem"><select id="selectDeveloper" name="developer">
                     <option value="None">None</option>
                     {% for dev in developers %}
                         {% if dev == node.developer %}
@@ -73,12 +49,10 @@
                             <option value="{{ dev.id }}">{{ dev.get_full_name }} </option>
                         {% endif %}
                     {% endfor %}
-                </select>
-            </div>
-        </div> {# Разработчик #}
-        <div><div>Тестировщик: </div>
-            <div>
-                <select id="selectTester" name="developer">
+                </select></div>
+                </div>
+                <div class="line">
+                    <div class="halfItem left">Тестировщик: </div><div class="halfItem"> <select id="selectTester" name="developer">
                     <option value="None">None</option>
                     {% for tester in testers %}
                         {% if tester == node.tester %}
@@ -87,42 +61,86 @@
                             <option value="{{ tester.id }}">{{tester.get_full_name }} </option>
                         {% endif %}
                     {% endfor %}
-                </select>
+                </select></div>
+                </div>
             </div>
-        </div> {# Тестировщик #}
-        <div><div class="source">Источник: </div>
-            <div>
-                <select id="selectSource" name="source">
-                    <option value="None">None</option>
-                    {% for source in sources %}
-                        {% if source == node.source %}
-                            <option value="{{ source.id }}" selected="true">{{source }} </option>
-                        {% else %}
-                            <option value="{{ source.id }}">{{source }} </option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
+            <div class="halfItem">
+                <div class="line">
+                    <div class="halfItem left">Статус: </div>
+                    <div class="halfItem">
+                        <select id="selectStatus" name="status" onchange="AskWhy('status')">
+                            {% for status in statuses %}
+                                {% if status == node.cur_status %}
+                                    <option value="{{ status.id }}" selected="true">{{status.title }} </option>
+                                {% else %}
+                                    <option value="{{ status.id }}">{{status.title }} </option>
+                                {% endif %}
+                            {% endfor %}
+                     </select>
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="halfItem left">Релиз: </div>
+                    <div class="halfItem">
+                        <select id="selectRelease" name="release" onchange="AskWhy('release')">
+                            <option value="None">None</option>
+                            {% for release in releases %}
+                                {% if release == node.cur_release %}
+                                    <option value="{{ release.id }}" selected="true">{{release }} {{release.date.date|date:'Y-m-d' }} </option>
+                                {% else %}
+                                    <option value="{{ release.id }}">{{release }} {{release.date.date|date:'Y-m-d' }} </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select> <span class="add release" onclick="ShowAddReleaseForm()"></span>
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="halfItem left">Источник: </div>
+                    <div class="halfItem">
+                        <select id="selectSource" name="source">
+                            <option value="None">None</option>
+                            {% for source in sources %}
+                                {% if source == node.source %}
+                                    <option value="{{ source.id }}" selected="true">{{source }} </option>
+                                {% else %}
+                                    <option value="{{ source.id }}">{{source }} </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
             </div>
+        </div>
 
-        </div> {# Источник #}
-        <div>
-            <div>Уточнения источника: </div><div><textarea id='source_textArea' class="small_text" name='source_content'>{{ node.source_description|safe }}</textarea></div>
-        </div> {# Описание источника #}
-        <div>
-            <div>Описание: </div><div><textarea id='content_textArea' class="big_text" name='description_content'>{{ node.content|safe }}</textarea></div>
-        </div> {# Требование (content) #}
-        <div>
-            <div><p style="margin: 0">Файлы:</p>
-                <span class="file">
-                <a onclick="ShowAddfileForm()">Добавить файл</a>
-                <span class="add file" onclick="ShowAddfileForm()"></span>
-            </span> </div>
+
+        <div class="margin"></div>
+        <div class="wideItem">Уточнения источника:</div>
+        <div class="wideItem">
+            <textarea id='source_textArea' class="small_text" name='source_content'>{% if node.source_description %}{{ node.source_description|safe }}{% endif %}</textarea>
+        </div>
+
+
+        <div class="margin"></div>
+        <div class="wideItem">Описание: </div>
+        <div class="wideItem">
+            <textarea id='content_textArea' class="big_text" name='description_content'>{% if node.content %} {{ node.content|safe }}{% endif %}</textarea>
+        </div>
+
+        <div class="margin"></div>
+        <div class="wideItem">
+            <div class="files">
+                <p>Файлы:
+                <p><span>
+                    <a onclick="ShowAddfileForm()">Добавить файл</a>
+                    <span class="add file" onclick="ShowAddfileForm()"></span>
+                </span>
+            </div>
             <div class="node_files">
                 {% for file in node.files.all %}
                     <span class="file"><a id='f_{{ file.id }}' href="/media/{{ file.file }}" target="_blank">{{ file.name }}</a><span id='file_{{ file.id }}' class="delete"></span>;</span>
                 {% endfor %}
             </div>
-        </div> {# Файлы #}
+        </div>
 
         <textarea class="hidden" name='product' id='release_comment' ></textarea>
         <textarea class="hidden" name='product' id='status_comment' ></textarea>

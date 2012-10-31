@@ -3,6 +3,8 @@ from django.utils.translation import ugettext as _
 from mptt.models import MPTTModel, TreeForeignKey
 from django.contrib.auth.models import User
 from django.db import models
+from ckeditor.fields import RichTextField
+from tree.settings import CKEDITOR_UPLOAD_PATH
 
 class Product(models.Model):
     title = models.CharField(max_length=300, verbose_name=u'Продукт')
@@ -68,7 +70,7 @@ class Node(MPTTModel):
     source_description = models.CharField(max_length=300,null=True, blank=True, verbose_name=u'Описание источника')
     creation_date = models.DateTimeField(auto_now=True, verbose_name=u'Время создания')
     last_modified_date = models.DateTimeField(auto_now=True, verbose_name=u'Время последнего изменения')
-    content = models.TextField(blank=True, null=True, verbose_name=u'Текст')
+    content = RichTextField(blank=True, null=True, verbose_name=u'Текст')
     files = models.ManyToManyField(File,  null=True, blank=True, verbose_name=u'Файлы')
     def __unicode__(self):
         return self.title

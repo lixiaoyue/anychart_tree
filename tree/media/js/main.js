@@ -11,21 +11,16 @@ $(function(){
         globalOffsetY: 6,
         offsetY: -15
     });
-
+    $('#tabs_content_block').html('');
     //устанавливаем высоту объектов в зависимости от высоты экрана
     $('#page').css('height',$(window).height()-45);
     $('#tabs_content_block').css('height', $(window).height()-129);
 
-    //проверяем выполнена ли регистрация
-    if ($('ul.registration').hasClass('true')) {LOGGED_IN = true}
+    // Проверяем выполнена ли регистрация
+    if ($('#login_space a').hasClass('registration')) {LoggedIn(true);}
+    else{LoggedIn(false);}
 
-    //если регистрация не выполнена делаем невозможным выбор режима редактирования
-    if (!LOGGED_IN){
-        $('input[name=mode]:checked').val('view');
-        $('input[name=mode]').attr('disabled',true);
-    }
-
-    //Показываем вкладку которая в hash
+    // Показываем вкладку которая в hash
     if (location.hash.length>2){
         var tab_id = location.hash.substr(5);
         var req_data = location.hash.substr(1);
@@ -42,39 +37,56 @@ $(function(){
                 pickNodeInTree($('#'+reqId));
                 $('body').dequeue();
             });
-        }else if( tab_id.substr(0, 15)=='description_tie'){
+        }else if(tab_id.substr(0, 15)=='description_tie'){
             openTab(tab_id);
             openTree(tab_id);
+        }else if(req_data.substr(0, 5)=='trash'){
+            openTrash();
         }
     }
-
-    var tie_id; //идентификатор узла, по которому щелкнули правой кнопкой мыши
-    //Вспомогательные меню на правую кнопку мыши
-    $('span.right_active.tie').contextMenu('popup_tie_menu',{
-        onContextMenu: function(e) {
-            if ($(e.target).parent().parent().parent('li').length > 0){
-                tie_id = $(e.target).parent().parent().parent('li').attr('id').replace('tree_tie_','');
-            }else{
-                tie_id = $(e.target).attr('id').replace('description_tie_','');
-            }
-            return true;
-        },bindings: {'create_tie': function() {
-            showCreateTieForm(tie_id, 'BR');}
-        },
-        menuStyle: {width: 160, cursor:'pointer'},
-        itemHoverStyle: {backgroundColor:'none', border:'none'}
-    });
-    $('span.right_active.req').contextMenu('popup_req_menu',{
-        onContextMenu: function(e) {
-            tie_id = $(e.target).parent().parent().parent().attr('id').replace('req_tie_','');
-            return true;
-        },bindings: {'add_req': function() {
-            showCreateTieForm(tie_id, 'OR');}
-        },
-        menuStyle: {width: 160, cursor:'pointer'},
-        itemHoverStyle: {backgroundColor:'none', border:'none'}
-    });
 });
+
+// Включить. выключить режим авторизованного пользователя.
+function LoggedIn(flag){
+    LOGGED_IN = flag;
+    if (flag){
+        // показать инструменты редактирования
+        $('.tools').show();
+        //Вспомогательные меню на правую кнопку мыши
+        var tie_id; //идентификатор узла, по которому щелкнули правой кнопкой мыши
+        // создать новый узел
+        $('span.right_active.tie').contextMenu('popup_tie_menu',{
+            onContextMenu: function(e) {
+                if ($(e.target).parent().parent().parent('li').length > 0){
+                    tie_id = $(e.target).parent().parent().parent('li').attr('id').replace('tree_tie_','');
+                }else{
+                    tie_id = $(e.target).attr('id').replace('description_tie_','');
+                }
+                return true;
+            },bindings: {'create_tie': function() {
+                showCreateTieForm(tie_id, 'BR');}
+            },
+            menuStyle: {width: 170, cursor:'pointer'},
+            itemHoverStyle: {backgroundColor:'none', border:'none'}
+        });
+        // создать новое требование
+        $('span.right_active.req').contextMenu('popup_req_menu',{
+            onContextMenu: function(e) {
+                tie_id = $(e.target).parent().parent().parent().attr('id').replace('req_tie_','');
+                return true;
+            },bindings: {'add_req': function() {
+                showCreateTieForm(tie_id, 'OR');}
+            },
+            menuStyle: {width: 180, cursor:'pointer'},
+            itemHoverStyle: {backgroundColor:'none', border:'none'}
+        });
+        $('#basket').removeClass('hidden').show();
+    }else{
+        // скрыть инструменты редактирования
+        $('.tools').hide();
+        $('#basket').addClass('hidden');
+    }
+}
 
 //Реакция на ресайз окна
 window.onresize = function (){
@@ -179,6 +191,7 @@ function getNodeContent(object_id){
         data: {nodeId: object_id, csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(html){
             $('#tabs_content_block div.tabs.tab_'+object_id).html(html);
+            if (!LOGGED_IN) LoggedIn(false);
         }
     });
 }
@@ -218,20 +231,40 @@ function showTabContent(tabId){
 //Создаем редакторы из текстовых полей на странице
 function makeEditors(tab){
     $("#tabs_content_block div.tabs.tab_" + tab + " textarea.big_text").each(function(n, obj) {
-        var fck = new FCKeditor(obj.id) ;
-        fck.ToolbarSet = 'AnyChartTree';
-        fck.BasePath = "/media/fckeditor/" ;
-        fck.Width = '100%';
-        fck.Height = '500';
-        fck.ReplaceTextarea() ;
+        var editor = CKEDITOR.instances[obj.id];
+        if (editor) { editor.destroy(true); }
+        CKEDITOR.replace(obj.id,
+            {
+                filebrowserBrowseUrl : '/ckeditor/browse/',
+                filebrowserUploadUrl : '/ckeditor/browse/',
+
+                toolbar :
+                    [
+                        { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+                        { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','Scayt' ] },
+                        { name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'
+                            ] }, '/',
+                        { name: 'styles', items : [ 'Styles','Format' ] },
+                        { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
+                        { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
+                        { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
+                        { name: 'tools', items : [ 'Maximize','-','About' ] }
+                    ]
+            });
     });
     $("#tabs_content_block div.tabs.tab_" + tab + " textarea.small_text").each(function(n, obj) {
-        var fck = new FCKeditor(obj.id) ;
-        fck.ToolbarSet = 'AnyChartTree';
-        fck.BasePath = "/media/fckeditor/" ;
-        fck.Width = '100%';
-        fck.Height = '200';
-        fck.ReplaceTextarea() ;
+        var editor = CKEDITOR.instances[obj.id];
+        if (editor) { editor.destroy(true); }
+        CKEDITOR.replace(obj.id,
+            {
+//                skin : 'office2003',
+                height : '40',
+                toolbar :
+                    [
+                        { name: 'basicstyles', items : [ 'Bold','Italic' ] },
+                        { name: 'links', items : [ 'Link','Unlink','Anchor' ] }
+                    ]
+            });
     });
 }
 
@@ -282,12 +315,16 @@ function showCreateTieForm(parent_id, type){
     $('.add_node_form .cover_form').attr('id', parent_id);
     $('.cover_form .confirm.button').attr('id', type);
     $('div.popup').html($('.add_node_form').html());
+    if (type == 'OR') {
+        console.log(type);
+        $('#add_node_name_text').val('Как называется новое требование?');
+    }
     showPopup(true);
 }
 
 //Создать новый узел
 function CreateTie(parent_id, type, name){
-    if (name=='Как называется твой новый узел?'){
+    if (name=='Как называется твой новый узел?' || name.trim() == ''){
         alert('Извините, но вы не можете создать узел без имени.')
     }else{
         $.ajax({
@@ -375,16 +412,14 @@ function addRelease(){
     var release_number = $('input#add_release_number_text').val();
     var release_date = $('input#add_release_date_text').val();
     var release_description = $('textarea#release_description').val();
-
     if(release_description == 'Оставьте описание релиза тут'){
         release_description = '';
     }
-
-    if (release_name == 'Как называется твой релиз?'){
+    if (release_name == 'Как называется твой релиз?' || release_name.trim() == '' ){
         alert('Извините, но вы не можете создать узел без имени.')
-    }else if(release_number == 'Какой номер релиза?'){
+    }else if(release_number == 'Какой номер релиза?' || release_name.trim() == ''){
         alert('Извините, но вы не можете создать релиз без номера.')
-    }else if(release_date == 'Год-месяц-день'){
+    }else if(release_date == 'Год-месяц-день'|| release_date.trim() == ''){
         alert('Извините, но вы не можете создать релиз без даты выпуска.')
     }else{
         $.ajax({
@@ -399,9 +434,16 @@ function addRelease(){
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             },
             success: function(html){
-                showPopup(false);
-                $('#selectRelease option').attr('selected', false);
-                $('#selectRelease').append(html);
+                console.log(html);
+                if (html.substr(0,7) == '<option'){
+                    showPopup(false);
+                    $('#selectRelease option').attr('selected', false);
+                    $('#selectRelease').append(html);
+                }else{
+                    $('input#add_release_date_text').addClass('mistake');
+                    alert('Введите корректную дату. Формат даты должен быть: год-месяц-день. Например: 2011-08-23.');
+                }
+
             }
         });
     }
@@ -416,6 +458,7 @@ function AskWhy(item){
 
 //Записать в скрытом виде комментарий по смене статуса или релиза
 function addComment(item, comment){
+    console.log(comment);
     $('#'+item+'_comment').text(comment);
     showPopup(false);
 }
@@ -426,6 +469,13 @@ function saveNode(nodeId){
     $('.node_files a').each(function(){
         files.push($(this).attr('id'));
     });
+    if ($('#release_comment').val() == 'Оставьте комментарий тут'){ var desc_rel =''}else{
+        desc_rel = $('#release_comment').val();
+    }
+    if ($('#status_comment').val() == 'Оставьте комментарий тут'){ var desc_com =''}else{
+        desc_com = $('#status_comment').val();
+    }
+
     $.ajax({
         type: "POST",
         url: "/saveNode/",
@@ -433,14 +483,14 @@ function saveNode(nodeId){
             nodeId: nodeId,
             title:$('#nodeTitle').val(),
             status:$('#selectStatus').val(),
-            status_comment:$('#status_comment').val(),
+            status_comment:desc_com,
             release:$('#selectRelease').val(),
-            release_comment:$('#release_comment').val(),
+            release_comment:desc_rel,
             developer:$('#selectDeveloper').val(),
             tester:$('#selectTester').val(),
             source:$('#selectSource').val(),
-            source_desc:$("#source_textArea___Frame").contents().find('#xEditingArea iframe').contents().find('html body').html(),
-            node_desc:$("#content_textArea___Frame").contents().find('#xEditingArea iframe').contents().find('html body').html(),
+            source_desc:CKEDITOR.instances.source_textArea.getData(),
+            node_desc:CKEDITOR.instances.content_textArea.getData(),
             files: files,
             csrfmiddlewaretoken: '{{ csrf_token }}'
         },
@@ -477,10 +527,11 @@ function SaveFile(){
             }, 500);
         });
 }
+
+//удаление файлов из узла
 $('.file span.delete').live('click', function(){
     DeleteFile($(this).attr('id').replace('file_',''))
 });
-
 function DeleteFile(file_id){
     $.ajax({
         type: "POST",
@@ -496,15 +547,63 @@ function DeleteFile(file_id){
     });
 }
 
-
-// TODO: Посмотреть историю узла
+// Посмотреть историю узла
 function viewNodeHistory(nodeId){
-    console.log(nodeId);
+    $.ajax({
+        type: "POST",
+        url: "/getNodeHistory/",
+        data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){
+            $('#tabs_content_block div.tabs.tab_' + getNodeId(nodeId)).html(html);
+        }
+    });
 }
 
-////TODO: Определяем ширину вкладок
-//function tabsWidthDetect(){
-//    $('#tabs_manage_block ul li').css('width', (parseInt($('#tabs_manage_block ul').css('width')) - 1)/$('#tabs_manage_block ul li').length - 20);
-//}
+// Открыть корзину
+function openTrash(){
+    location.hash = 'trash';
+    pickNodeInTree($('a.trash'));
+    addBlockForTabContent('trash');
+    $('#tabs_manage_block ul li.active').html('Корзина');
+    $.ajax({
+        type: "POST",
+        url: "/openTrash/",
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){
+            $('#tabs_content_block div.tabs').hide();
+            $('#tabs_content_block div.tabs.tab_trash').html(html);
+            $('#tabs_content_block div.tabs.tab_trash').show();
+
+        }
+    });
+}
+
+// При выделении узлов чекбоксами
+function checkTrash(){
+    if ($('input[type=checkbox]:checked').length > 0){
+        $('.panel li.repair').removeClass('disable').addClass('active');
+        $('.panel li.repair').attr('onclick','restoreTrash()');
+    }else{
+        $('.panel li.repair').removeClass('active').addClass('disable');
+        $('.panel li.repair').attr('onclick','');
+    }
+}
+
+// Восстанавливаем выделенное из корзины
+function restoreTrash(){
+    var nodes = '';
+    $('input[type=checkbox]:checked').each(function(){
+        nodes += $(this).attr('id').replace('node_', '') + '; ';
+    });
+    $.ajax({
+        type: "POST",
+        url: "/restoreTrash/",
+        data: {nodes: nodes , csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){
+            if (html == 'ok'){window.location.reload();}
+        }
+    });
+}
+
 
 

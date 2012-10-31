@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from django.conf import settings
 from app.models import *
 import datetime
+from django.utils import formats
 
 DELETED = Status.objects.get(id = 6)
 media = settings.MEDIA_URL
@@ -50,6 +51,8 @@ def deleteNode(request):
     node = Node.objects.get(id=id)
     delete_node_children(id)
     changeStatusInNode(id, DELETED, request.POST['comment'])
+    if node.parent.type == 'NE':
+        return HttpResponse('/')
     return HttpResponse('/#tab_description_tie_%d' % node.parent.id)
 
 # Удалить детей узла (Id узла)
@@ -137,16 +140,23 @@ def cancelEditNode(request):
 def addingReleaseInNode(request):
     if request.method == 'POST':
         product = Product.objects.get(id = request.POST['product'])
-        release = Release(
-            name  = request.POST['name'],
-            number = request.POST['number'],
-            status = False,
-            date =  request.POST['date'],
-            product = product,
-            description = request.POST['description']
-        )
-        release.save()
-        return HttpResponse("<option value='%s' selected='true'>%s </option>" % (release.id, release.name))
+        description = request.POST['description']
+        if description == u'Оставьте комментарий тут':
+            description =''
+        print 'DESCRIPTION :'+ description
+        try:
+            release = Release(
+                name  = request.POST['name'],
+                number = request.POST['number'],
+                status = False,
+                date = request.POST['date'],
+                product = product,
+                description = description
+            )
+            release.save()
+            return HttpResponse("<option value='%s' selected='true'>%s %s </option>" % (release.id, release.name, release.date))
+        except Exception as e:
+            return HttpResponse('data error'+ e.message)
     else:
         return HttpResponse("Not a POST! " + str(request.method))
 
@@ -182,15 +192,13 @@ def saveNode(request):
             node.source = None
         node.source_description = request.POST['source_desc']
         node.content = request.POST['node_desc']
-#        TODO сохранить измениея files (request.POST['files[]'])
-
         node.save()
         if NOT_AVAILABLE_NODES.has_key(node.id):
             del NOT_AVAILABLE_NODES[node.id]
         return render_to_response("node.html", {'node':node})
     return HttpResponse('Not a POST for some reason : ' + str(request.method))
 
-
+# Сохраняем новые фыйлы для узла
 @csrf_exempt
 def addingFilesInNodes(request):
     try:
@@ -198,7 +206,8 @@ def addingFilesInNodes(request):
             file=request.FILES['file'],
             name = request.FILES['file'].name
         )
-        if request.POST['name']!=u'Как называется твой новый файл?':
+        print 'name : "'  + request.POST['name'] +'"'
+        if request.POST['name'] != u'Как называется твой новый файл?' and request.POST['name'].strip() != '':
             extension = new_file.name.split('.')[-1]
             new_file.name = new_file.name.replace(new_file.name[:new_file.name.find(extension)-1], request.POST['name'])
         new_file.save()
@@ -208,6 +217,7 @@ def addingFilesInNodes(request):
     except Exception as e:
         return HttpResponse('Message from adding file is : \n' + e.message)
 
+# Получаем список фалов для узла
 @csrf_exempt
 def getFiles(request):
     if request.method == 'POST':
@@ -221,6 +231,7 @@ def getFiles(request):
             return HttpResponse('Message from get Files is : \n' + str(e.args))
     return HttpResponse('Not POST type of ajax : \n' + str(request.method))
 
+# Удаляем файл узла
 @csrf_exempt
 def deleteFile(request):
     if request.method == 'POST':
@@ -232,8 +243,43 @@ def deleteFile(request):
             return HttpResponse('Message from get Files is : \n' + str(e.args))
     return HttpResponse('Not POST type of ajax : \n' + str(request.method))
 
+# Просмотр истории изменений с узлом
+@csrf_exempt
+def nodeHistory(request):
+    if request.is_ajax():
+        if request.method == 'POST':
+            node = Node.objects.get(id = request.POST['nodeId'])
+            statusHistory = StatusHistory.objects.filter(id_node = node.id).order_by('-date')
+            releaseHistory = ReleaseHistory.objects.filter(id_node = node.id).order_by('-date')
+    return render_to_response("history.html", {'node':node, 'statusHistory':statusHistory,'releaseHistory':releaseHistory})
 
+# Открываем корзину
+@csrf_exempt
+def openTrash(request):
+    deletedNodes = Node.objects.filter(cur_status = 6)
+    nodes = StatusHistory.objects.filter(id_node__in = deletedNodes).filter(id_status = 6).filter(id_node__type = 'BR').order_by('-date')
+    requirements = StatusHistory.objects.filter(id_node__in = deletedNodes).filter(id_status = 6).filter(id_node__type = 'OR').order_by('-date')
+    return render_to_response("trash.html", {'nodes':checkForRepeatable(nodes), 'requirements':checkForRepeatable(requirements)})
 
+def checkForRepeatable(nodesHistory):
+    existing_nodes = []
+    for i, node in enumerate(nodesHistory):
+        if node.id_node.id not in existing_nodes:
+            existing_nodes.append(node.id_node.id)
+        else:
+            nodesHistory = nodesHistory.exclude(id = node.id)
+    return nodesHistory.order_by('-date')
+
+# Восстанавливем файлы из корзины
+@csrf_exempt
+def restoreTrash(request):
+    nodes = request.POST['nodes']
+    nodes = nodes.split('; ')
+    for i in nodes:
+        if i != '':
+            status = StatusHistory.objects.filter(id_node = i).order_by('-date')[1]
+            changeStatusInNode(i, status.id_status, 'Восстановлено из корзины')
+    return HttpResponse('ok')
 
 
 

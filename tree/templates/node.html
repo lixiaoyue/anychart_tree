@@ -4,67 +4,77 @@
             <span class="status_{{ node.cur_status.id }}"></span>{{ node.cur_status.title }}
         </div>
         <br class="clearfix"/>
-        <div class="time" >
-            <span>Создано: </span>{{ node.creation_date.date }}
-        </div>
-        <div class="time" >
-            <span>Изменено: </span>{{ node.last_modified_date }}
-        </div>
+
     </div>
-    <div class="tools" id='{{ node.id }}'>
-        <div class="edit button" onclick="editNode($(this).parent().attr('id'))">
+    <div class="tools" onclick="$('ul.tools').toggle()">Редактирование<span class="opener"></span></div>
+    <ul class="tools" id='{{ node.id }}'>
+        <li class="edit " onclick="editNode($(this).parent().attr('id'))">
                 <span class="edit node"></span>
                 Редактировать
-                <span class="end_button"></span>
-        </div>
-        <div class="history button" onclick="viewNodeHistory($(this).parent().attr('id'))">
+        </li>
+        <li class="history " onclick="viewNodeHistory($(this).parent().attr('id'))">
             <span class="info node"></span>
             Посмотреть историю
-            <span class="end_button"></span>
-        </div>
-        <div class="delete button" onclick="showDeleteNodePopup($(this).parent().attr('id'))">
+
+        </li>
+        <li class="delete " onclick="showDeleteNodePopup($(this).parent().attr('id'))">
             <span class="delete node"></span>
             Удалить
-            <span class="end_button"></span>
-        </div>
-    </div>
+        </li>
+    </ul>
 </div>
 
-<div class='content_node'>
-    <div class='table'>
-        {% if  node.cur_release %}
-            <div><div class="release">Релиз: </div><div><a href='#'>{{ node.cur_release }}</a></div></div>
-        {% endif %}
-        {% if  node.source %}
-            <div><div>Источник: </div><div>{{ node.source }}</div></div>
-        {% endif %}
-        {% if  node.source_description %}
-            <div><div>Уточнение источника: </div><div><a href='#'>{{ node.source_description|safe }}</a></div></div>
-        {% endif %}
+<div class="second_panel">
+    <table class="people">
         {% if  node.curator %}
-            <div><div>Куратор: </div><div>{{ node.curator.first_name }} {{ node.curator.last_name }}</div></div>
+            <tr><td class="staff">Куратор: </td><td><a href="mailto:{{ node.curator.emil }}">{{ node.curator.first_name }} {{ node.curator.last_name }}</a></td></tr>
         {% endif %}
         {% if  node.developer %}
-            <div><div>Разработчик: </div><div>{{ node.developer.first_name }} {{ node.developer.last_name }}</div></div>
+            <tr><td class="staff">Разработчик: </td><td><a href="mailto:{{ node.developer.emil }}">{{ node.developer.first_name }} {{ node.developer.last_name }}</a></td></tr>
         {% endif %}
         {% if  node.tester %}
-            <div><div>Тестировщик: </div><div>{{ node.tester.first_name }} {{ node.tester.last_name }}</div></div>
+            <tr><td class="staff">Тестировщик: </td><td><a href="mailto:{{ node.tester.emil }}">{{ node.tester.first_name }} {{ node.tester.last_name }}</a></td></tr>
         {% endif %}
-        {% if  node.content %}
-            <div><div>Описание: </div><div>{{ node.content|safe }}</div></div>
+    </table>
+
+    <table class="data">
+        <tr class="time" >
+            <td class="staff">Создано: </td><td>{{ node.creation_date.date }}</td>
+        </tr>
+        <tr class="time" >
+            <td class="staff">Изменено: </td><td>{{ node.last_modified_date }}</td>
+        </tr>
+        {% if  node.cur_release %}
+            <tr><td class="staff">Релиз: </td><td><a href='#'>{{ node.cur_release }}</a></td></tr>
         {% endif %}
-        {% if not node.files %}
-            <div>
-                <div>Файлы: </div>
-                <div>
-                    {% for file in node.files.all %}
-                        <a href="/media/{{ file.file }}">{{ file.name }}</a>;
-                    {% endfor %}
-                </div>
-            </div>
+
+        {% if  node.source %}
+            <tr><td class="staff">Источник: </td><td>{{ node.source }}</td></tr>
         {% endif %}
-    </div>
+        {% if  node.source_description %}
+            <tr><td class="staff">Уточнение источника: </td><td>{{ node.source_description|safe }}</td></tr>
+        {% endif %}
+    </table>
+<br class="clearfix">
 </div>
+
+<div class='description'>
+    <div>
+        {% for file in node.files.all %}
+            <a href="/media/{{ file.file }}" target="_blank">{{ file.name }}</a>;
+        {% endfor %}
+    </div>
+
+    {% if  node.content %}
+        <div style="margin-top: 20px">{{ node.content|safe }}</div>
+    {% endif %}
+
+
+
+
+
+</div>
+
 
 <div class='hidden deletion_form'>
     <div class="cover_form">
