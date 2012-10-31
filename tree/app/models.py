@@ -8,6 +8,7 @@ from tree.settings import CKEDITOR_UPLOAD_PATH
 
 class Product(models.Model):
     title = models.CharField(max_length=300, verbose_name=u'Продукт')
+    short_name = models.CharField(max_length=300, verbose_name=u'Кодовое название продукта')
     description = models.TextField(blank=True, verbose_name=u'Описание')
     def __unicode__(self):
         return self.title
@@ -58,6 +59,7 @@ class File(models.Model):
 NODES_TYPES = (('NE', 'non_editable'), ('BR','business_requirement'), ('OR','other_requirement'))
 class Node(MPTTModel):
     title = models.CharField(max_length=300, verbose_name=u'Название узла')
+    name_id = models.CharField(max_length=300, verbose_name=u'Идентификатор узла')
     product = models.ForeignKey(Product, verbose_name=u'Продукт')
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', verbose_name=u'Родительский узел')
     type = models.CharField(max_length=2, choices=NODES_TYPES, verbose_name=u'Тип узла', db_index=True)

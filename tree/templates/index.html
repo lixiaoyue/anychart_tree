@@ -76,6 +76,7 @@
                         <div class="contextMenu" id="popup_tie_menu">
                             <ul>
                                 <li id="create_tie">Добавить узел</li>
+                                <li id="create_folder">Добавить папку</li>
                             </ul>
                         </div>
                         <div class="contextMenu" id="popup_req_menu">
@@ -84,7 +85,7 @@
                             </ul>
                         </div>
                         <li>
-                            <div><p><a href="#" class="sc close_req"></a> <span class='folder' style="color: #000;">{{ cur_product.title }}</span></p></div>
+                            <div><p><a href="#" class="sc close_req"></a> <span class='folder right_active tie' style="color: #000;">{{ cur_product.title }}</span></p></div>
                             {% load mptt_tags %}
                             <ul>
                                 {% recursetree nodes %}

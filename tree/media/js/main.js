@@ -8,7 +8,7 @@ $(function(){
     //делаем меню красивым
     $('#menu > ul').dropotron({
         mode: 'fade',
-        globalOffsetY: 6,
+        globalOffsetY: 5,
         offsetY: -15
     });
     $('#tabs_content_block').html('');
@@ -58,16 +58,24 @@ function LoggedIn(flag){
         $('span.right_active.tie').contextMenu('popup_tie_menu',{
             onContextMenu: function(e) {
                 if ($(e.target).parent().parent().parent('li').length > 0){
-                    tie_id = $(e.target).parent().parent().parent('li').attr('id').replace('tree_tie_','');
+                    if ($(e.target).parent().parent().parent('li').attr('id') == undefined){
+                        tie_id = 'None'
+                    }else{
+                        tie_id = $(e.target).parent().parent().parent('li').attr('id').replace('tree_tie_','');
+                    }
+
                 }else{
                     tie_id = $(e.target).attr('id').replace('description_tie_','');
                 }
                 return true;
-            },bindings: {'create_tie': function() {
-                showCreateTieForm(tie_id, 'BR');}
+            },bindings: {
+                'create_tie': function() {
+                showCreateTieForm(tie_id, 'BR');},
+                'create_folder': function() {
+                showCreateTieForm(tie_id, 'NE');}
             },
-            menuStyle: {width: 170, cursor:'pointer'},
-            itemHoverStyle: {backgroundColor:'none', border:'none'}
+            menuStyle: {width: 170, cursor:'pointer' },
+            itemHoverStyle: {backgroundColor:'#ccc', border:'1px solid white', margin:'0', padding:'3px'}
         });
         // создать новое требование
         $('span.right_active.req').contextMenu('popup_req_menu',{
@@ -77,8 +85,8 @@ function LoggedIn(flag){
             },bindings: {'add_req': function() {
                 showCreateTieForm(tie_id, 'OR');}
             },
-            menuStyle: {width: 180, cursor:'pointer'},
-            itemHoverStyle: {backgroundColor:'none', border:'none'}
+            menuStyle: {width: 180, cursor:'pointer' },
+            itemHoverStyle: {backgroundColor:'#ccc', border:'1px solid white', margin:'0', padding:'3px'}
         });
         $('#basket').removeClass('hidden').show();
     }else{

@@ -91,10 +91,18 @@ def changeReleaseInNode(node_id, release, comment=''):
 @csrf_exempt
 def addNode(request):
     if request.method == 'POST':
+        product = Product.objects.get(id = request.POST['product'])
+        try:
+            last_added_node = Node.objects.filter(product = product).order_by('-creation_date')[0]
+            i = int(last_added_node.name_id.replace(product.short_name + '_', ''))
+        except Exception:
+            i = 0
         node = Node()
         node.title = request.POST['name']
-        node.product = Product.objects.get(id = request.POST['product'])
-        node.parent = Node.objects.get(id = request.POST['parent'])
+        node.product = product
+        node.name_id = product.short_name + '-' + str(i + 1)
+        if request.POST['parent'] != 'None':
+            node.parent = Node.objects.get(id = request.POST['parent'])
         node.type = request.POST['type']
         node.curator = request.user
         node.cur_status = Status.objects.get(id = 1)

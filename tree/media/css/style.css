@@ -542,6 +542,7 @@ iframe{
     background: #DCDCDC;
     position: absolute;
     top:0;
+    z-index: 0;
 }
 .panel span.status_1, .panel span.status_2,.panel span.status_3,.panel span.status_4,.panel span.status_5,.panel span.edit,.panel span.delete, .panel span.info{
     margin: 2px 4px 4px 5px;
