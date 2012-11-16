@@ -85,13 +85,19 @@
                             </ul>
                         </div>
                         <li>
-                            <div><p><a href="#" class="sc close_req"></a> <span class='folder right_active tie' style="color: #000;">{{ cur_product.title }}</span></p></div>
+                            <div><p><a href="#" class="sc close_req"></a>
+                                <span class='folder right_active tie' style="color: #000;">
+                                    <a id="PR_{{ cur_product.short_name}}" class="open_tie_in_tab">{{ cur_product.title }}</a>
+                                </span></p></div>
                             {% load mptt_tags %}
                             <ul>
                                 {% recursetree nodes %}
                                     {% if node.type == 'NE' %}
-                                        <li id="tree_tie_{{ node.id }}" class="cl">
-                                            <div><p><a href="#" class="sc close_req"></a> <span class='folder right_active tie' style="color: #000;">{{ node.title }}</span></p></div>
+                                        <li id="NE_{{ node.name_id }}" class="cl">
+                                            <div><p><a href="#" class="sc close_req"></a>
+                                                <span class='folder right_active tie' style="color: #000;">
+                                                    <a id="NE_{{ node.name_id }}" class="open_tie_in_tab">{{ node.title }}</a>
+                                                </span></p></div>
                                             <ul>
                                                 {% if not node.is_leaf_node %}
                                                     {{ children }}
@@ -99,13 +105,13 @@
                                             </ul>
                                         </li>
                                     {% else  %}
-                                        <li id="tree_tie_{{ node.id }}" class="cl">
+                                        <li id="tie_{{ node.name_id }}" class="cl">
                                             <div>
-                                                <p><a href="#" class="sc close_tie"></a> <span class="folder right_active tie"><a id="description_tie_{{ node.id }}" class="open_tie_in_tab" style="color: {{ node.cur_status.color }}">
+                                                <p><a href="#" class="sc close_tie"></a> <span class="folder right_active tie"><a id="BR_{{ node.name_id }}" class="open_tie_in_tab" style="color: {{ node.cur_status.color }}">
                                                 <span class="status_{{ node.cur_status.id }}"></span>{{ node.title }}</a></span></p>
                                             </div>
                                             <ul>
-                                                <li id="req_tie_{{ node.id }}" class="cl req">
+                                                <li id="reqs_{{ node.name_id }}" class="cl req">
                                                     <div>
                                                         <p>
                                                             <a href="#" class="sc close_req"></a>  <span class="right_active req folder">Требования</span>

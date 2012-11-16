@@ -22,29 +22,47 @@ $(function(){
 
     // Показываем вкладку которая в hash
     if (location.hash.length>2){
-        var tab_id = location.hash.substr(5);
         var req_data = location.hash.substr(1);
-        if (req_data.substr(0, 3)=='tie'){
-            var tieId = req_data.split(':')[0];
-            var reqId = req_data.split(':')[1];
-            $('body').queue(function () {
-                pasteRequirements('req_' + tieId);
+        if (req_data.substr(0, 2)=='OR'){
+            var tieId = '';
+            $.ajax({
+                type: "POST",
+                url: "/getParentNode/",
+                data: {reqId: req_data.substr(3), csrfmiddlewaretoken: '{{ csrf_token }}'},
+                success: function(html){
+                    tieId = html;
+                    $('body').queue(function () {
+                        pasteRequirements('reqs_' + tieId);
+                    });
+                    $('body').queue(function () {
+                        openTree('BR_' + tieId);
+                        openTree('reqs_' + tieId);
+                        openTab(req_data);
+                        pickNodeInTree($('#'+req_data));
+                        $('body').dequeue();
+                    });
+                }
             });
+       }else if(req_data.substr(0, 5)=='trash'){
+            openTrash();
+
+        }else{
             $('body').queue(function () {
-                openTree('description_' + tieId);
-                openTree('req_' + tieId);
-                openTab(reqId);
-                pickNodeInTree($('#'+reqId));
+                openTab(req_data);
+                openTree(req_data);
+                pickNodeInTree($('a#'+req_data));
                 $('body').dequeue();
             });
-        }else if(tab_id.substr(0, 15)=='description_tie'){
-            openTab(tab_id);
-            openTree(tab_id);
-        }else if(req_data.substr(0, 5)=='trash'){
-            openTrash();
         }
     }
 });
+
+// Получить родительский узел для требования
+function getParentNode(reqId){
+//    console.log('req - ' + reqId);
+
+    return answer;
+}
 
 // Включить. выключить режим авторизованного пользователя.
 function LoggedIn(flag){
@@ -57,15 +75,16 @@ function LoggedIn(flag){
         // создать новый узел
         $('span.right_active.tie').contextMenu('popup_tie_menu',{
             onContextMenu: function(e) {
-                if ($(e.target).parent().parent().parent('li').length > 0){
-                    if ($(e.target).parent().parent().parent('li').attr('id') == undefined){
+                if ($(e.target).parent().attr('id') != undefined){
+                    if ($(e.target).parent().attr('id').substr(0,2) == 'PR'){
                         tie_id = 'None'
-                    }else{
-                        tie_id = $(e.target).parent().parent().parent('li').attr('id').replace('tree_tie_','');
                     }
-
                 }else{
-                    tie_id = $(e.target).attr('id').replace('description_tie_','');
+                    if ($(e.target).parent().parent().parent('li').length > 0){
+                        tie_id = $(e.target).parent().parent().parent('li').attr('id');
+                    }else{
+                        tie_id = $(e.target).attr('id');
+                    }
                 }
                 return true;
             },bindings: {
@@ -166,7 +185,7 @@ function pasteRequirements(liId){
 $('a.open_tab.reqs, a.open_tie_in_tab').live('click', function(){
     if (EDITING){
         console.log('Отмена редактирования узла ' + location.hash.substr(1).replace('req_','').replace('tab_description_tie_',''));
-        cancelEditNode(location.hash.substr(1).replace('req_','').replace('tab_description_tie_',''));
+        cancelEditNode(location.hash.substr(1));
     }
     openTab($(this).attr('id'));
     pickNodeInTree($(this));
@@ -182,26 +201,39 @@ function pickNodeInTree(a_object){
 
 //------------------ОТКРЫТИЕ ВКЛАДОК-----------------------//
 
-//Открываем вкладку по id вкладки и по типу (reqs, open_tie_in_tab)
+//Открываем вкладку по id вкладки
 function openTab(object_id){
     var obj = $('a#'+object_id);
     addBlockForTabContent(object_id);
     addTabNameToManageBlock(obj.html());
-    showTabContent('tab_'+ object_id);
+    showTabContent(object_id);
     getNodeContent(object_id);
 }
 
 //получаем данные по узлу
 function getNodeContent(object_id){
-    $.ajax({
-        type: "POST",
-        url: "/getNode/",
-        data: {nodeId: object_id, csrfmiddlewaretoken: '{{ csrf_token }}'},
-        success: function(html){
-            $('#tabs_content_block div.tabs.tab_'+object_id).html(html);
-            if (!LOGGED_IN) LoggedIn(false);
-        }
-    });
+    if (object_id.substr(0,2)== 'PR' || object_id.substr(0,2)== 'NE'){
+        $.ajax({
+            type: "POST",
+            url: "/getNodeLessEditable/",
+            data: {nodeId: object_id, csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(html){
+                console.log(html, $('#tabs_content_block div.tabs.tab_'+object_id));
+                $('#tabs_content_block div.tabs.tab_'+object_id).html(html);
+                if (!LOGGED_IN) LoggedIn(false);
+            }
+        });
+    }else{
+        $.ajax({
+            type: "POST",
+            url: "/getNode/",
+            data: {nodeId: object_id.split('_')[1], csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(html){
+                $('#tabs_content_block div.tabs.tab_'+object_id).html(html);
+                if (!LOGGED_IN) LoggedIn(false);
+            }
+        });
+    }
 }
 
 //добавляем блок для содержимого вкладки
@@ -221,16 +253,10 @@ function addTabNameToManageBlock(tab_name){
 //Показать содержимое вкладки
 function showTabContent(tabId){
     if (tabId != undefined){
-        if (tabId.substr(0, 7)=='tab_req'){
-            var reqId = tabId.replace('tab_', '');
-            var tieId = $('#'+reqId).parent().parent().parent().parent().parent().attr('id').replace('req_', '');
-            location.hash = tieId + ':' + reqId;
-        }else{
-            location.hash = tabId;
-        }
+        location.hash = tabId;
     }
     $('#tabs_content_block div.tabs').hide();
-    $('#tabs_content_block div.'+tabId).show();
+    $('#tabs_content_block div.tabs.tab_'+tabId).show();
 }
 
 
@@ -305,6 +331,7 @@ function showDeleteNodePopup(node_id){
 
 //Удалить узел
 function DeleteNode(node_id, comment){
+    console.log(node_id);
     if (comment=='Оставьте комметарий'){comment=''}
     $.ajax({
         type: "POST",
@@ -320,6 +347,7 @@ function DeleteNode(node_id, comment){
 
 //Показать всплывающую форму "Создать новый узел"
 function showCreateTieForm(parent_id, type){
+    console.log(parent_id);
     $('.add_node_form .cover_form').attr('id', parent_id);
     $('.cover_form .confirm.button').attr('id', type);
     $('div.popup').html($('.add_node_form').html());
@@ -345,10 +373,9 @@ function CreateTie(parent_id, type, name){
             window.location.href = href;
             window.setTimeout(function(){
                     window.location.reload();
-                }, 100
-            );
-        }
-    });
+                }, 100);
+            }
+        });
     }
 }
 
@@ -369,16 +396,34 @@ function editNode(nodeId){
         url: "/editNode/",
         data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(html){
-            $('#tabs_content_block div.tabs.tab_' + getNodeId(nodeId)).html(html);
+            $('#tabs_content_block div.tabs.tab_' + nodeId).html(html);
 
             if ($('.table').hasClass('editable')){
                 EDITING = true;
                 window.setTimeout(function(){
-                    makeEditors(getNodeId(nodeId));
+                    makeEditors(nodeId);
                 }, 300);
-
             }
+        }
+    });
+}
 
+//Редактировать папку
+function editNodeLessEditable(nodeId){
+    console.log(nodeId);
+    $.ajax({
+        type: "POST",
+        url: "/editNodeLessEditable/",
+        data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){
+            $('#tabs_content_block div.tabs.tab_' + nodeId).html(html);
+
+            if ($('.table').hasClass('editable')){
+                EDITING = true;
+                window.setTimeout(function(){
+                    makeEditors(nodeId);
+                }, 300);
+            }
         }
     });
 }
@@ -483,7 +528,6 @@ function saveNode(nodeId){
     if ($('#status_comment').val() == 'Оставьте комментарий тут'){ var desc_com =''}else{
         desc_com = $('#status_comment').val();
     }
-
     $.ajax({
         type: "POST",
         url: "/saveNode/",
@@ -503,7 +547,7 @@ function saveNode(nodeId){
             csrfmiddlewaretoken: '{{ csrf_token }}'
         },
         success: function(html){
-            $('#tabs_content_block div.tabs.tab_' + getNodeId(nodeId)).html(html);
+            $('#tabs_content_block div.tabs.tab_' + nodeId).html(html);
             EDITING = false;
         }
     });
@@ -562,7 +606,7 @@ function viewNodeHistory(nodeId){
         url: "/getNodeHistory/",
         data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(html){
-            $('#tabs_content_block div.tabs.tab_' + getNodeId(nodeId)).html(html);
+            $('#tabs_content_block div.tabs.tab_' + nodeId).html(html);
         }
     });
 }

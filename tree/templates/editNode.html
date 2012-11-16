@@ -4,7 +4,7 @@
             <span class="status_{{ node.cur_status.id }}"></span>{{ node.cur_status.title }}
         </div>
     </div>
-    <ul class="save_tools" id='{{ node.id }}'>
+    <ul class="save_tools" id='{{ node.type }}_{{ node.name_id }}'>
         <li class="edit " onclick="saveNode($(this).parent().attr('id'))">
             <span class="edit node"></span>
             Сохранить
@@ -153,7 +153,7 @@
         <iframe class="hidden" id=hiddenframe name=hiddenframe style="width:0; height:0; border:0"></iframe>
         <form enctype=multipart/form-data action='/addFileToNode/' method=post name=load_file id='loadingFile' target=hiddenframe>
             <input type=hidden name='size' value=64000>
-            <input type='text' name='node' id='node_id' value="{{ node.id }}" class="hidden" >
+            <input type='text' name='node' id='node_id' value="{{ node.name_id }}" class="hidden" >
             <input type='text' name='name' id='add_file_name_text' value='Как называется твой новый файл?'>
             <input type="file" name='file' id="id_file">
 

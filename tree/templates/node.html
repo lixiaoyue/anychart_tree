@@ -7,7 +7,7 @@
 
     </div>
     <div class="tools" onclick="$('ul.tools').toggle()">Редактирование<span class="opener"></span></div>
-    <ul class="tools" id='{{ node.id }}'>
+    <ul class="tools" id='{{ node.type }}_{{ node.name_id }}'>
         <li class="edit " onclick="editNode($(this).parent().attr('id'))">
                 <span class="edit node"></span>
                 Редактировать

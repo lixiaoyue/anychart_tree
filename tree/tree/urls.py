@@ -22,6 +22,12 @@ urlpatterns = patterns('',
     url(r'^getNodeHistory/$', nodeHistory),
     url(r'^openTrash/$', openTrash),
     url(r'^restoreTrash/$', restoreTrash),
+    url(r'^getParentNode/$', getParentNode),
+
+    url(r'^getNodeLessEditable/$', getNodeLessEditable),
+
+    url(r'^editNodeLessEditable/$', editNodeLessEditable),
+    url(r'^check/$', checking),
 
     (r'^ckeditor/', include('ckeditor.urls')),
 

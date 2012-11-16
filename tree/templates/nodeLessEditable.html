@@ -1,0 +1,42 @@
+<div class="panel" style="top:-20px">
+    <div class="tools" onclick="$('ul.tools').toggle()">Редактирование<span class="opener"></span></div>
+    <ul class="tools" id='{% if node %}{{ node.type }}_{{ node.name_id }}{% else if product %}PR_{{ product.short_name }}{% endif %}'>
+        <li class="edit " onclick="editNodeLessEditable($(this).parent().attr('id'))">
+                <span class="edit node"></span>
+                Редактировать
+        </li>
+        {% if node %}
+            <li class="delete " onclick="showDeleteNodePopup($(this).parent().attr('id'))">
+                <span class="delete node"></span>
+                Удалить
+            </li>
+        {% endif %}
+    </ul>
+</div>
+
+<div class='description'>
+    {% if  node.content %}
+        <div style="margin-top: 20px">{{ node.content|safe }}</div>
+    {% endif %}
+
+    {% if  product.description %}
+        <div style="margin-top: 20px">{{ product.description|safe }}</div>
+    {% endif %}
+</div>
+
+
+<div class='hidden deletion_form'>
+    <div class="cover_form">
+        <textarea id='deletion_comment'>Оставьте комметарий</textarea>
+        <div class="cancel button" onclick="showPopup(false)">
+            <span class="delete"></span>
+            Отменить
+            <span class="end_button"></span>
+        </div>
+        <div class="confirm button" onclick="DeleteNode($(this).parent().attr('id'), $('#deletion_comment').val())">
+            <span class="status_5"></span>
+            Удалить
+            <span class="end_button"></span>
+        </div>
+    </div>
+</div>

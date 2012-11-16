@@ -1,0 +1,39 @@
+<div class="panel">
+    <ul class="save_tools" id='{% if node %}{{ node.type }}_{{ node.name_id }}{% else if product %}PR_{{ product.short_name }}{% endif %}'>
+        <li class="edit " onclick="saveNode($(this).parent().attr('id'))">
+            <span class="edit node"></span>
+            Сохранить
+        </li>
+        <li class="delete " onclick="cancelEditNode($(this).parent().attr('id'))">
+            <span class="delete node"></span>
+            Отменить
+        </li>
+    </ul>
+</div>
+
+<div class='content_node'>
+    <div class='table editable'>
+        <div class="wideItem">
+                Название:
+        </div>
+        <div class="wideItem">
+            <div class="line">
+                <input type="text" name='title' id='nodeTitle' value="{{ node.title }}">
+            </div>
+        </div>
+
+
+        <div class="margin"></div>
+        <div class="wideItem">Описание: </div>
+        <div class="wideItem">
+            <textarea id='content_textArea' class="big_text" name='description_content'>{% if node.content %} {{ node.content|safe }}{% endif %}{% if node.description %} {{ node.description|safe }}{% endif %}</textarea>
+        </div>
+
+        <div class="margin"></div>
+
+        <input type=text class="hidden" id='cur_node_id' value="{{ node.id }}{{ product.id }}">
+    </div>
+</div>
+
+
+
