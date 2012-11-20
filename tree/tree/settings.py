@@ -1,5 +1,6 @@
 import os
-FOLDER = os.curdir
+def rel(*x):
+    return os.path.join(os.path.abspath(os.path.dirname(__file__)),'../', *x)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -32,7 +33,7 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-MEDIA_ROOT = os.path.join(FOLDER, 'media')
+MEDIA_ROOT = rel('media')
 MEDIA_URL = '/media/'
 FEINCMS_ADMIN_MEDIA = '/static/feincms/'
 FEINCMS_ADMIN_MEDIA_LOCATION = os.path.join(MEDIA_ROOT, 'static', 'feincms')
@@ -41,7 +42,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
 # Put strings here, like "/home/html/static" or "C:/www/django/static".
 )
-TEMPLATE_DIRS = (os.path.join(FOLDER, 'templates'), os.path.join(FOLDER, 'feincms', 'templates'))
+TEMPLATE_DIRS = (rel('templates'), os.path.join(rel('feincms'), 'templates'))
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -107,7 +108,7 @@ LOGGING = {
             },
         }
 }
-CKEDITOR_UPLOAD_PATH = os.path.join(FOLDER, 'media', 'files')
+CKEDITOR_UPLOAD_PATH = os.path.join(rel('media'), 'files')
 
 CKEDITOR_CONFIGS = {
     'default': {
