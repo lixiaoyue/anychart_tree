@@ -86,7 +86,7 @@ ul h4 {	margin-bottom: 0.35em;}
 .cover_form.small {
     margin: 8% auto 0 auto;
     height: 25%;
- }
+}
 .cover_form textarea{
     position: absolute;
     width: 93%;
@@ -149,8 +149,8 @@ ul h4 {	margin-bottom: 0.35em;}
     float: left;
 }
 #logo a {
-	text-decoration: none;
-	text-shadow: 0 1px 1px #3E3E3E;
+    text-decoration: none;
+    text-shadow: 0 1px 1px #3E3E3E;
     color: #6E6E6E;
     padding-left: 40px;
     background: url(../i/logo.png) no-repeat left center;
@@ -164,12 +164,12 @@ ul h4 {	margin-bottom: 0.35em;}
 
 /* <<-- MENU */
 #menu {
-	padding: 0 0 0 0;
-	position: relative;
-	margin: 0;
-	width: 60%;
+    padding: 0 0 0 0;
+    position: relative;
+    margin: 0;
+    width: 60%;
     min-width: 610px;
-	text-shadow: 0 1px 1px #007D7D;
+    text-shadow: 0 1px 1px #007D7D;
     float: right;
     border-bottom: 40px solid #104E8B;
     border-left: 50px solid transparent;
@@ -186,90 +186,90 @@ ul h4 {	margin-bottom: 0.35em;}
     text-decoration: none;
 }
 #menu ul {
-	list-style: none;
-	padding-top: 3px;
-	position: relative;
+    list-style: none;
+    padding-top: 3px;
+    position: relative;
     float: right;
 }
 #menu ul li {
-	padding: 7px 10px 5px 10px;
-	margin-left: 10px;
-	display: inline-block;
+    padding: 7px 10px 5px 10px;
+    margin-left: 10px;
+    display: inline-block;
 }
 #menu ul li a, #menu ul li span{
-	text-decoration: none;
-	color: #FFFFFF;
-	letter-spacing: -1px;
-	font-size: 1.1em;
+    text-decoration: none;
+    color: #FFFFFF;
+    letter-spacing: -1px;
+    font-size: 1.1em;
 }
 #menu ul li span b {
-	display: inline-block;
-	border-left: 6px solid transparent;
-	border-right: 6px solid transparent;
-	border-top: 7px solid #1C86EE;
-	margin-left: 8px;
-	position: relative;
-	top: -1px;
+    display: inline-block;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 7px solid #1C86EE;
+    margin-left: 8px;
+    position: relative;
+    top: -1px;
 }
 #menu ul li.active {
-	background: #1874CD;
-	border-top: solid 1px #1C86EE;
-	border-bottom: solid 1px #1C86EE;
-	border-radius: 3px;
-	padding-top: 4px;
-	padding-bottom: 4px;
+    background: #1874CD;
+    border-top: solid 1px #1C86EE;
+    border-bottom: solid 1px #1C86EE;
+    border-radius: 3px;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 #menu ul li.active span b {
-	border-top-color: #1C86EE;
+    border-top-color: #1C86EE;
 }
 .dropotron {
-	background: rgba(16,78,139,0.9);
-	border-top: solid 1px #1874CD;
-	border-bottom: solid 1px #1C86EE;
-	text-shadow: 0 1px 1px #007D7D;
-	list-style: none;
-	margin: 0;
-	padding: 15px 10px 15px 10px;
-	min-width: 200px;
-	border-radius: 6px;
-	box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2);
+    background: rgba(16,78,139,0.9);
+    border-top: solid 1px #1874CD;
+    border-bottom: solid 1px #1C86EE;
+    text-shadow: 0 1px 1px #007D7D;
+    list-style: none;
+    margin: 0;
+    padding: 15px 10px 15px 10px;
+    min-width: 200px;
+    border-radius: 6px;
+    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2);
 }
 .dropotron a, .dropotron span {
-	color: #FFFFFF;
-	text-decoration: none;
-	letter-spacing: -1px;
-	display: block;
-	width: 100%;
-	position: relative;
+    color: #FFFFFF;
+    text-decoration: none;
+    letter-spacing: -1px;
+    display: block;
+    width: 100%;
+    position: relative;
     height: 20px;
 }
 .dropotron span b {
-	display: inline-block;
-	border-top: 6px solid transparent;
-	border-bottom: 6px solid transparent;
-	border-left: 7px solid #00BFFF;
-	position: absolute;
-	right: 0;
-	top: 4px;
+    display: inline-block;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-left: 7px solid #00BFFF;
+    position: absolute;
+    right: 0;
+    top: 4px;
 }
 .dropotron li:hover span b {
-	border-left-color: #104E8B;
+    border-left-color: #104E8B;
 }
 .dropotron li {
-	padding: 3px 10px 3px 10px;
-	margin: 2px 0 2px 0;
-	border-radius: 3px;
+    padding: 3px 10px 3px 10px;
+    margin: 2px 0 2px 0;
+    border-radius: 3px;
 }
 .dropotron li:hover, .dropotron li.active {
-	padding-top: 2px;
-	padding-bottom: 2px;
-	background: rgba(26,116,205,0.9);
-	border-top: solid 1px #1C86EE;
-	border-bottom: solid 1px #1C86EE;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    background: rgba(26,116,205,0.9);
+    border-top: solid 1px #1C86EE;
+    border-bottom: solid 1px #1C86EE;
 }
 .dropotron-level-1 {
-	border-top-left-radius: 0;
-	border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
 label.menu{
     color: #FFFFFF;
@@ -375,13 +375,13 @@ li#create_tie a:hover,li#create_req a:hover {
 .treeview li p span.folder{margin: 2px 3px 0 7px; float: left; cursor: pointer}
 .treeview a {padding: 0.1em 0.2em; white-space: nowrap; //height: 1px; text-decoration: none; }
 .treeview img.i{border-right: 2px solid; border-bottom: 0.5em solid;margin-bottom: -0.5em; vertical-align: middle;}
-.treeview a.sc{position: absolute; top: 0.06em; width: 15px; height: 20px; left: -12px; padding: 0; text-decoration: none;}
-.treeview a.sc.close_tie{background: url(../i/icons.png) no-repeat -18px 3px;}
-.treeview a.sc.open_tie{background: url(../i/icons.png) no-repeat -1px 3px;}
-.treeview a.sc.open_req{background:  url(../i/icons.png) no-repeat -66px center}
-.treeview a.sc.close_req{background:  url(../i/icons.png) no-repeat -49px center}
-.treeview a.sc.close_req.open_tie{background:   url(../i/icons.png) no-repeat -66px center !important;}
-.treeview a.sc.close_req.close_tie{background:  url(../i/icons.png) no-repeat -49px center !important;}
+.treeview a.sc{position: absolute; top: 0.3em; width: 19px; height: 19px; left: -12px; padding: 0; text-decoration: none;}
+.treeview a.sc.close_tie{background: url(../i/icons.png) no-repeat -86px -20px;}
+.treeview a.sc.open_tie{background: url(../i/icons.png) no-repeat -106px -19px;}
+.treeview a.sc.open_req{background: url(../i/icons.png) no-repeat -18px 0px;}
+.treeview a.sc.close_req{background: url(../i/icons.png) no-repeat 0px top;}
+.treeview a.sc.close_req.open_tie{background: url(../i/icons.png) no-repeat 0px 0px !important;}
+.treeview a.sc.close_req.close_tie{background: url(../i/icons.png) no-repeat 0px 0px !important;}
 .treeview a.sc.trash{background:  url(../i/icons.png) no-repeat -298px center !important;}
 
 .treeview a {
@@ -445,11 +445,11 @@ span.add{ background: url(../i/icons.png) no-repeat -119px top;}
 span.edit{background: url(../i/icons.png) no-repeat -137px top;}
 span.delete{background: url(../i/icons.png) no-repeat -153px top;}
 span.info{background: url(../i/icons.png) no-repeat -169px top;}
-span.status_1{background: url(../i/icons.png) no-repeat -218px top;}
-span.status_2{background: url(../i/icons.png) no-repeat -234px top;}
-span.status_3{background: url(../i/icons.png) no-repeat -250px top;}
-span.status_4{background: url(../i/icons.png) no-repeat -266px top;}
-span.status_5{background: url(../i/icons.png) no-repeat -282px top;}
+span.status_1{background: url(../i/icons.png) no-repeat -1px -19px;}
+span.status_2{background: url(../i/icons.png) no-repeat -19px -19px;}
+span.status_3{background: url(../i/icons.png) no-repeat -37px -18px;}
+span.status_4{background: url(../i/icons.png) no-repeat -56px -19px;}
+span.status_5{background: url(../i/icons.png) no-repeat -70px -20px;}
 
 span.add.file{
     margin-right: 5px;
@@ -485,39 +485,39 @@ iframe{
     font-family: verdana, sans-serif;
 }
 /*#tabs_manage_block ul li{*/
-    /*float: left;*/
-    /*min-width: 140px;*/
-    /*padding: 6px 10px 10px 10px;*/
-    /*height: 10px;*/
-    /*border-top: solid 1px #7E7E7E;*/
-    /*border-right: solid 1px #7E7E7E;*/
-    /*background: #fff;*/
-    /*overflow: hidden;*/
-    /*position: relative;*/
-    /*-moz-border-radius: 10px 10px 0 0; *//* Firefox */
-    /*-webkit-border-radius: 10px 10px 0 0; *//* Safari, Chrome */
-    /*-khtml-border-radius: 10px 10px 0 0; *//* KHTML */
-    /*border-radius: 10px 10px 0 0; *//* CSS3 */
+/*float: left;*/
+/*min-width: 140px;*/
+/*padding: 6px 10px 10px 10px;*/
+/*height: 10px;*/
+/*border-top: solid 1px #7E7E7E;*/
+/*border-right: solid 1px #7E7E7E;*/
+/*background: #fff;*/
+/*overflow: hidden;*/
+/*position: relative;*/
+/*-moz-border-radius: 10px 10px 0 0; *//* Firefox */
+/*-webkit-border-radius: 10px 10px 0 0; *//* Safari, Chrome */
+/*-khtml-border-radius: 10px 10px 0 0; *//* KHTML */
+/*border-radius: 10px 10px 0 0; *//* CSS3 */
 /*}*/
 /*#tabs_manage_block ul li:first-child{*/
-    /*border-left: solid 1px #7E7E7E;*/
+/*border-left: solid 1px #7E7E7E;*/
 /*}*/
 /*#tabs_manage_block ul li.active{*/
-    /*background: #6E6E6E;*/
-    /*color: #fff;*/
+/*background: #6E6E6E;*/
+/*color: #fff;*/
 /*}*/
 /*#tabs_manage_block ul li.active:hover{*/
-    /*background: #6E6E6E;*/
+/*background: #6E6E6E;*/
 /*}*/
 /*#tabs_manage_block ul li:hover{*/
-    /*background: #DCDCDC;*/
+/*background: #DCDCDC;*/
 /*}*/
 /*#tabs_manage_block li.active a{*/
-    /*color: #DCDCDC;*/
+/*color: #DCDCDC;*/
 /*}*/
 /*#tabs_manage_block li:hover a{*/
-    /*color: #0F8C8C;*/
-    /*color: #104E8B;*/
+/*color: #0F8C8C;*/
+/*color: #104E8B;*/
 /*}*/
 /* TABS -->> */
 /* <<-- TABS CONTENT */
@@ -660,21 +660,21 @@ div.history.statuses span.status_3, div.history.statuses span.status_4, div.hist
     border: 1px solid #888;
     height: 25px;
 }.table.trash input{
-    width: 30px;
-    float: left;
-    padding: 0 1%;
-    margin: -3px 0 0 0px;
-    border: none;
-    height: 25px;
-}
+     width: 30px;
+     float: left;
+     padding: 0 1%;
+     margin: -3px 0 0 0px;
+     border: none;
+     height: 25px;
+ }
 .panel li.repair.disable{
-     color: #CCC;
-     cursor: default;
- }
+    color: #CCC;
+    cursor: default;
+}
 .panel li.repair.active{
-     color: #1c1c1c;
-     cursor: pointer;
- }
+    color: #1c1c1c;
+    cursor: pointer;
+}
 
 .table select{
     width: 90%;
@@ -712,8 +712,8 @@ div.wide, #descr_redaction{
 .files span.add.file{
     float: right;
 }.files p{
-    margin: 0;
-}
+     margin: 0;
+ }
 .node_files{
     position: relative;
     width: 75%; float: left;
@@ -777,20 +777,20 @@ ul.notification_list li input{
 
 
 #page-bottom{
-	color: #F5F5F5;
+    color: #F5F5F5;
     border-top: dotted 1px #8F8F8F;
     background: #DCDCDC;
 }
 #search input.form-submit {
-	margin-left: 1em;
-	color: #FFFFFF;
-	padding: 10px;
-	background: #1874CD;
-	border: 0;
+    margin-left: 1em;
+    color: #FFFFFF;
+    padding: 10px;
+    background: #1874CD;
+    border: 0;
 }
 #search input.form-text {
-	border: solid 1px #8F8F8F;
-	padding: 10px;
+    border: solid 1px #8F8F8F;
+    padding: 10px;
 }
 
 #new_line{

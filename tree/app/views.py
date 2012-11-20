@@ -21,6 +21,17 @@ def homePage(request):
     user = request.user
     return render_to_response('index.html',{'media':media, 'nodes':nodes,'user':user, 'products' : products, 'cur_product':cur_product})
 
+
+def productPage(request, name):
+    products = Product.objects.all()
+    try:
+        cur_product = Product.objects.get(short_name=name)
+        nodes = Node.objects.filter(product = cur_product.id).exclude(type = 'OR').exclude(cur_status = DELETED)
+        user = request.user
+    except Exception:
+        homePage(request)
+    return render_to_response('index.html',{'media':media, 'nodes':nodes,'user':user, 'products' : products, 'cur_product':cur_product})
+
 # Получаем все требования для узла
 @csrf_exempt
 def getRequirements(request):

@@ -28,7 +28,7 @@ $(function(){
             $.ajax({
                 type: "POST",
                 url: "/getParentNode/",
-                data: {reqId: req_data.substr(3), csrfmiddlewaretoken: '{{ csrf_token }}'},
+                data: {reqId: window.location.pathname.substr(1,2) + req_data.substr(2), csrfmiddlewaretoken: '{{ csrf_token }}'},
                 success: function(html){
                     tieId = html;
                     $('body').queue(function () {
@@ -37,7 +37,7 @@ $(function(){
                     $('body').queue(function () {
                         openTree('BR_' + tieId);
                         openTree('reqs_' + tieId);
-                        openTab(req_data);
+                        openTab('OR_' + window.location.pathname.substr(1,2) + req_data.substr(2));
                         pickNodeInTree($('#'+req_data));
                         $('body').dequeue();
                     });
@@ -45,11 +45,11 @@ $(function(){
             });
        }else if(req_data.substr(0, 5)=='trash'){
             openTrash();
-
         }else{
+            console.log('Открываем: ' + window.location.pathname.substr(1,2) + req_data.substr(2));
             $('body').queue(function () {
-                openTab(req_data);
-                openTree(req_data);
+                openTab(req_data.substr(0,2) + '_' + window.location.pathname.substr(1,2) + req_data.substr(2));
+                openTree(req_data.substr(0,2) + '_' + window.location.pathname.substr(1,2) + req_data.substr(2));
                 pickNodeInTree($('a#'+req_data));
                 $('body').dequeue();
             });
@@ -60,7 +60,6 @@ $(function(){
 // Получить родительский узел для требования
 function getParentNode(reqId){
 //    console.log('req - ' + reqId);
-
     return answer;
 }
 
@@ -122,6 +121,10 @@ window.onresize = function (){
 //    tabsWidthDetect();
 };
 
+//Меняем продукт
+function changeProduct(name){
+    window.location = '/' + name;
+}
 
 //------------------ДЕРЕВО-----------------------//
 
@@ -253,7 +256,8 @@ function addTabNameToManageBlock(tab_name){
 //Показать содержимое вкладки
 function showTabContent(tabId){
     if (tabId != undefined){
-        location.hash = tabId;
+        console.log('Change location :'+ tabId );
+        location.hash = tabId.replace('_' + window.location.pathname.substr(1,2), '');
     }
     $('#tabs_content_block div.tabs').hide();
     $('#tabs_content_block div.tabs.tab_'+tabId).show();

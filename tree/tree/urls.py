@@ -7,7 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url('^$', homePage),
-    url('^home/$', homePage),
+    url('^([A-Z]{1,2})/$', productPage),
     url(r'^getRequirements/$', getRequirements),
     url(r'^getNode/$', getNodeDescription),
     url(r'^deleteNode/$', deleteNode),

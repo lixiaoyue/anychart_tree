@@ -48,10 +48,11 @@
                         <ul>
                             {%  for product in products %}
                                 <li>
-                                    <input type="radio" value="{{ product.id }}" id="product" {% if product == cur_product %} checked {% endif %}>
-                                    <label class="menu" for="product">{{ product.title }}</label>
+                                    <input type="radio" value="{{ product.id }}" id="product_{{ product.id }}" name = "product" {% if product == cur_product %} checked {% endif %}>
+                                    <label class="menu" for="product_{{ product.id }}" onclick="changeProduct('{{ product.short_name }}')">{{ product.title }}</label>
                                 </li>
                             {% endfor  %}
+                        <li><a href="#">Новый проект</a></li>
                         </ul>
                     </li>
                     <li>
