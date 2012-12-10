@@ -138,9 +138,6 @@ def saveReleaseCatalog(request):
         return HttpResponse(e.args)
     return getReleaseCatalog(request)
 
-
-
-
 # Получаем словарь пользователей
 @csrf_exempt
 def getUsersCatalog(request):
@@ -193,7 +190,7 @@ def deleteNode(request):
         changeStatusInNode(node.id, DELETED, request.POST['comment'])
         if node.parent == 'None':
             return HttpResponse('/')
-        return HttpResponse('/%s/#%s-%s' % (node.product.short_name, node.type, node.parent.name_id))
+        return HttpResponse('/%s/#%s-%s' % (node.product.short_name, node.type, node.parent.name_id.replace(node.product.short_name + '-', '')))
 
 # Удалить детей узла (Id узла)
 def delete_node_children(node_id):
@@ -249,7 +246,7 @@ def addNode(request):
         node.creation_date = datetime.datetime.now()
         node.save()
         changeStatusInNode(node.id, node.cur_status, comment='Just created')
-        return HttpResponse('/%s/#%s-%s %s' % (node.product.short_name, node.type, node.name_id.split('-')[1], last_added_node.title))
+        return HttpResponse('/%s/#%s-%s' % (node.product.short_name, node.type, node.name_id.split('-')[1]))
 
 # Открыть режим редактирования узла
 @csrf_exempt
