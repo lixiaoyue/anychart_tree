@@ -62,16 +62,16 @@
                                 <li><a href="#">Новый проект</a></li>
                                 </ul>
                             </li>
+                            <li>
+                                <span class="opener">Справочники<b></b></span>
+                                <ul>
+                                    <li><a href="/{{ cur_product.short_name }}/catalog/#1" onclick="changeCatalog(1)">Статусы требований </a></li>
+                                    <li><a href="/{{ cur_product.short_name }}/catalog/#2" onclick="changeCatalog(2)">Источники требований </a></li>
+                                    <li><a href="/{{ cur_product.short_name }}/catalog/#3" onclick="changeCatalog(3)">Релизы </a></li>
+                                    <li><a href="/{{ cur_product.short_name }}/catalog/#4" onclick="changeCatalog(4)">Пользователи </a></li>
+                                </ul>
+                            </li>
                         {% endif %}
-                        <li>
-                            <span class="opener">Справочники<b></b></span>
-                            <ul>
-                                <li><a href="/{{ cur_product.short_name }}/catalog/#1" onclick="changeCatalog(1)">Статусы требований </a></li>
-                                <li><a href="/{{ cur_product.short_name }}/catalog/#2" onclick="changeCatalog(2)">Источники требований </a></li>
-                                <li><a href="/{{ cur_product.short_name }}/catalog/#3" onclick="changeCatalog(3)">Релизы </a></li>
-                                <li><a href="/{{ cur_product.short_name }}/catalog/#4" onclick="changeCatalog(4)">Пользователи </a></li>
-                            </ul>
-                        </li>
                         <li><a href="#">Статистика</a></li>
                     </ul>
                 {% endif %}

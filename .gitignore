@@ -19,3 +19,5 @@ tree/.idea
 tree/media/files
 tree/tree/wsgi.py
 *.pyc
+*/__init__.py
+src/django-ckeditor
