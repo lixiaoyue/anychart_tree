@@ -1,6 +1,6 @@
 <div class="panel">
     <div class="current">
-        <div class="status" style="color:{{ node.cur_status.color }}">
+        <div class="status" style="color:{{ node.cur_status.color }};{% for i in colorItems %}{% if i.status.id == node.cur_status.id %}color:{{ i.color }};{% endif %}{% endfor %}">
             <span class="status_{{ node.cur_status.id }}"></span>{{ node.cur_status.title }}
         </div>
         <br class="clearfix"/>

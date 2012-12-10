@@ -26,6 +26,8 @@ EMAIL_HOST_USER = 'olga.vorobyeva@anychart.com'
 EMAIL_HOST_PASSWORD = 'terrawyw9y24sbella'
 EMAIL_USE_TLS = True
 
+LOGIN_REDIRECT_URL = '/'
+
 TIME_ZONE = 'Asia/Irkutsk'
 LANGUAGE_CODE = 'ru-ru'
 SITE_ID = 1
@@ -42,7 +44,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
 # Put strings here, like "/home/html/static" or "C:/www/django/static".
 )
-TEMPLATE_DIRS = (rel('templates'), os.path.join(rel('feincms'), 'templates'))
+TEMPLATE_DIRS = (rel('templates'), os.path.join(rel('feincms'), 'templates'), os.path.join(rel('templates'),'catalogs'))
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',

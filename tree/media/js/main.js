@@ -17,51 +17,50 @@ $(function(){
     $('#tabs_content_block').css('height', $(window).height()-129);
 
     // Проверяем выполнена ли регистрация
-    if ($('#login_space a').hasClass('registration')) {LoggedIn(true);}
+    if ($('#login_space a').hasClass('registration') && $('#login_space a').hasClass('curators')) {LoggedIn(true);}
     else{LoggedIn(false);}
 
     // Показываем вкладку которая в hash
-    if (location.hash.length>2){
-        var req_data = location.hash.substr(1);
-        if (req_data.substr(0, 2)=='OR'){
-            var tieId = '';
-            $.ajax({
-                type: "POST",
-                url: "/getParentNode/",
-                data: {reqId: window.location.pathname.substr(1,2) + req_data.substr(2), csrfmiddlewaretoken: '{{ csrf_token }}'},
-                success: function(html){
-                    tieId = html;
-                    $('body').queue(function () {
-                        pasteRequirements('reqs_' + tieId);
-                    });
-                    $('body').queue(function () {
-                        openTree('BR_' + tieId);
-                        openTree('reqs_' + tieId);
-                        openTab('OR_' + window.location.pathname.substr(1,2) + req_data.substr(2));
-                        pickNodeInTree($('#'+req_data));
-                        $('body').dequeue();
-                    });
-                }
-            });
-       }else if(req_data.substr(0, 5)=='trash'){
-            openTrash();
-        }else{
-            console.log('Открываем: ' + window.location.pathname.substr(1,2) + req_data.substr(2));
-            $('body').queue(function () {
-                openTab(req_data.substr(0,2) + '_' + window.location.pathname.substr(1,2) + req_data.substr(2));
-                openTree(req_data.substr(0,2) + '_' + window.location.pathname.substr(1,2) + req_data.substr(2));
-                pickNodeInTree($('a#'+req_data));
-                $('body').dequeue();
-            });
+    if (location.pathname.split('/')[2] == 'catalog'){
+        if (location.hash == "#1" || "#2" || "#3" || "#4"){
+            changeCatalog(location.hash.substr(1));
+        }
+    }else{
+        if (location.hash.length>2){
+            var req_data = location.hash.substr(1);
+            if (req_data.substr(0, 2)=='OR'){
+                var tieId = '';
+                $.ajax({
+                    type: "POST",
+                    url: "/getParentNode/",
+                    data: {reqId: window.location.pathname.substr(1,2) + req_data.substr(2), csrfmiddlewaretoken: '{{ csrf_token }}'},
+                    success: function(html){
+                        tieId = html;
+                        $('body').queue(function () {
+                            openTree('BR_' + tieId);
+                        });
+                        $('body').queue(function () {
+                            openTree('reqs_' + tieId);
+                            openTab('OR_' + window.location.pathname.substr(1,2) + req_data.substr(2));
+                            pickNodeInTree($('#OR_' + window.location.pathname.substr(1,2) + req_data.substr(2)));
+                            $('body').dequeue();
+                        });
+                    }
+                });
+            }else if(req_data.substr(0, 5)=='trash'){
+                openTrash();
+            }else{
+                $('body').queue(function () {
+                    req_data = req_data.substr(0,2) + '_' + window.location.pathname.substr(1,2) + req_data.substr(2);
+                    openTab(req_data);
+                    openTree(req_data);
+                    pickNodeInTree($('a#'+req_data));
+                    $('body').dequeue();
+                });
+            }
         }
     }
 });
-
-// Получить родительский узел для требования
-function getParentNode(reqId){
-//    console.log('req - ' + reqId);
-    return answer;
-}
 
 // Включить. выключить режим авторизованного пользователя.
 function LoggedIn(flag){
@@ -110,6 +109,7 @@ function LoggedIn(flag){
     }else{
         // скрыть инструменты редактирования
         $('.tools').hide();
+        $('.tools_up').hide();
         $('#basket').addClass('hidden');
     }
 }
@@ -123,16 +123,29 @@ window.onresize = function (){
 
 //Меняем продукт
 function changeProduct(name){
+    $('input#product_'+ name).attr('checked', true);
     window.location = '/' + name;
 }
 
-//------------------ДЕРЕВО-----------------------//
+//Показать или сткрыть всплывающее окно
+function showPopup(bool){
+    if(bool){
+        $('div.popup, .shadow').show();
+    }else{
+        $('div.popup').html('');
+        $('div.popup, .shadow').hide();
+    }
+}
+
+
+//------------------РАСКРЫТИЕ ДЕРЕВА-----------------------//
 
 //Развернуть дерево до нужного узла
 function openTree(tab_id){
     if ($('li#'+tab_id).hasClass('req')){
         var liId = tab_id;
-        $('li#req_'+tab_id + ' div:first p a.sc').removeClass('close_req').addClass('open_req');
+        $('li#'+tab_id).removeClass('noReqs');
+        $('li#'+tab_id + ' div:first p a.sc').removeClass('close_req').addClass('open_req');
     }else{
         liId = $('#'+tab_id).parent().parent().parent().parent().attr('id');
         pickNodeInTree($('#'+tab_id));
@@ -142,6 +155,7 @@ function openTree(tab_id){
         if ($('li#'+liId).hasClass('cl')){
             $('li#'+liId).removeClass('cl');
             $('li#'+liId + ' div:first p a.sc').removeClass('close_tie').addClass('open_tie');
+            pasteRequirements(liId);
         }
         liId = $('li#'+liId).parent().parent().attr('id')
     }
@@ -155,12 +169,13 @@ $('a.sc, span.req, span.folder').live('click', function(){
     if ($('li#'+liId).hasClass('cl')){
         $('li#'+liId).removeClass('cl');
         $('li#'+liId + ' div:first p a.sc').removeClass('close_tie').addClass('open_tie');
-        //если это папка с требованиями
-        if ($('li#'+liId).hasClass('req')){
-            //если требования не подгружены, получаем требования для узла по id узла
-            if ($('li#' + liId + ' ul').html() == '')pasteRequirements(liId);
-            $('li#'+liId + ' div:first p a.sc').removeClass('close_req').addClass('open_req');
-        }
+        if ($('li#' + liId + ' ul li.req ul').html() == '')pasteRequirements(liId);
+//        //если это папка с требованиями
+//        if ($('li#'+liId).hasClass('req')){
+//            //если требования не подгружены, получаем требования для узла по id узла
+//            if ($('li#' + liId + ' ul').html() == '')pasteRequirements(liId);
+//            $('li#'+liId + ' div:first p a.sc').removeClass('close_req').addClass('open_req');
+//        }
     //если узел развернут, сворачиваем
     }else{
         $('li#'+liId).addClass('cl');
@@ -173,25 +188,44 @@ $('a.sc, span.req, span.folder').live('click', function(){
 
 //Получить список требований для узла
 function pasteRequirements(liId){
-    $.ajax({
-        type: "POST",
-        url: "/getRequirements/",
-        data: {liId: liId, csrfmiddlewaretoken: '{{ csrf_token }}'},
-        success: function(html){
-            $('li#' + liId + ' ul').html(html);
-            $('body').dequeue();
-        }
-    });
+    if (!$('li#' + liId).hasClass('req')){
+        $.ajax({
+            type: "POST",
+            url: "/getRequirements/",
+            data: {liId: liId, csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(html){
+                if (html == ''){
+                    $('li#' + liId.replace('tie_', 'reqs_')).addClass('noReqs');
+                    $('body').dequeue();
+                }else{
+                    $('li#' + liId.replace('tie_', 'reqs_')).removeClass('noReqs');
+                    $('li#' + liId.replace('tie_', 'reqs_') + ' ul').html(html);
+                    $('body').dequeue();
+                }
+            }
+        });
+    }
+
 }
 
-//Открываем вкладку при клике по дереву
+//Открываем узел при клике по дереву ()
 $('a.open_tab.reqs, a.open_tie_in_tab').live('click', function(){
+    //если открытая вкладка находится в режиме редактирования
     if (EDITING){
-        console.log('Отмена редактирования узла ' + location.hash.substr(1).replace('req_','').replace('tab_description_tie_',''));
-        cancelEditNode(location.hash.substr(1));
+        if (confirm('Несохраненные данные будут потеряны, вы уверены, что хотите покинуть требование?')) {
+            // Отменеем режим редактирования, все несохраненные данные потеряны
+            cancelEditNode(location.hash.substr(1, 2) + '_' + window.location.pathname.substr(1,2) + location.hash.substr(3));
+            // отрываем новый узел
+            openTab($(this).attr('id'));
+            // Выделяем его в дереве
+            pickNodeInTree($(this));
+        }
+        // если не хотим потерять несохраненные данные ничего не делаем
+    }else{
+        openTab($(this).attr('id'));
+        pickNodeInTree($(this));
     }
-    openTab($(this).attr('id'));
-    pickNodeInTree($(this));
+
 
 });
 
@@ -202,7 +236,7 @@ function pickNodeInTree(a_object){
     a_object.parent().parent('p').addClass('active');
 }
 
-//------------------ОТКРЫТИЕ ВКЛАДОК-----------------------//
+//------------------ОТКРЫТИЕ ВКЛАДОК ДЕРЕВА-----------------------//
 
 //Открываем вкладку по id вкладки
 function openTab(object_id){
@@ -213,7 +247,7 @@ function openTab(object_id){
     getNodeContent(object_id);
 }
 
-//получаем данные по узлу
+//Открывает узел или папку или описание продукта
 function getNodeContent(object_id){
     if (object_id.substr(0,2)== 'PR' || object_id.substr(0,2)== 'NE'){
         $.ajax({
@@ -221,7 +255,6 @@ function getNodeContent(object_id){
             url: "/getNodeLessEditable/",
             data: {nodeId: object_id, csrfmiddlewaretoken: '{{ csrf_token }}'},
             success: function(html){
-                console.log(html, $('#tabs_content_block div.tabs.tab_'+object_id));
                 $('#tabs_content_block div.tabs.tab_'+object_id).html(html);
                 if (!LOGGED_IN) LoggedIn(false);
             }
@@ -256,11 +289,73 @@ function addTabNameToManageBlock(tab_name){
 //Показать содержимое вкладки
 function showTabContent(tabId){
     if (tabId != undefined){
-        console.log('Change location :'+ tabId );
         location.hash = tabId.replace('_' + window.location.pathname.substr(1,2), '');
     }
     $('#tabs_content_block div.tabs').hide();
     $('#tabs_content_block div.tabs.tab_'+tabId).show();
+}
+
+
+//------------------УДАЛЕНИЕ УЗЛОВ ДЕРЕВА-----------------------//
+
+//Всплывающая форма "Вы действительно хотите удалить узел?"
+function showDeleteNodePopup(node_id){
+    $('.deletion_form .cover_form').attr('id', node_id);
+    $('div.popup').html($('.deletion_form').html());
+    showPopup(true);
+}
+
+//Удалить узел
+function DeleteNode(node_id, comment){
+    console.log('Удаляем узел: ', node_id, comment);
+    if (comment=='Оставьте комметарий'){comment=''}
+    $.ajax({
+        type: "POST",
+        url: "/deleteNode/",
+        data: {node: node_id, comment:comment, csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(href){
+            showPopup(false);
+            window.location.href = href;
+            window.location.reload();
+        }
+    });
+}
+
+//------------------СОЗДАНИЕ УЗЛОВ ДЕРЕВА-----------------------//
+
+//Показать всплывающую форму "Создать новый узел"
+function showCreateTieForm(parent_id, type){
+    $('.add_node_form .cover_form').attr('id', parent_id);
+    $('.cover_form .confirm').attr('id', type);
+    $('div.popup').html($('.add_node_form').html());
+    if (type == 'OR') {
+        $('#add_node_name_text').val('Как называется новое требование?');
+    }else if (type == 'NE'){
+        $('#add_node_name_text').val('Как называется новая папка?');
+    }
+    showPopup(true);
+}
+
+//Создать новый узел
+function CreateTie(parent_id, type, name){
+    if (name=='Как называется твой новый узел?' || name.trim() == ''){
+        alert('Извините, но вы не можете создать узел без имени.')
+    }else{
+
+        $.ajax({
+            type: "POST",
+            url: "/addNode/",
+            data: {parent:parent_id, type:type, name:name, product:$('input[name=product]:checked').val(), csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(href){
+                showPopup(false);
+
+                window.location.href = href;
+                window.setTimeout(function(){
+                    window.location.reload();
+                }, 100);
+            }
+        });
+    }
 }
 
 
@@ -316,83 +411,6 @@ $('#add_node_name_text, #add_file_name_text, #add_release_name_text, #add_releas
     $(this).val('');
 });
 
-//Показать или сткрыть всплывающее окно
-function showPopup(bool){
-    if(bool){
-        $('div.popup, .shadow').show();
-    }else{
-        $('div.popup').html('');
-        $('div.popup, .shadow').hide();
-    }
-}
-
-//Всплывающая форма "Вы действительно хотите удалить узел?"
-function showDeleteNodePopup(node_id){
-      $('.deletion_form .cover_form').attr('id', node_id);
-      $('div.popup').html($('.deletion_form').html());
-      showPopup(true);
-}
-
-//Удалить узел
-function DeleteNode(node_id, comment){
-    console.log(node_id);
-    if (comment=='Оставьте комметарий'){comment=''}
-    $.ajax({
-        type: "POST",
-        url: "/deleteNode/",
-        data: {node: node_id, comment:comment, csrfmiddlewaretoken: '{{ csrf_token }}'},
-        success: function(href){
-            showPopup(false);
-            window.location.href = href;
-            window.location.reload();
-        }
-    });
-}
-
-//Показать всплывающую форму "Создать новый узел"
-function showCreateTieForm(parent_id, type){
-    console.log(parent_id);
-    $('.add_node_form .cover_form').attr('id', parent_id);
-    $('.cover_form .confirm.button').attr('id', type);
-    $('div.popup').html($('.add_node_form').html());
-    if (type == 'OR') {
-        console.log(type);
-        $('#add_node_name_text').val('Как называется новое требование?');
-    }
-    showPopup(true);
-}
-
-//Создать новый узел
-function CreateTie(parent_id, type, name){
-    if (name=='Как называется твой новый узел?' || name.trim() == ''){
-        alert('Извините, но вы не можете создать узел без имени.')
-    }else{
-        $.ajax({
-        type: "POST",
-        url: "/addNode/",
-        data: {parent:parent_id, type:type, name:name, product:$('input#product:checked').val(), csrfmiddlewaretoken: '{{ csrf_token }}'},
-        success: function(href){
-            showPopup(false);
-            console.log('LOG is ' + href);
-            window.location.href = href;
-            window.setTimeout(function(){
-                    window.location.reload();
-                }, 100);
-            }
-        });
-    }
-}
-
-//Получить идентикатор ссылки в дереве по id узла
-function getNodeId(id){
-    if ($('#tabs_content_block div.tabs.tab_description_tie_'+id).length > 0){
-        var nodeId = 'description_tie_'+id;
-    }else{
-        nodeId = 'req_'+id;
-    }
-    return nodeId;
-}
-
 //Редактировать узел
 function editNode(nodeId){
     $.ajax({
@@ -414,14 +432,12 @@ function editNode(nodeId){
 
 //Редактировать папку
 function editNodeLessEditable(nodeId){
-    console.log(nodeId);
     $.ajax({
         type: "POST",
         url: "/editNodeLessEditable/",
         data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(html){
             $('#tabs_content_block div.tabs.tab_' + nodeId).html(html);
-
             if ($('.table').hasClass('editable')){
                 EDITING = true;
                 window.setTimeout(function(){
@@ -432,30 +448,6 @@ function editNodeLessEditable(nodeId){
     });
 }
 
-//Отменить редактирование
-function cancelEditNode(nodeId){
-    if (EDITING){
-        $.ajax({
-            type: "POST",
-            url: "/cancelEditNode/",
-            data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
-            success: function(){
-                EDITING = false;
-                window.location.reload();
-            }
-        });
-    }
-}
-
-//При смене адреса выйти из режима редактирования.
-window.onbeforeunload = function() {
-    if (EDITING) {
-        console.log('Отмена редактирования узла ' + location.hash.substr(1).replace('req_','').replace('tab_description_tie_',''));
-        cancelEditNode(location.hash.substr(1).replace('req_','').replace('tab_description_tie_',''));
-        EDITING = false;
-    }
-};
-
 //показать форму добавления нового релиза
 function ShowAddReleaseForm(){
     $('div.popup').html($('.add_release_form').html());
@@ -464,7 +456,7 @@ function ShowAddReleaseForm(){
 
 //Добавление нового релиза
 function addRelease(){
-    var product = $('input#product:checked').val();
+//    var product = $('input#product:checked').val();
     var release_name = $('input#add_release_name_text').val();
     var release_number = $('input#add_release_number_text').val();
     var release_date = $('input#add_release_date_text').val();
@@ -479,11 +471,12 @@ function addRelease(){
     }else if(release_date == 'Год-месяц-день'|| release_date.trim() == ''){
         alert('Извините, но вы не можете создать релиз без даты выпуска.')
     }else{
+//        console.log(location.pathname.split('/')[1], release_date, release_name, release_description, release_number);
         $.ajax({
             type: "POST",
             url: "/addReleaseToNode/",
             data: {
-                product:product,
+                product:location.pathname.split('/')[1],
                 name:release_name,
                 number:release_number,
                 date:release_date,
@@ -491,7 +484,6 @@ function addRelease(){
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             },
             success: function(html){
-                console.log(html);
                 if (html.substr(0,7) == '<option'){
                     showPopup(false);
                     $('#selectRelease option').attr('selected', false);
@@ -500,7 +492,6 @@ function addRelease(){
                     $('input#add_release_date_text').addClass('mistake');
                     alert('Введите корректную дату. Формат даты должен быть: год-месяц-день. Например: 2011-08-23.');
                 }
-
             }
         });
     }
@@ -515,7 +506,6 @@ function AskWhy(item){
 
 //Записать в скрытом виде комментарий по смене статуса или релиза
 function addComment(item, comment){
-    console.log(comment);
     $('#'+item+'_comment').text(comment);
     showPopup(false);
 }
@@ -532,10 +522,24 @@ function saveNode(nodeId){
     if ($('#status_comment').val() == 'Оставьте комментарий тут'){ var desc_com =''}else{
         desc_com = $('#status_comment').val();
     }
-    $.ajax({
-        type: "POST",
-        url: "/saveNode/",
-        data: {
+    if ($('#selectStatus').val() == undefined  && $('#selectDeveloper').val() == undefined  && $('#selectTester').val()== undefined && $('#selectSource').val() == undefined && $('#selectRelease').val() == undefined){
+       var data = {
+           nodeId: nodeId,
+           title:$('#nodeTitle').val(),
+           status:'None',
+           status_comment:desc_com,
+           release:'None',
+           release_comment:desc_rel,
+           developer:'None',
+           tester:'None',
+           source:'None',
+           source_desc: 'None',
+           node_desc:CKEDITOR.instances.content_textArea.getData(),
+           files: files,
+           csrfmiddlewaretoken: '{{ csrf_token }}'
+       };
+    }else{
+        data = {
             nodeId: nodeId,
             title:$('#nodeTitle').val(),
             status:$('#selectStatus').val(),
@@ -545,11 +549,16 @@ function saveNode(nodeId){
             developer:$('#selectDeveloper').val(),
             tester:$('#selectTester').val(),
             source:$('#selectSource').val(),
-            source_desc:CKEDITOR.instances.source_textArea.getData(),
+            source_desc: CKEDITOR.instances.source_textArea.getData(),
             node_desc:CKEDITOR.instances.content_textArea.getData(),
             files: files,
             csrfmiddlewaretoken: '{{ csrf_token }}'
-        },
+        }
+    }
+    $.ajax({
+        type: "POST",
+        url: "/saveNode/",
+        data: data,
         success: function(html){
             $('#tabs_content_block div.tabs.tab_' + nodeId).html(html);
             EDITING = false;
@@ -603,6 +612,30 @@ function DeleteFile(file_id){
     });
 }
 
+//Отменить редактирование
+function cancelEditNode(nodeId){
+    if (EDITING){
+        $.ajax({
+            type: "POST",
+            url: "/cancelEditNode/",
+            data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(){
+                EDITING = false;
+                window.location.reload();
+            }
+        });
+    }
+}
+
+//TODO:При смене адреса выйти из режима редактирования.
+window.onbeforeunload = function() {
+    if (EDITING) {
+        console.log('Отмена редактирования узла ' +location.hash.substr(1, 2) + '_' + window.location.pathname.substr(1,2) + location.hash.substr(3));
+        cancelEditNode(location.hash.substr(1, 2) + '_' + window.location.pathname.substr(1,2) + location.hash.substr(3));
+        EDITING = false;
+    }
+};
+
 // Посмотреть историю узла
 function viewNodeHistory(nodeId){
     $.ajax({
@@ -614,6 +647,8 @@ function viewNodeHistory(nodeId){
         }
     });
 }
+
+//------------------КОРЗИНА-----------------------//
 
 // Открыть корзину
 function openTrash(){
@@ -634,7 +669,7 @@ function openTrash(){
     });
 }
 
-// При выделении узлов чекбоксами
+// При выделении узлов чекбоксами в корзине
 function checkTrash(){
     if ($('input[type=checkbox]:checked').length > 0){
         $('.panel li.repair').removeClass('disable').addClass('active');
@@ -662,4 +697,151 @@ function restoreTrash(){
 }
 
 
+//------------------Справочники-----------------------//
+function openCatalog(adress, id){
+    $.ajax({
+        type: "POST",
+        url: adress,
+        data: {product:location.pathname.split('/')[1], csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){
+            $('#tabs_content_block div.tabs.tab_cat_' + id).html(html);
+            if (id == '1') { checkColors(); openPicker(); }
+        }
+    });
+}
 
+function checkColors(){
+    $('input.statusCatalog').each(function (){
+        if ($(this).val()==''){
+            $(this).val($(this).attr('rel'));
+            $(this).parent().append($(this).attr('rel'));
+        }
+    });
+}
+function changeCatalog(cat_id){
+    location.hash = cat_id;
+    pickNodeInTree($('a#cat_'+cat_id));
+    addBlockForTabContent('cat_' + cat_id);
+    addTabNameToManageBlock($('a#cat_'+cat_id).html());
+    $('#tabs_content_block div.tabs').hide();
+    $('#tabs_content_block div.tabs.tab_cat_'+cat_id).show();
+    if (cat_id == 1){
+        openCatalog("/getStatusCatalog/", cat_id);
+    }else if (cat_id == 2){
+        openCatalog("/getSourceCatalog/", cat_id);
+    }else if(cat_id == 3){
+        openCatalog("/getReleaseCatalog/", cat_id)
+    }else if(cat_id == 4){
+        openCatalog("/getUsersCatalog/", cat_id)
+    }
+}
+
+//COLOR PICKER
+function openPicker(){
+    var f = $.farbtastic('#picker');
+    var p = $('#picker').css('opacity', 0.25);
+    var selected;
+    $('.statusCatalog')
+        .each(function () { f.linkTo(this); $(this).css('opacity', 0.75); })
+        .focus(function() {
+            if (selected) {
+                $(selected).css('opacity', 0.75);
+            }
+            f.linkTo(this);
+            p.css('opacity', 1);
+            $(selected = this).css('opacity', 1);
+        });
+
+
+}
+
+//Сохранить цвета для статусов
+function saveStatusesColors(){
+    var st = "";
+    $('input.statusCatalog').each(function(){st += $(this).val() + '; '});
+    $.ajax({
+        type: "POST",
+        url: "/saveStatuses/",
+        data: {colors: st, product:location.pathname.split('/')[1], csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){
+            $('#tabs_content_block div.tabs.tab_cat_1').html(html);
+            openPicker();
+        }
+    });
+}
+
+//Добавить источник
+function addSource(){
+    if ($('#new_source').val() == ''){
+        alert('Вы не можете добавить источник без названия.');
+    }else{
+        $.ajax({
+            type: "POST",
+            url: "/addSourceCatalog/",
+            data: {name: $('#new_source').val(), product:location.pathname.split('/')[1], csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(html){
+                $('#tabs_content_block div.tabs.tab_cat_2').html(html);
+
+            }
+        });
+    }
+}
+
+//Удалить источник
+function deleteSource(id){
+    if (confirm('Вы уверены, что хотите удалить источник?')){
+        $.ajax({
+            type: "POST",
+            url: "/deleteSourceCatalog/",
+            data: {id: id, product:location.pathname.split('/')[1], csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(html){
+                $('#tabs_content_block div.tabs.tab_cat_2').html(html);
+            }
+        });
+    }
+}
+
+//Удалить релиз
+function deleteRelease(id){
+    if (confirm('Вы уверены, что хотите удалить источник?')){
+        $.ajax({
+            type: "POST",
+            url: "/deleteReleaseCatalog/",
+            data: {id: id, product:location.pathname.split('/')[1], csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(html){
+                $('#tabs_content_block div.tabs.tab_cat_3').html(html);
+            }
+        });
+    }
+}
+
+//Редактировать релиз
+function editRelease(id){
+    $('.wideItem.underline.'+ id).html($('.wideItem.hidden.'+ id).html());
+}
+
+//Сохранить изменения в Релизе
+function saveRelease(id){
+    var status;
+    if ($('input[name=status_'+id+']').attr('checked')){status=true}else{status=false}
+    if ($('input[name=name_'+id+']').val() =='' || $('input[name=number_'+id+']').val()=='' ||  $('input[name=date_'+id+']').val()==''){
+        alert ('Поля: название, номер и дата выхода релиза обязательны для заполнения');
+    }else{
+        $.ajax({
+            type: "POST",
+            url: "/saveReleaseCatalog/",
+            data: {
+                id: id,
+                name: $('input[name=name_'+id+']').val(),
+                number: $('input[name=number_'+id+']').val(),
+                date: $('input[name=date_'+id+']').val(),
+                status: status,
+                description:$('textarea[name=description_'+id+']').val(),
+                product:location.pathname.split('/')[1],
+                csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(html){
+                $('#tabs_content_block div.tabs.tab_cat_3').html(html);
+            }
+        });
+    }
+}

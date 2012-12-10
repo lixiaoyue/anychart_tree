@@ -1,16 +1,16 @@
 <!doctype html>
 <html>
 <head>
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
     <title>AnyChart live tree</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" type="text/css" href="{{ media }}css/style.css" />{# Стили #}
-    <script type="text/javascript" src="{{ media }}js/jquery-1.8.0.min.js"></script>{# JQuery #}
-    <script type="text/javascript" src="{{ media }}js/jquery.dropotron-1.0.js"></script>{# Красивое меню наверху #}
-    <script type="text/javascript" src="{{ media }}ckeditor/ckeditor.js"></script>{# Делаем из texarea редактор #}
-    <script type="text/javascript" src="{{ media }}js/jquery.contextmenu.js"></script> {#Для реакции на правую кнопку мыши#}
-    <script type="text/javascript" src="{{ media }}js/main.js"></script> {# Файл с обработкой всех остальных событий - самый главный файл#}
+    <link rel="icon" type="image/ico" href="/media/i/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="/media/css/style.css" />{# Стили #}
+    <script type="text/javascript" src="/media/js/jquery-1.8.0.min.js"></script>{# JQuery #}
+    <script type="text/javascript" src="/media/js/jquery.dropotron-1.0.js"></script>{# Красивое меню наверху #}
+    <script type="text/javascript" src="/media/ckeditor/ckeditor.js"></script>{# Делаем из texarea редактор #}
+    <script type="text/javascript" src="/media/js/jquery.contextmenu.js"></script> {#Для реакции на правую кнопку мыши#}
+    <script type="text/javascript" src="/media/js/main.js"></script> {# Файл с обработкой всех остальных событий - самый главный файл#}
+    <script type="text/javascript" src="/media/js/farbtastic.js"></script> {# Выбор цвета #}
 </head>
 <body>
     <div class="shadow" onclick="showPopup(false)"></div>
@@ -18,16 +18,16 @@
     <div class='hidden add_node_form'>
         <div class="cover_form small">
             <input type='text' id='add_node_name_text' value='Как называется твой новый узел?'>
-            <div class="cancel button" onclick="showPopup(false)">
+            <div class="cancel">
+                <input type="button" onclick="showPopup(false)" value="Отменить">
                 <span class="delete"></span>
-                Отменить
-                <span class="end_button"></span>
             </div>
-            <div class="confirm button" onclick="CreateTie($(this).parent().attr('id'), $(this).attr('id'), $('#add_node_name_text').val())">
+
+            <div class="confirm" >
+                <input type="button"  onclick="CreateTie($(this).parent().parent().attr('id'), $(this).parent().attr('id'), $('#add_node_name_text').val())" value="Создать">
                 <span class="status_5"></span>
-                Создать
-                <span class="end_button"></span>
             </div>
+
         </div>
     </div>
     <div id="wrapper">
@@ -36,120 +36,51 @@
                 <h1><a href="/">AnyChart requirements tree</a></h1>
             </div>
             <div id="menu">
+
                 <div id='login_space'>
                     {% if user.is_authenticated %}
-                        Hi, {{ user.first_name }} {{ user.last_name }}! <a class="registration" href="{% url auth_logout %}">Выйти</a>
+                        Здравствуй, {{ user.first_name }} {{ user.last_name }}! <a class="registration {% for group in user.groups.all %} {{ group }} {% endfor %}" href="{% url auth_logout %}">Выйти</a>
                     {% else %}
-                        <a href="{% url auth_login %}">Log in</a>
+                        {% if cur_product %}
+                            <a href="{% url auth_login %}">Войти</a>
+                        {% else %}
+                            Для начала работы необходимо <a href="{% url auth_login %}">войти на сайт</a>
+                        {% endif %}
                     {% endif %}
                 </div>
-                <ul>
-                    <li><span class="opener">{{ cur_product.title }}<b></b></span>
-                        <ul>
-                            {%  for product in products %}
-                                <li>
-                                    <input type="radio" value="{{ product.id }}" id="product_{{ product.id }}" name = "product" {% if product == cur_product %} checked {% endif %}>
-                                    <label class="menu" for="product_{{ product.id }}" onclick="changeProduct('{{ product.short_name }}')">{{ product.title }}</label>
-                                </li>
-                            {% endfor  %}
-                        <li><a href="#">Новый проект</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <span class="opener">Справочники<b></b></span>
-                        <ul>
-                            <li><a href="#">Статусы требований </a></li>
-                            <li><a href="#">Источники требований </a></li>
-                            <li><a href="#">Релизы </a></li>
-                            <li><a href="#">Пользователи </a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">Статистика</a></li>
-                </ul>
+                {% if user.is_authenticated %}
+                    <ul>
+                        {% if cur_product %}
+                            <li><span class="opener">{{ cur_product.title }}<b></b></span>
+                                <ul>
+                                    {%  for product in products %}
+                                        <li onclick="changeProduct('{{ product.short_name }}')">
+                                            <input type="radio" value="{{ product.id }}" id="product_{{ product.short_name }}" name = "product" {% if product == cur_product %} checked {% endif %}>
+                                            <label class="menu" for="product_{{ product.short_name }}" >{{ product.title }}</label>
+                                        </li>
+                                    {% endfor  %}
+                                <li><a href="#">Новый проект</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <span class="opener">Справочники<b></b></span>
+                            <ul>
+                                <li><a href="/{{ cur_product.short_name }}/catalog/#1" onclick="changeCatalog(1)">Статусы требований </a></li>
+                                <li><a href="/{{ cur_product.short_name }}/catalog/#2" onclick="changeCatalog(2)">Источники требований </a></li>
+                                <li><a href="/{{ cur_product.short_name }}/catalog/#3" onclick="changeCatalog(3)">Релизы </a></li>
+                                <li><a href="/{{ cur_product.short_name }}/catalog/#4" onclick="changeCatalog(4)">Пользователи </a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Статистика</a></li>
+                    </ul>
+                {% endif %}
                 <br class="clearfix"/>
             </div>
         </div>
 
-        <div id="page">
-            <div id="sidebar">
-                <div class="treeview">
-                    <ul>
-                        <div class="contextMenu" id="popup_tie_menu">
-                            <ul>
-                                <li id="create_tie">Добавить узел</li>
-                                <li id="create_folder">Добавить папку</li>
-                            </ul>
-                        </div>
-                        <div class="contextMenu" id="popup_req_menu">
-                            <ul>
-                                <li id="add_req">Добавить требование</li>
-                            </ul>
-                        </div>
-                        <li>
-                            <div><p><a href="#" class="sc close_req"></a>
-                                <span class='folder right_active tie' style="color: #000;">
-                                    <a id="PR_{{ cur_product.short_name}}" class="open_tie_in_tab">{{ cur_product.title }}</a>
-                                </span></p></div>
-                            {% load mptt_tags %}
-                            <ul>
-                                {% recursetree nodes %}
-                                    {% if node.type == 'NE' %}
-                                        <li id="NE_{{ node.name_id }}" class="cl">
-                                            <div><p><a href="#" class="sc close_req"></a>
-                                                <span class='folder right_active tie' style="color: #000;">
-                                                    <a id="NE_{{ node.name_id }}" class="open_tie_in_tab">{{ node.title }}</a>
-                                                </span></p></div>
-                                            <ul>
-                                                {% if not node.is_leaf_node %}
-                                                    {{ children }}
-                                                {% endif %}
-                                            </ul>
-                                        </li>
-                                    {% else  %}
-                                        <li id="tie_{{ node.name_id }}" class="cl">
-                                            <div>
-                                                <p><a href="#" class="sc close_tie"></a> <span class="folder right_active tie"><a id="BR_{{ node.name_id }}" class="open_tie_in_tab" style="color: {{ node.cur_status.color }}">
-                                                <span class="status_{{ node.cur_status.id }}"></span>{{ node.title }}</a></span></p>
-                                            </div>
-                                            <ul>
-                                                <li id="reqs_{{ node.name_id }}" class="cl req">
-                                                    <div>
-                                                        <p>
-                                                            <a href="#" class="sc close_req"></a>  <span class="right_active req folder">Требования</span>
-                                                        </p>
-                                                    </div>
-                                                    <ul></ul>
-                                                </li>
-
-                                                {% if not node.is_leaf_node %}
-                                                    {{ children }}
-                                                {% endif %}
-                                            </ul>
-                                        </li>
-                                    {% endif %}
-                                {% endrecursetree %}
-                                <li id="basket" class="cl hidden">
-                                    <div><p><a href="#" class="sc trash" onclick="openTrash()"></a> <span style="color: #7A7A7A;" class="folder" onclick="openTrash()">Корзина</span></p></div>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div id="content">
-                <div id="tabs_manage_block">
-                    <ul>
-                        <li class="active"></li>
-                    </ul>
-                </div>
-                <div id="tabs_content_block"></div>
-                <div id="footer">
-                    Copyright (c) 2012 AnyChart.com. All rights reserved. Developed by AnyChart QA Department.
-                </div>
-            </div>
-            <br class="clearfix" />
-        </div>
-        <div class='hidden' id="hidden_block"></div>
+       {% include main_content %}
     </div>
 </body>
+
 </html>

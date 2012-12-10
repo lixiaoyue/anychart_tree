@@ -1,6 +1,6 @@
 <div class="panel">
     <div class="current">
-        <div class="status" style="color:{{ node.cur_status.color }}">
+        <div class="status" style="color:{{ node.cur_status.color }};{% for i in colorItems %}{% if i.status.id == node.cur_status.id %}color:{{ i.color }};{% endif %}{% endfor %}">
             <span class="status_{{ node.cur_status.id }}"></span>{{ node.cur_status.title }}
         </div>
     </div>
@@ -114,18 +114,10 @@
 
 
         <div class="margin"></div>
-        <div class="wideItem">Уточнения источника:</div>
+        <div class="wideItem">Уточнения источника <span>(ссылка на тикет или на обращение клиента):</span></div>
         <div class="wideItem">
             <textarea id='source_textArea' class="small_text" name='source_content'>{% if node.source_description %}{{ node.source_description|safe }}{% endif %}</textarea>
         </div>
-
-
-        <div class="margin"></div>
-        <div class="wideItem">Описание: </div>
-        <div class="wideItem">
-            <textarea id='content_textArea' class="big_text" name='description_content'>{% if node.content %} {{ node.content|safe }}{% endif %}</textarea>
-        </div>
-
         <div class="margin"></div>
         <div class="wideItem">
             <div class="files">
@@ -142,6 +134,14 @@
             </div>
         </div>
 
+        <div class="margin"></div>
+        <div class="wideItem description">Описание: </div>
+        <div class="wideItem">
+            <textarea id='content_textArea' class="big_text" name='description_content'>{% if node.content %} {{ node.content|safe }}{% endif %}</textarea>
+        </div>
+
+
+
         <textarea class="hidden" name='product' id='release_comment' ></textarea>
         <textarea class="hidden" name='product' id='status_comment' ></textarea>
         <input type=text class="hidden" id='cur_node_id' value="{{ node.id }}">
@@ -156,17 +156,17 @@
             <input type='text' name='node' id='node_id' value="{{ node.name_id }}" class="hidden" >
             <input type='text' name='name' id='add_file_name_text' value='Как называется твой новый файл?'>
             <input type="file" name='file' id="id_file">
-
-            <div class="cancel button" onclick="showPopup(false)">
+            <div class="cancel">
+                <input type="button" onclick="showPopup(false)" value="Отменить">
                 <span class="delete"></span>
-                Отменить
-                <span class="end_button"></span>
             </div>
-            <div class="confirm button"  onclick="SaveFile()">
+
+            <div class="confirm" >
+                <input type="submit"  onclick="SaveFile()" value="Добавить">
                 <span class="status_5"></span>
-                    <input type='submit' value="Добавить">
-                <span class="end_button"></span>
             </div>
+
+
         </form>
     </div>
 </div>
@@ -179,31 +179,30 @@
         <input type='text' name='release_number' id='add_release_number_text' value='Какой номер релиза?'>
         <input type='text' name='release_date' id='add_release_date_text' value="Год-месяц-день">
         <textarea name="release_description" id='release_description' >Оставьте описание релиза тут</textarea>
-        <div class="cancel button" onclick="showPopup(false)">
+        <div class="cancel">
+            <input type="button" onclick="showPopup(false)" value="Отменить">
             <span class="delete"></span>
-            Отменить
-            <span class="end_button"></span>
         </div>
-        <div class="confirm button"  onclick="addRelease()">
+
+        <div class="confirm" >
+            <input type="button"  onclick="addRelease()" value="Добавить">
             <span class="status_5"></span>
-            Добавить
-            <span class="end_button"></span>
         </div>
+
     </div>
 </div>
 
 <div class='hidden ask_why'>
     <div class="cover_form">
         <textarea name="release_description" id='change_description' >Оставьте комментарий тут</textarea>
-        <div class="cancel button" onclick="showPopup(false)">
+        <div class="cancel">
+            <input type="button" onclick="showPopup(false)" value="Отменить">
             <span class="delete"></span>
-            Отменить
-            <span class="end_button"></span>
         </div>
-        <div class="confirm button"  onclick="addComment($(this).parent().attr('id'), $('#change_description').val())">
+
+        <div class="confirm" >
+            <input type="button"  onclick="addComment($(this).parent().parent().attr('id'), $('#change_description').val())" value="Сохранить">
             <span class="status_5"></span>
-            Сохранить
-            <span class="end_button"></span>
         </div>
     </div>
 </div>

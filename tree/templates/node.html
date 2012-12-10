@@ -1,6 +1,6 @@
 <div class="panel">
     <div class="current">
-        <div class="status" style="color:{{ node.cur_status.color }}">
+        <div class="status" style="color:{{ node.cur_status.color }};{% for i in colorItems %}{% if i.status.id == node.cur_status.id %}color:{{ i.color }};{% endif %}{% endfor %}">
             <span class="status_{{ node.cur_status.id }}"></span>{{ node.cur_status.title }}
         </div>
         <br class="clearfix"/>
@@ -27,13 +27,13 @@
 <div class="second_panel">
     <table class="people">
         {% if  node.curator %}
-            <tr><td class="staff">Куратор: </td><td><a href="mailto:{{ node.curator.emil }}">{{ node.curator.first_name }} {{ node.curator.last_name }}</a></td></tr>
+            <tr><td class="staff">Куратор: </td><td><a href="mailto:{{ node.curator.email }}">{{ node.curator.first_name }} {{ node.curator.last_name }}</a></td></tr>
         {% endif %}
         {% if  node.developer %}
-            <tr><td class="staff">Разработчик: </td><td><a href="mailto:{{ node.developer.emil }}">{{ node.developer.first_name }} {{ node.developer.last_name }}</a></td></tr>
+            <tr><td class="staff">Разработчик: </td><td><a href="mailto:{{ node.developer.email }}">{{ node.developer.first_name }} {{ node.developer.last_name }}</a></td></tr>
         {% endif %}
         {% if  node.tester %}
-            <tr><td class="staff">Тестировщик: </td><td><a href="mailto:{{ node.tester.emil }}">{{ node.tester.first_name }} {{ node.tester.last_name }}</a></td></tr>
+            <tr><td class="staff">Тестировщик: </td><td><a href="mailto:{{ node.tester.email }}">{{ node.tester.first_name }} {{ node.tester.last_name }}</a></td></tr>
         {% endif %}
     </table>
 
@@ -79,15 +79,15 @@
 <div class='hidden deletion_form'>
     <div class="cover_form">
         <textarea id='deletion_comment'>Оставьте комметарий</textarea>
-        <div class="cancel button" onclick="showPopup(false)">
+
+        <div class="cancel">
+            <input type="button" onclick="showPopup(false)" value="Отменить">
             <span class="delete"></span>
-            Отменить
-            <span class="end_button"></span>
         </div>
-        <div class="confirm button" onclick="DeleteNode($(this).parent().attr('id'), $('#deletion_comment').val())">
+
+        <div class="confirm" >
+            <input type="button"  onclick="DeleteNode($(this).parent().parent().attr('id'), $('#deletion_comment').val())" value="Удалить">
             <span class="status_5"></span>
-            Удалить
-            <span class="end_button"></span>
         </div>
     </div>
 </div>

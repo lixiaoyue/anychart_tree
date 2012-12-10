@@ -1,0 +1,27 @@
+<div id="home_page">
+    {% if user.is_authenticated %}
+        <div class="start_work">
+            <p>Для начала работы выберите продукт:</p>
+            <ul>
+                {%  for product in products %}
+                    <li onclick="changeProduct('{{ product.short_name }}')">
+                        {{ product.title }} ({{ product.short_name }})
+                    </li>
+                {% endfor  %}
+            </ul>
+            <p>Или начните создавать требования к <a href="#">новому продукту</a></p>
+        </div>
+    {% endif %}
+    <div class="tree_description">
+        <p>AnyChart requirements tree - это продукт, разработанный компанией AnyChart, для внутреннего использования.
+        Продукт предназначен для написания требований к продуктам компании, разработан отделом тестирования, но пока протестировать его было некому.</p>
+        <p>Временные материалы взяты с сайта компании <a href="http://anychart.com" target="_blank">anychart</a>. </p>
+    </div>
+
+</div>
+
+<div id="footer">
+    Copyright (c) 2012 AnyChart.com. All rights reserved. Developed by AnyChart QA Department.
+</div>
+
+

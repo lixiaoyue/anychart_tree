@@ -1,0 +1,35 @@
+<div class="table">
+    <div class='content_node' style="padding-top: 20px">
+            <table class="release">
+                <thead>
+                <tr>
+{#                    <th></th>#}
+                    <th>Имя</th>
+                    <th>Фамилия</th>
+                    <th>Email</th>
+                    <th>Группы</th>
+                </tr>
+                </thead>
+                {% for user in users %}
+                    <tr class="wideItem underline {{ item.id  }}">
+{#                        <td></td>#}
+                        <td>{{ user.first_name }} </td>
+                        <td>{{ user.last_name }}</td>
+                        <td><a href="mailto:{{user.email}}">{{ user.email  }} </a></td>
+                        <td> {% for group in user.groups.all %} {{ group }}; {% endfor %}</td>
+
+                    </tr>
+                    <tr class="wideItem hidden {{ item.id  }}">
+                        <td><span class="save node" onclick="saveRelease({{ item.id }})"></span></td>
+                        <td><input type="checkbox" name="status_{{ item.id }}" {% if item.status %} checked="true" {% endif %}></td>
+                        <td><input  style="width: 75%" type="text" value="{{ item.name }}" name="name_{{ item.id }}"> </td>
+                        <td><input type="text" value="{{ item.number }}" name="number_{{ item.id }}"> </td>
+                        <td><input type="text" value="{{ item.date|date:"Y-m-d" }}" name="date_{{ item.id }}"> </td>
+
+                    </tr>
+                {% endfor %}
+
+
+            </table>
+    </div>
+</div>

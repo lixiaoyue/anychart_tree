@@ -2,35 +2,154 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.template.context import RequestContext
 from django.shortcuts import render_to_response
-#from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.conf import settings
 from app.models import *
 import datetime
-from django.utils import formats
+
 
 DELETED = Status.objects.get(id = 6)
-media = settings.MEDIA_URL
 NOT_AVAILABLE_NODES = {}
 
-# Стартовая страница - строим дерево узлов
+# Стартовая страница
 def homePage(request):
     products = Product.objects.all()
-    cur_product = Product.objects.get(id=1)
-    nodes = Node.objects.filter(product = 1).exclude(type = 'OR').exclude(cur_status = DELETED)
     user = request.user
-    return render_to_response('index.html',{'media':media, 'nodes':nodes,'user':user, 'products' : products, 'cur_product':cur_product})
+    return render_to_response('index.html',{'main_content':'main.html', 'user':user, 'products' : products, })
 
 
+# Страница дерева продукта
 def productPage(request, name):
     products = Product.objects.all()
     try:
         cur_product = Product.objects.get(short_name=name)
         nodes = Node.objects.filter(product = cur_product.id).exclude(type = 'OR').exclude(cur_status = DELETED)
         user = request.user
+        return render_to_response('index.html',{'main_content':'tree.html', 'nodes':nodes,'user':user, 'products' : products, 'cur_product':cur_product, 'colorItems': StatusColorUser.objects.filter(user = request.user.id)})
     except Exception:
         homePage(request)
-    return render_to_response('index.html',{'media':media, 'nodes':nodes,'user':user, 'products' : products, 'cur_product':cur_product})
+
+# Страница справочников
+def catalogs(request, name):
+    cur_product = Product.objects.get(short_name=name)
+    products = Product.objects.all()
+    user = request.user
+    return render_to_response('index.html',{'main_content':'catalog.html', 'user':user, 'products' : products, 'cur_product':cur_product})
+
+#Получаем словарь Статусов
+@csrf_exempt
+def getStatusCatalog(request):
+    statuses = Status.objects.all()
+    colorItems = StatusColorUser.objects.filter(user = request.user.id)
+    cur_product = Product.objects.get(short_name = request.POST['product'])
+    return render_to_response('statusCatalog.html',{
+        'statuses':statuses,
+        'cur_product':cur_product,
+        'colorItems': colorItems
+    })
+
+#Сохраням цвета для статусов
+@csrf_exempt
+def saveStatuses(request):
+    statuses = Status.objects.all()
+    colors = request.POST['colors'].split('; ')
+    for index, status in enumerate(statuses):
+        try:
+            item = StatusColorUser.objects.get(user = request.user, status = status)
+        except Exception:
+            item = StatusColorUser(user = request.user, status = status)
+        item.color = colors[index]
+        item.save()
+    return getStatusCatalog(request)
+
+#Получаем словарь Источников
+@csrf_exempt
+def getSourceCatalog(request):
+    cur_product = Product.objects.get(short_name = request.POST['product'])
+    return render_to_response('sourceCatalog.html',{
+        'sources': Source.objects.all(),
+        'cur_product':cur_product
+    })
+
+# Добавить источник
+@csrf_exempt
+def addSourceCatalog(request):
+    Source(source = request.POST['name']).save()
+    sources = Source.objects.all()
+    cur_product = Product.objects.get(short_name = request.POST['product'])
+    return render_to_response('sourceCatalog.html',{
+        'sources':sources,
+        'cur_product':cur_product
+    })
+
+# Удалить источник
+@csrf_exempt
+def deleteSourceCatalog(request):
+    Source.objects.get(id = request.POST['id']).delete()
+    sources = Source.objects.all()
+    cur_product = Product.objects.get(short_name = request.POST['product'])
+    return render_to_response('sourceCatalog.html',{
+        'sources':sources,
+        'cur_product':cur_product
+    })
+
+#Получаем словарь Релизов
+@csrf_exempt
+def getReleaseCatalog(request):
+    cur_product = Product.objects.get(short_name = request.POST['product'])
+    cant_delete = []
+    for item in Release.objects.filter(product = cur_product):
+        nodes = Node.objects.filter(cur_release = item)
+        if nodes:
+            cant_delete.append(item)
+    return render_to_response('releaseCatalog.html',{
+        'releases': Release.objects.filter(product = cur_product),
+        'cur_product':cur_product,
+        'cant_delete':cant_delete
+    })
+
+#Удалить Релиз
+@csrf_exempt
+def deleteReleaseCatalog(request):
+    cur_product = Product.objects.get(short_name = request.POST['product'])
+    Release.objects.get(id = request.POST['id']).delete()
+    return getReleaseCatalog(request)
+
+#Сохранить изменения в релизе
+@csrf_exempt
+def saveReleaseCatalog(request):
+    try:
+        release = Release.objects.get(id = request.POST['id'])
+    except Exception:
+        release = Release()
+        pass
+    release.name = request.POST['name']
+    release.product = Product.objects.get(short_name = request.POST['product'])
+    release.number= request.POST['number']
+    if  request.POST['status'] == 'true':
+        release.status= True
+    else:
+        release.status= False
+    release.date= request.POST['date']
+    release.description= request.POST['description']
+    try:
+        release.save()
+    except Exception as e:
+        return HttpResponse(e.args)
+    return getReleaseCatalog(request)
+
+
+
+
+# Получаем словарь пользователей
+@csrf_exempt
+def getUsersCatalog(request):
+    users = User.objects.all()
+    cur_product = Product.objects.get(short_name = request.POST['product'])
+    return render_to_response('userCatalog.html',{
+        'users':users,
+        'cur_product':cur_product
+    })
 
 # Получаем все требования для узла
 @csrf_exempt
@@ -38,7 +157,7 @@ def getRequirements(request):
     message = ''
     if request.is_ajax():
         if request.method == 'POST':
-            tie_id = request.POST['liId'].replace('reqs_','')
+            tie_id = request.POST['liId'].replace('tie_','')
             reqs = Node.objects.filter(parent__name_id = tie_id, type = 'OR').exclude(cur_status = DELETED)
             for req in reqs:
                 message += '''<li><div><p>
@@ -53,7 +172,8 @@ def getNodeDescription(request):
         if request.method == 'POST':
             node_id = request.POST['nodeId']
             node = Node.objects.get(name_id = node_id)
-    return render_to_response("node.html", {'node':node})
+            return render_to_response("node.html", {'node':node,'colorItems': StatusColorUser.objects.filter(user = request.user.id)})
+    return HttpResponse('POST: ' + str(request.POST))
 
 # Получить id родительского узла для требования
 @csrf_exempt
@@ -67,14 +187,13 @@ def getParentNode(request):
 # Удалить узел
 @csrf_exempt
 def deleteNode(request):
-    node = Node.objects.get(name_id = request.POST['node'].split('_')[1])
-    delete_node_children(node.id)
-    changeStatusInNode(node.id, DELETED, request.POST['comment'])
-    if node.parent == 'None':
-        return HttpResponse('/')
-    if node.parent.type == 'NE':
-        return HttpResponse('/')
-    return HttpResponse('/#BR_%s' % node.parent.name_id)
+    if request.method == 'POST':
+        node = Node.objects.get(name_id = request.POST['node'].split('_')[1])
+        delete_node_children(node.id)
+        changeStatusInNode(node.id, DELETED, request.POST['comment'])
+        if node.parent == 'None':
+            return HttpResponse('/')
+        return HttpResponse('/%s/#%s-%s' % (node.product.short_name, node.type, node.parent.name_id))
 
 # Удалить детей узла (Id узла)
 def delete_node_children(node_id):
@@ -122,31 +241,37 @@ def addNode(request):
         node.title = request.POST['name']
         node.product = product
         node.name_id = product.short_name + '-' + str(i + 1)
-#        return HttpResponse(request.POST['parent'][:2])
         if request.POST['parent'][:2] != 'PR':
             node.parent = Node.objects.get(name_id = request.POST['parent'].split('_')[1])
         node.type = request.POST['type']
         node.curator = request.user
         node.cur_status = Status.objects.get(id = 1)
+        node.creation_date = datetime.datetime.now()
         node.save()
         changeStatusInNode(node.id, node.cur_status, comment='Just created')
-        return HttpResponse('/#%s_%s' % (node.type, node.name_id))
-
+        return HttpResponse('/%s/#%s-%s %s' % (node.product.short_name, node.type, node.name_id.split('-')[1], last_added_node.title))
 
 # Открыть режим редактирования узла
 @csrf_exempt
 def editNode(request):
     if request.method == 'POST':
         node = Node.objects.get(name_id = request.POST['nodeId'].split('_')[1])
-        if NOT_AVAILABLE_NODES.has_key(node.id) and NOT_AVAILABLE_NODES[node.id] != request.user.get_full_name():
-            return HttpResponse('Error: %s is editing node.' % NOT_AVAILABLE_NODES[node.id])
+        if NOT_AVAILABLE_NODES.has_key(node.name_id) and NOT_AVAILABLE_NODES[node.name_id] != request.user.get_full_name():
+            return HttpResponse('Оперция не возможна: %s еще не закончил редактирование %s.' % (NOT_AVAILABLE_NODES[node.name_id], node.title))
         else:
-            NOT_AVAILABLE_NODES[node.id] = request.user.get_full_name()
+            NOT_AVAILABLE_NODES[node.name_id] = request.user.get_full_name()
+        statuses = []
+        if node.cur_status.id > 1:
+            statuses.append(Status.objects.get(id = int(node.cur_status.id) - 1))
+        statuses.append(Status.objects.get(id = int(node.cur_status.id)))
+        if node.cur_status.id < 5:
+            statuses.append(Status.objects.get(id = int(node.cur_status.id) + 1))
         return render_to_response("editNode.html", {
             'node':node,
-            'statuses':Status.objects.all(),
+            'colorItems': StatusColorUser.objects.filter(user = request.user.id),
+            'statuses':statuses,
             'sources': Source.objects.all(),
-            'releases': Release.objects.all(),
+            'releases': Release.objects.filter(product = node.product).filter(status = False),
             'developers': User.objects.filter(groups__name='developers'),
             'testers': User.objects.filter(groups__name='testers')
         }, context_instance=RequestContext(request))
@@ -158,21 +283,10 @@ def getNodeLessEditable(request):
         type = request.POST['nodeId'].split('_')[0]
         if type == 'PR':
             product = Product.objects.get(short_name = request.POST['nodeId'].split('_')[1])
-#            return HttpResponse(product.title)
-            return render_to_response("nodeLessEditable.html", {'product':product}, context_instance=RequestContext(request))
-
-#            if NOT_AVAILABLE_NODES.has_key(product.short_name) and NOT_AVAILABLE_NODES[product.short_name] != request.user.get_full_name():
-#                return HttpResponse('Error: %s is editing node.' % NOT_AVAILABLE_NODES[product.short_name])
-#            else:
-#                NOT_AVAILABLE_NODES[product.short_name] = request.user.get_full_name()
-#            return render_to_response("nodeLessEditable.html", {'product':product})
-#        elif type == 'NE':
-#            node = Node.objects.get(name_id = request.POST['nodeId'].split('_')[1])
-#            if NOT_AVAILABLE_NODES.has_key(node.id) and NOT_AVAILABLE_NODES[node.id] != request.user.get_full_name():
-#                return HttpResponse('Error: %s is editing node.' % NOT_AVAILABLE_NODES[node.id])
-#            else:
-#                NOT_AVAILABLE_NODES[node.id] = request.user.get_full_name()
-#                return render_to_response("nodeLessEditable.html", {'node':node}, context_instance=RequestContext(request))
+            return render_to_response("folder.html", {'product':product})
+        elif type == 'NE':
+            node = Node.objects.get(name_id = request.POST['nodeId'].split('_')[1])
+            return render_to_response("folder.html", {'node':node}, context_instance=RequestContext(request))
 
 # Открыть режим редактирования Папки или Продукта
 @csrf_exempt
@@ -182,38 +296,40 @@ def editNodeLessEditable(request):
         if type == 'PR':
             product = Product.objects.get(short_name = request.POST['nodeId'].split('_')[1])
             if NOT_AVAILABLE_NODES.has_key(product.short_name) and NOT_AVAILABLE_NODES[product.short_name] != request.user.get_full_name():
-                return HttpResponse('Error: %s is editing node.' % NOT_AVAILABLE_NODES[product.short_name])
+                return HttpResponse('Оперция не возможна: %s еще не закончил редактирование %s.' % (NOT_AVAILABLE_NODES[product.short_name], product.title))
             else:
                 NOT_AVAILABLE_NODES[product.short_name] = request.user.get_full_name()
-                return render_to_response("editNodeLessEditable.html", {'product':product}, context_instance=RequestContext(request))
+                return render_to_response("editFolder.html", {'product':product}, context_instance=RequestContext(request))
         elif type == 'NE':
             node = Node.objects.get(name_id = request.POST['nodeId'].split('_')[1])
-            if NOT_AVAILABLE_NODES.has_key(node.id) and NOT_AVAILABLE_NODES[node.id] != request.user.get_full_name():
-                return HttpResponse('Error: %s is editing node.' % NOT_AVAILABLE_NODES[node.id])
+            if NOT_AVAILABLE_NODES.has_key(node.name_id) and NOT_AVAILABLE_NODES[node.name_id] != request.user.get_full_name():
+                return HttpResponse('Оперция не возможна: %s еще не закончил редактирование %s.' % (NOT_AVAILABLE_NODES[node.name_id], node.title))
             else:
-                NOT_AVAILABLE_NODES[node.id] = request.user.get_full_name()
-                return render_to_response("editNodeLessEditable.html", {'node':node}, context_instance=RequestContext(request))
-
-
+                NOT_AVAILABLE_NODES[node.name_id] = request.user.get_full_name()
+                return render_to_response("editFolder.html", {'node':node}, context_instance=RequestContext(request))
 
 
 # Отменить режим редактирования узла
 @csrf_exempt
 def cancelEditNode(request):
     if request.method == 'POST':
-        node = Node.objects.get(name_id = request.POST['nodeId'].split('_')[1])
-        try:
-            del NOT_AVAILABLE_NODES[node.id]
-            return HttpResponse('ok')
-        except Exception as e:
-            return HttpResponse(e.message)
+        if request.POST['nodeId'].split('_')[0] == 'PR':
+            product = Product.objects.get(short_name = request.POST['nodeId'].split('_')[1])
+            if NOT_AVAILABLE_NODES.has_key(product.short_name):
+                del NOT_AVAILABLE_NODES[product.short_name]
+                return HttpResponse('Node id to delete ' + product.short_name)
+        else:
+            node = Node.objects.get(name_id = request.POST['nodeId'].split('_')[1])
+            if NOT_AVAILABLE_NODES.has_key(node.name_id):
+                del NOT_AVAILABLE_NODES[node.name_id]
+                return HttpResponse('Node id to delete ' + node.name_id)
     return HttpResponse('The method was\'t POST for some mystic reasons')
 
 # Добавить новый релиз, и вернуться в режиме редактирования
 @csrf_exempt
 def addingReleaseInNode(request):
     if request.method == 'POST':
-        product = Product.objects.get(id = request.POST['product'])
+        product = Product.objects.get(short_name = request.POST['product'])
         description = request.POST['description']
         if description == u'Оставьте комментарий тут':
             description =''
@@ -237,12 +353,13 @@ def addingReleaseInNode(request):
 # Сохранить все изменения по узлу и вернуться в режим чтения.
 @csrf_exempt
 def saveNode(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.POST['nodeId'].split('_')[0] != 'PR':
         node = Node.objects.get(name_id = request.POST['nodeId'].split('_')[1])
-        if node.cur_status != Status.objects.get(id = request.POST['status']):
-            changeStatusInNode(node.id, Status.objects.get(id = request.POST['status']),request.POST['status_comment'])
+        if request.POST['status'] != 'None' :
+            if node.cur_status != Status.objects.get(id = request.POST['status']):
+                changeStatusInNode(node.id, Status.objects.get(id = request.POST['status']),request.POST['status_comment'])
         node.title = request.POST['title']
-        if request.POST['release'] != 'None':
+        if request.POST['release'] != 'None' :
             if node.cur_release != Release.objects.get(id = request.POST['release']):
                 changeReleaseInNode(node.id, Release.objects.get(id = request.POST['release']), request.POST['release_comment'])
                 node.cur_release = Release.objects.get(id = request.POST['release'])
@@ -256,21 +373,32 @@ def saveNode(request):
             node.developer = User.objects.get(id = request.POST['developer'])
         else:
             node.developer = None
-        if request.POST['tester']!='None':
+        if request.POST['tester']!='None' :
             node.tester = User.objects.get(id = request.POST['tester'])
         else:
             node.tester = None
-        if request.POST['source'] != 'None':
+        if request.POST['source'] != 'None' :
             node.source = Source.objects.get(id = request.POST['source'])
         else:
             node.source = None
         node.source_description = request.POST['source_desc']
         node.content = request.POST['node_desc']
+        node.creation_date = node.creation_date
         node.save()
-        if NOT_AVAILABLE_NODES.has_key(node.id):
-            del NOT_AVAILABLE_NODES[node.id]
+        if NOT_AVAILABLE_NODES.has_key(node.name_id):
+            del NOT_AVAILABLE_NODES[node.name_id]
+        if node.type == 'NE':
+            return render_to_response("folder.html", {'node':node})
         return render_to_response("node.html", {'node':node})
-    return HttpResponse('Not a POST for some reason : ' + str(request.method))
+    elif request.POST['nodeId'].split('_')[0] == 'PR':
+        product = Product.objects.get(short_name = request.POST['nodeId'].split('_')[1])
+        product.title = request.POST['title']
+        product.description = request.POST['node_desc']
+        product.save()
+        if NOT_AVAILABLE_NODES.has_key(product.short_name):
+            del NOT_AVAILABLE_NODES[product.short_name]
+        return render_to_response("folder.html", {'product':product})
+    return HttpResponse('Not a POST for some reason : ' + str(request.POST['title']))
 
 # Сохраняем новые фыйлы для узла
 @csrf_exempt
@@ -327,7 +455,7 @@ def nodeHistory(request):
             node = Node.objects.get(name_id = request.POST['nodeId'].split('_')[1])
             statusHistory = StatusHistory.objects.filter(id_node = node.id).order_by('-date')
             releaseHistory = ReleaseHistory.objects.filter(id_node = node.id).order_by('-date')
-    return render_to_response("history.html", {'node':node, 'statusHistory':statusHistory,'releaseHistory':releaseHistory})
+    return render_to_response("history.html", {'node':node, 'statusHistory':statusHistory,'releaseHistory':releaseHistory, 'colorItems': StatusColorUser.objects.filter(user = request.user.id)})
 
 # Открываем корзину
 @csrf_exempt
@@ -337,6 +465,7 @@ def openTrash(request):
     requirements = StatusHistory.objects.filter(id_node__in = deletedNodes).filter(id_status = 6).filter(id_node__type = 'OR').order_by('-date')
     return render_to_response("trash.html", {'nodes':checkForRepeatable(nodes), 'requirements':checkForRepeatable(requirements)})
 
+# Убираем повторения истории узла
 def checkForRepeatable(nodesHistory):
     existing_nodes = []
     for i, node in enumerate(nodesHistory):
@@ -358,8 +487,8 @@ def restoreTrash(request):
     return HttpResponse('ok')
 
 
-
 def checking(request):
+#    NOT_AVAILABLE_NODES = {}
     return HttpResponse(str(NOT_AVAILABLE_NODES))
 
 

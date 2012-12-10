@@ -1,0 +1,81 @@
+<div id="page">
+    <div id="sidebar">
+        <div class="treeview">
+            <ul>
+                <div class="contextMenu" id="popup_tie_menu">
+                    <ul>
+                        <li id="create_tie">Добавить узел</li>
+                        <li id="create_folder">Добавить папку</li>
+                    </ul>
+                </div>
+                <div class="contextMenu" id="popup_req_menu">
+                    <ul>
+                        <li id="add_req">Добавить требование</li>
+                    </ul>
+                </div>
+                <li>
+                    <div><p><a href="#" class="sc close_req"></a>
+                        <span class='folder right_active tie' style="color: #000;">
+                            <a id="PR_{{ cur_product.short_name}}" class="open_tie_in_tab">{{ cur_product.title }}</a>
+                        </span></p></div>
+                    {% load mptt_tags %}
+                    <ul>
+                        {% recursetree nodes %}
+                            {% if node.type == 'NE' %}
+                                <li id="NE_{{ node.name_id }}" class="cl">
+                                    <div><p><a href="#" class="sc close_req"></a>
+                                        <span class='folder right_active tie' style="color: #000;">
+                                            <a id="NE_{{ node.name_id }}" class="open_tie_in_tab">{{ node.title }}</a>
+                                        </span></p></div>
+                                    <ul>
+                                        {% if not node.is_leaf_node %}
+                                            {{ children }}
+                                        {% endif %}
+                                    </ul>
+                                </li>
+                            {% else  %}
+                                <li id="tie_{{ node.name_id }}" class="cl">
+                                    <div>
+                                        <p><a href="#" class="sc close_tie"></a> <span class="folder right_active tie">
+                                            <a id="BR_{{ node.name_id }}" class="open_tie_in_tab" style="color:{{ node.cur_status.color }};{% for i in colorItems %}{% if i.status.id == node.cur_status.id %}color:{{ i.color }};{% endif %}{% endfor %}">
+                                        <span class="status_{{ node.cur_status.id }}"></span>{{ node.title }}</a></span></p>
+                                    </div>
+                                    <ul>
+                                        <li id="reqs_{{ node.name_id }}" class="cl req">
+                                            <div>
+                                                <p>
+                                                    <a href="#" class="sc close_req"></a>  <span class="right_active req folder">Требования</span>
+                                                </p>
+                                            </div>
+                                            <ul></ul>
+                                        </li>
+
+                                        {% if not node.is_leaf_node %}
+                                            {{ children }}
+                                        {% endif %}
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        {% endrecursetree %}
+                        <li id="basket" class="cl hidden">
+                            <div><p><a href="#" class="sc trash" onclick="openTrash()"></a> <span style="color: #7A7A7A;" class="folder" onclick="openTrash()">Корзина</span></p></div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="content">
+        <div id="tabs_manage_block">
+            <ul>
+                <li class="active"></li>
+            </ul>
+        </div>
+        <div id="tabs_content_block"></div>
+        <div id="footer">
+            Copyright (c) 2012 AnyChart.com. All rights reserved. Developed by AnyChart QA Department.
+        </div>
+    </div>
+    <br class="clearfix" />
+</div>
+<div class='hidden' id="hidden_block"></div>

@@ -1,0 +1,59 @@
+<div id="page">
+    <div id="sidebar">
+        <div class="treeview">
+            <ul>
+                <li>
+                    <div><p><a href="#" class="sc close_req"></a>
+                        <span class="folder" >
+                            <a style="color: #104E8B; font-weight: bold;">Справочники</a>
+                        </span></p>
+                    </div>
+                    <ul>
+                        <li>
+                            <div>
+                                <p><a onclick="changeCatalog(1)" id='cat_1'>Статусы требований </a>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <p class="active"><a onclick="changeCatalog(2)" id='cat_2'>Источники требований </a>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <p><a onclick="changeCatalog(3)" id='cat_3'>Релизы </a>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <p><a onclick="changeCatalog(4)" id='cat_4'> Пользователи</a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <div>
+                        <div><p>
+                        <span class="folder" >
+                            <a style="color: #104E8B; font-weight: bold;" href="/{{ cur_product.short_name }}/">Назад к дереву требований</a>
+                        </span></p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="content">
+        <div id="tabs_manage_block">
+            <ul>
+                <li class="active"></li>
+            </ul>
+        </div>
+        <div id="tabs_content_block"></div>
+        <div id="footer">
+            Copyright (c) 2012 AnyChart.com. All rights reserved. Developed by AnyChart QA Department.
+        </div>
+    </div>
+    <br class="clearfix" />
+</div>
+<div class='hidden' id="hidden_block"></div>

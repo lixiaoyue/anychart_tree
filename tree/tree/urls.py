@@ -8,6 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url('^$', homePage),
     url('^([A-Z]{1,2})/$', productPage),
+    url('^([A-Z]{1,2})/catalog/$', catalogs),
     url(r'^getRequirements/$', getRequirements),
     url(r'^getNode/$', getNodeDescription),
     url(r'^deleteNode/$', deleteNode),
@@ -23,10 +24,21 @@ urlpatterns = patterns('',
     url(r'^openTrash/$', openTrash),
     url(r'^restoreTrash/$', restoreTrash),
     url(r'^getParentNode/$', getParentNode),
-
     url(r'^getNodeLessEditable/$', getNodeLessEditable),
-
     url(r'^editNodeLessEditable/$', editNodeLessEditable),
+
+    url(r'^getStatusCatalog/$', getStatusCatalog),
+    url(r'^saveStatuses/$', saveStatuses),
+    url(r'^getSourceCatalog/$', getSourceCatalog),
+    url(r'^addSourceCatalog/$', addSourceCatalog),
+    url(r'^deleteSourceCatalog/$', deleteSourceCatalog),
+    url(r'^getReleaseCatalog/$', getReleaseCatalog),
+    url(r'^deleteReleaseCatalog/$', deleteReleaseCatalog),
+    url(r'^saveReleaseCatalog/$', saveReleaseCatalog),
+
+    url(r'^getUsersCatalog/$', getUsersCatalog),
+
+
     url(r'^check/$', checking),
 
     (r'^ckeditor/', include('ckeditor.urls')),

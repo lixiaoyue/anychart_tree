@@ -1,4 +1,25 @@
-{% block content %}
-    <h1>Выход</h1>
-    Спасибо, что были с нами. Ждем вас снова.<br/><br/><a href="{% url auth_login %}">Вернуться</a>
-{% endblock %}
+<!doctype html>
+<html>
+<head>
+    <title>AnyChart live tree</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="icon" type="image/ico" href="/media/i/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="/media/css/style.css" />{# Стили #}
+
+</head>
+<body>
+    <div class="login">
+        {% block content %}
+            <h1>Выход</h1>
+
+            <p>Вы можете:</p>
+            <ul>
+                <li><a href="{% url auth_login %}">Войти снова</a></li>
+                <li><a href="/">Вернуться на сайт</a></li>
+            </ul>
+            <p>Спасибо, что были с нами!</p>
+
+        {% endblock %}
+    </div>
+</body>
+</html>

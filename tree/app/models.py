@@ -38,6 +38,17 @@ class Status(models.Model):
         verbose_name = _(u'статус')
         verbose_name_plural = _(u'Статусы')
 
+
+class StatusColorUser(models.Model):
+    user = models.ForeignKey(User, verbose_name = u'Пользователь')
+    status = models.ForeignKey(Status, verbose_name = u'Статус')
+    color = models.CharField(max_length=7, verbose_name=u'Цвет')
+    def __unicode__(self):
+        return self.status.title
+    class Meta:
+        verbose_name = _(u'цвет статуса')
+        verbose_name_plural = _(u'Цвета статуса')
+
 class Source(models.Model):
     source = models.CharField(max_length=300, verbose_name=u'Источник')
     def __unicode__(self):
@@ -70,7 +81,7 @@ class Node(MPTTModel):
     cur_release = models.ForeignKey(Release, null=True, blank=True, verbose_name = u'Текущий релиз')
     source = models.ForeignKey(Source, null=True, blank=True, verbose_name = u'Источник')
     source_description = models.CharField(max_length=300,null=True, blank=True, verbose_name=u'Описание источника')
-    creation_date = models.DateTimeField(auto_now=True, verbose_name=u'Время создания')
+    creation_date = models.DateTimeField(verbose_name=u'Время создания')
     last_modified_date = models.DateTimeField(auto_now=True, verbose_name=u'Время последнего изменения')
     content = RichTextField(blank=True, null=True, verbose_name=u'Текст')
     files = models.ManyToManyField(File,  null=True, blank=True, verbose_name=u'Файлы')
