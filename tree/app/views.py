@@ -190,7 +190,7 @@ def deleteNode(request):
         changeStatusInNode(node.id, DELETED, request.POST['comment'])
         if node.parent == 'None':
             return HttpResponse('/')
-        return HttpResponse('/%s/#%s-%s' % (node.product.short_name, node.type, node.parent.name_id.replace(node.product.short_name + '-', '')))
+        return HttpResponse('/%s/#%s-%s' % (node.product.short_name, node.parent.type, node.parent.name_id.replace(node.product.short_name + '-', '')))
 
 # Удалить детей узла (Id узла)
 def delete_node_children(node_id):
