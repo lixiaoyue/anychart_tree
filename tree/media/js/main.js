@@ -124,7 +124,8 @@ window.onresize = function (){
 //Меняем продукт
 function changeProduct(name){
     $('input#product_'+ name).attr('checked', true);
-    window.location.pathname = '/' + name;
+    var st = 'http://'+ window.location.host +'/' + name +'/';
+    window.location.href = st;
 }
 
 //Показать или сткрыть всплывающее окно
