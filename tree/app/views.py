@@ -15,7 +15,7 @@ NOT_AVAILABLE_NODES = {}
 def homePage(request):
     products = Product.objects.all()
     user = request.user
-    return render_to_response('index.html',{'main_content':'main.html', 'user':user, 'products' : products, })
+    return render_to_response('index.html',{'main_content':'main.html', 'user':user, 'products' : products, 'media_root':settings.MEDIA_ROOT})
 
 
 # Страница дерева продукта
