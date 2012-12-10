@@ -8,8 +8,8 @@ $(function(){
     //делаем меню красивым
     $('#menu > ul').dropotron({
         mode: 'fade',
-        globalOffsetY: 5,
-        offsetY: -15
+        globalOffsetY: 4,
+        offsetY: -16
     });
     $('#tabs_content_block').html('');
     //устанавливаем высоту объектов в зависимости от высоты экрана

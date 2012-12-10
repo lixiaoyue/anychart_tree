@@ -1,15 +1,11 @@
+# -*- coding: utf-8 -*-
 import os
-#def rel(*x):
-#    return os.path.join(os.path.abspath(os.path.dirname(__file__)),'../', *x)
-
 def rel(*x):
     return os.path.join(os.path.dirname(os.path.abspath(__file__)),'../', *x)
 
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-ADMINS = ( #('olga', 'olga@irnok.net'),
-    )
+ADMINS = (('olga', 'vorobyeva.rykova@gmail.com'), )
 MANAGERS = ADMINS
 
 DATABASES = {
@@ -45,14 +41,12 @@ FEINCMS_ADMIN_MEDIA = '/static/feincms/'
 FEINCMS_ADMIN_MEDIA_LOCATION = os.path.join(MEDIA_ROOT, 'static', 'feincms')
 STATIC_ROOT = ''
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-# Put strings here, like "/home/html/static" or "C:/www/django/static".
-)
+STATICFILES_DIRS = ()
+
 TEMPLATE_DIRS = (rel('templates'), os.path.join(rel('feincms'), 'templates'), os.path.join(rel('templates'),'catalogs'))
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
     )
 
 SECRET_KEY = 'oc878%&amp;3lz0q$qb6o!p-4*dx)57emr92&amp;$6vpukci@6f1#p1$q'
@@ -60,7 +54,6 @@ SECRET_KEY = 'oc878%&amp;3lz0q$qb6o!p-4*dx)57emr92&amp;$6vpukci@6f1#p1$q'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-    #     'django.template.loaders.eggs.Loader',
     )
 
 MIDDLEWARE_CLASSES = (
@@ -69,12 +62,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     )
 
 ROOT_URLCONF = 'tree.urls'
-
-# Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'tree.wsgi.application'
 
 INSTALLED_APPS = (

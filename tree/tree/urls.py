@@ -1,14 +1,15 @@
+# -*- coding: utf-8 -*-
 from django.conf.urls import patterns, include, url
-from django.conf import settings
-from app.views import *
-from django.views.generic.simple import direct_to_template
 from django.contrib import admin
+from app.views import *
 admin.autodiscover()
 
 urlpatterns = patterns('',
     url('^$', homePage),
     url('^([A-Z]{1,2})/$', productPage),
     url('^([A-Z]{1,2})/catalog/$', catalogs),
+
+    #Получение данных ajax
     url(r'^getRequirements/$', getRequirements),
     url(r'^getNode/$', getNodeDescription),
     url(r'^deleteNode/$', deleteNode),
@@ -27,6 +28,7 @@ urlpatterns = patterns('',
     url(r'^getNodeLessEditable/$', getNodeLessEditable),
     url(r'^editNodeLessEditable/$', editNodeLessEditable),
 
+    #Cправочники
     url(r'^getStatusCatalog/$', getStatusCatalog),
     url(r'^saveStatuses/$', saveStatuses),
     url(r'^getSourceCatalog/$', getSourceCatalog),
@@ -35,19 +37,14 @@ urlpatterns = patterns('',
     url(r'^getReleaseCatalog/$', getReleaseCatalog),
     url(r'^deleteReleaseCatalog/$', deleteReleaseCatalog),
     url(r'^saveReleaseCatalog/$', saveReleaseCatalog),
-
     url(r'^getUsersCatalog/$', getUsersCatalog),
-
 
     url(r'^check/$', checking),
 
-    (r'^ckeditor/', include('ckeditor.urls')),
-
     url(r'^accounts/', include('registration.urls')),
-    url(r'^accounts/profile/$', homePage),
     url(r'^admin/', include(admin.site.urls)),
+
+    (r'^ckeditor/', include('ckeditor.urls')),
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root':'./media/'}),
+
 )
-if settings.DEBUG:
-    urlpatterns += patterns('',
-        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root':'./media/'}),
-    )
