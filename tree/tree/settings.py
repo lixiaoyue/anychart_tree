@@ -40,7 +40,7 @@ MEDIA_URL = '/media/'
 FEINCMS_ADMIN_MEDIA = '/static/feincms/'
 FEINCMS_ADMIN_MEDIA_LOCATION = os.path.join(MEDIA_ROOT, 'static', 'feincms')
 STATIC_ROOT = ''
-STATIC_URL = '/media/admin/'
+STATIC_URL = '/media/static/'
 STATICFILES_DIRS = ()
 
 TEMPLATE_DIRS = (rel('templates'), os.path.join(rel('feincms'), 'templates'), os.path.join(rel('templates'),'catalogs'))
