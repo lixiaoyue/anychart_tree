@@ -1,6 +1,10 @@
 import os
+#def rel(*x):
+#    return os.path.join(os.path.abspath(os.path.dirname(__file__)),'../', *x)
+
 def rel(*x):
-    return os.path.join(os.path.abspath(os.path.dirname(__file__)),'../', *x)
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)),'../', *x)
+
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
