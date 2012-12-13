@@ -7,8 +7,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url('^$', homePage),
-    url('^([A-Z]{1,2})/$', productPage),
-    url('^([A-Z]{1,2})/catalog/$', catalogs),
+    url('^([A-Z]{1,6})/$', productPage),
+    url('^([A-Z]{1,6})/catalog/$', catalogs),
 
     #Получение данных ajax
     url(r'^getRequirements/$', getRequirements),

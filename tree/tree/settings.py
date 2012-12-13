@@ -42,8 +42,9 @@ FEINCMS_ADMIN_MEDIA_LOCATION = os.path.join(MEDIA_ROOT, 'static', 'feincms')
 STATIC_ROOT = ''
 STATIC_URL = '/media/static/'
 STATICFILES_DIRS = ()
-
 TEMPLATE_DIRS = (rel('templates'), os.path.join(rel('feincms'), 'templates'), os.path.join(rel('templates'),'catalogs'))
+
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
