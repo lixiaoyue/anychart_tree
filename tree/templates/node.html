@@ -59,10 +59,8 @@
 </div>
 
 <div class='description'>
-    <div>
-        {% for file in node.files.all %}
-            <a href="/media/{{ file.file }}" target="_blank">{{ file.name }}</a>;
-        {% endfor %}
+    <div class="node_files">
+
     </div>
 
     {% if  node.content %}

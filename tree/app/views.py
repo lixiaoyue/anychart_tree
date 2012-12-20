@@ -6,7 +6,8 @@ from django.http import HttpResponse
 from django.conf import settings
 from app.models import *
 import datetime
-
+import shutil
+import os
 
 DELETED = Status.objects.get(id = 6)
 NOT_AVAILABLE_NODES = {}
@@ -400,49 +401,35 @@ def saveNode(request):
 # Сохраняем новые фыйлы для узла
 @csrf_exempt
 def addingFilesInNodes(request):
-    try:
-        new_file = File.objects.create(
-            file=request.FILES['file'],
-            name = request.FILES['file'].name
-        )
-        if request.POST['name'] != u'Как называется твой новый файл?' and request.POST['name'].strip() != '':
-            extension = new_file.name.split('.')[-1]
-            new_file.name = new_file.name.replace(new_file.name[:new_file.name.find(extension)-1], request.POST['name'])
-        new_file.save()
-        print 'name : "'  + new_file.name
-        print 'node from POST : "'  + request.POST['node']
-        node = Node.objects.get(name_id = request.POST['node'])
-        print 'node :' + node.name_id
-        node.files.add(new_file)
-        return HttpResponse('<a id="file_%s" href="/media%s">%s</a>' %(new_file.id, new_file.file, new_file.name))
-    except Exception as e:
-        return HttpResponse('Message from adding file is : \n' + e.message)
+    name = request.FILES['file'].name
+    temp_file = File.objects.create(file=request.FILES['file'])
+    if request.POST['name'] != u'Как называется твой новый файл?' and request.POST['name'].strip() != '':
+        temp_file.name = request.POST['name'] + '.' + name.split('.')[1]
+    temp_file.save()
+    node = Node.objects.get(name_id = request.POST['node'])
+    target = os.path.join(settings.MEDIA_ROOT, 'files', node.name_id)
+    if not os.path.exists(target):
+        os.mkdir(target)
+    shutil.copy(os.path.join(settings.MEDIA_ROOT, temp_file.file.path), os.path.join(target, temp_file.name))
+    temp_file.delete()
+    os.remove(os.path.join(settings.MEDIA_ROOT, temp_file.file.path))
+    return HttpResponse('<a href="/media/files%s">%s</a>' % (os.path.join(node.name_id, temp_file.file.path) , temp_file.name))
 
 # Получаем список фалов для узла
 @csrf_exempt
 def getFiles(request):
-    if request.method == 'POST':
-        try:
-            node = Node.objects.get(name_id = request.POST['node'])
-            message= ''
-            for file in node.files.all():
-                message += '<span class="file"><a id="f_%s" href="/media/%s" target="_blank">%s</a><span class="delete" id ="file_%s"></span>;</span> ' %(file.id, file.file, file.name, file.id)
-            return HttpResponse(message)
-        except Exception as e:
-            return HttpResponse('Message from get Files is : \n' + str(e.args))
-    return HttpResponse('Not POST type of ajax : \n' + str(request.method))
+    path = os.path.join(settings.MEDIA_ROOT, 'files', request.POST['node'])
+    message= ''
+    for root, dirs, files in os.walk(path):
+        for fn in files:
+            message += '<span class="file"><a href="/media/files/%s" target="_blank">%s</a><span class="delete" onclick=\'DeleteFile("%s")\'></span>;</span>' % (os.path.join(request.POST['node'],fn), fn, os.path.join(request.POST['node'],fn))
+    return HttpResponse(message)
 
 # Удаляем файл узла
 @csrf_exempt
 def deleteFile(request):
-    if request.method == 'POST':
-        try:
-            file = File.objects.get(id = request.POST['file_id'])
-            file.delete()
-            return HttpResponse('File deleted')
-        except Exception as e:
-            return HttpResponse('Message from get Files is : \n' + str(e.args))
-    return HttpResponse('Not POST type of ajax : \n' + str(request.method))
+    os.remove(os.path.join(settings.MEDIA_ROOT, 'files', request.POST['file_path']))
+    return HttpResponse( 'Deleted ' + os.path.join(settings.MEDIA_ROOT, 'files', request.POST['file_path']))
 
 # Просмотр истории изменений с узлом
 @csrf_exempt

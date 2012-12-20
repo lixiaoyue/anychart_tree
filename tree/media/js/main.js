@@ -3,6 +3,17 @@
 var LOGGED_IN = false; // если false,  то никто не залогинен
 var EDITING = false; // если false, но все можно нажимать, никакой узел не находиться в состоянии редактирования.
 
+var currentNode = {name:'', type:''}; // Имя-идентефикатор текущего открытого узла
+
+/* Идентефикаторы элементов списка в js дереве (li#)
+    NE_currentNode - узел - папка
+    tie_currentNode - узел - бизнес-требование
+    reqs_currentNode - папка с требованиями для узла tie_currentNode
+    OR_currentNode - ссылка - требование
+    BR_currentNode - ссылка - требование
+*/
+
+
 //выполняем сразу при загрузке страницы:
 $(function(){
     //делаем меню красивым
@@ -20,41 +31,60 @@ $(function(){
     if ($('#login_space a').hasClass('registration') && $('#login_space a').hasClass('curators')) {LoggedIn(true);}
     else{LoggedIn(false);}
 
-    // Показываем вкладку которая в hash
+/*  Выясняем где мы находимся. Мы можем быть
+    1. "/"      - дома, страница инициализации
+    "/Product/" - на странице продукта (редактирование и просмотр дерева требований)
+    "/Product/catalog" - на странице справочников продукта
+    "/Product/statistic" - на странице статистики продукта
+*/
+    // если это каталог, то выясняем, какой справочник открывать
     if (location.pathname.split('/')[2] == 'catalog'){
         if (location.hash == "#1" || "#2" || "#3" || "#4"){
             changeCatalog(location.hash.substr(1));
         }
+    // если это страница статистки
+    }else if (location.pathname.split('/')[2] == 'statistic'){
+        //TODO: Тут пока никто незнает что делать надо, но делать чего-то надо
+    // Если не статистика и не каталог, значит мы в каком-то продукте.
     }else{
+        // если hash не пуст. значит нужно открыть какой-то узел или корзину
         if (location.hash.length>2){
-            var req_data = location.hash.substr(1);
-            if (req_data.substr(0, 2)=='OR'){
-                var tieId = '';
+            currentNode['name'] = location.pathname.split('/')[1] + location.hash.substr(3);
+            // если это корзина, открываем корзину
+            if(location.hash.substr(1, 6)=='trash'){
+                openTrash();
+            // если это (не)функциональное требование, нужно сначала подгрузить все требования для родительского узла в дереве, а затем его открыть
+            }else if (location.hash.substr(1, 3)=='OR'){
                 $.ajax({
                     type: "POST",
                     url: "/getParentNode/",
-                    data: {reqId: window.location.pathname.substr(1,2) + req_data.substr(2), csrfmiddlewaretoken: '{{ csrf_token }}'},
-                    success: function(html){
-                        tieId = html;
+                    data: {reqId: currentNode['name'], csrfmiddlewaretoken: '{{ csrf_token }}'},
+                    success: function(parentId){
+                        //получили parentId - id родительского узла для требования
                         $('body').queue(function () {
-                            openTree('BR_' + tieId);
+                            //раскрываем дерево до родительского узла
+                            openTree('BR_' + parentId);
                         });
                         $('body').queue(function () {
-                            openTree('reqs_' + tieId);
-                            openTab('OR_' + window.location.pathname.substr(1,2) + req_data.substr(2));
-                            pickNodeInTree($('#OR_' + window.location.pathname.substr(1,2) + req_data.substr(2)));
+                            //раскрываем дерево требования родительского узла
+                            openTree('reqs_' + parentId);
+                            //открываем требование
+                            openTab('OR_' + currentNode['name']);
+                            //выделяем открытое требование подсветкой
+                            pickNodeInTree($('#OR_' + currentNode['name']));
                             $('body').dequeue();
                         });
                     }
                 });
-            }else if(req_data.substr(0, 5)=='trash'){
-                openTrash();
+            // если это бизнес-требование,или папка или описание продукта, то просто открываем его для просмотра, location.hash.substr(1, 3) - укажет нам тип (остались: BR, NE или PR)
             }else{
                 $('body').queue(function () {
-                    req_data = req_data.substr(0,2) + '_' + window.location.pathname.substr(1,2) + req_data.substr(2);
-                    openTab(req_data);
-                    openTree(req_data);
-                    pickNodeInTree($('a#'+req_data));
+                    //раскрываем дерево до нужного узла
+                    openTree(location.hash.substr(1, 2) + '_' + currentNode['name']);
+                    //открываем требование
+                    openTab(location.hash.substr(1, 2) + '_' + currentNode['name']);
+                    //выделяем открытое требование подсветкой
+                    pickNodeInTree($('a#'+location.hash.substr(1, 2) + '_' + currentNode['name']));
                     $('body').dequeue();
                 });
             }
@@ -242,13 +272,40 @@ function pickNodeInTree(a_object){
 //Открываем вкладку по id вкладки
 function openTab(object_id){
     var obj = $('a#'+object_id);
+    //добавляем блок для содержимого вкладки
     addBlockForTabContent(object_id);
+    //добавляем название вкладки
     addTabNameToManageBlock(obj.html());
+    //Показать контейнер для содержимого вкладки
     showTabContent(object_id);
+    //Получает содержимое и записывает в контейнер
     getNodeContent(object_id);
 }
 
-//Открывает узел или папку или описание продукта
+
+//Добавляем блок для содержимого вкладки
+function addBlockForTabContent(block_id){
+    if ($('.tabs.tab_'+block_id).length <=0){
+        $('#tabs_content_block').append('<div class="tabs tab_'+block_id+'"> </div>');
+    }
+
+}
+//Добавляем название вкладки
+function addTabNameToManageBlock(tab_name){
+    $('#tabs_manage_block ul li.active').html(tab_name);
+    $('#tabs_manage_block li.active span').remove();
+}
+
+//Показать контейнер для содержимого вкладки
+function showTabContent(tabId){
+    if (tabId != undefined){
+        location.hash = tabId.replace('_' + window.location.pathname.substr(1,2), '');
+    }
+    $('#tabs_content_block div.tabs').hide();
+    $('#tabs_content_block div.tabs.tab_'+tabId).show();
+}
+
+//Получает содержимое узла, или папки, или описание продукта и записывает в контейнер
 function getNodeContent(object_id){
     if (object_id.substr(0,2)== 'PR' || object_id.substr(0,2)== 'NE'){
         $.ajax({
@@ -268,35 +325,11 @@ function getNodeContent(object_id){
             success: function(html){
                 $('#tabs_content_block div.tabs.tab_'+object_id).html(html);
                 if (!LOGGED_IN) LoggedIn(false);
+                getFiles(currentNode['name']);
             }
         });
     }
 }
-
-//добавляем блок для содержимого вкладки
-function addBlockForTabContent(block_id){
-    if ($('.tabs.tab_'+block_id).length <=0){
-        $('#tabs_content_block').append('<div class="tabs tab_'+block_id+'"> </div>');
-    }
-
-}
-
-//добавляем название вкладки
-function addTabNameToManageBlock(tab_name){
-    $('#tabs_manage_block ul li.active').html(tab_name);
-    $('#tabs_manage_block li.active span').remove();
-}
-
-//Показать содержимое вкладки
-function showTabContent(tabId){
-    if (tabId != undefined){
-        location.hash = tabId.replace('_' + window.location.pathname.substr(1,2), '');
-    }
-    $('#tabs_content_block div.tabs').hide();
-    $('#tabs_content_block div.tabs.tab_'+tabId).show();
-}
-
-
 //------------------УДАЛЕНИЕ УЗЛОВ ДЕРЕВА-----------------------//
 
 //Всплывающая форма "Вы действительно хотите удалить узел?"
@@ -425,6 +458,7 @@ function editNode(nodeId){
                 EDITING = true;
                 window.setTimeout(function(){
                     makeEditors(nodeId);
+                    getFiles(currentNode['name']);
                 }, 300);
             }
         }
@@ -575,40 +609,40 @@ function ShowAddfileForm(){
 
 //добавить новый файл к узлу
 function SaveFile(){
-    $("#loadingFile").submit(
-        function(){
+    $("#loadingFile").submit(function(){
             setTimeout(function(){
-                $.ajax({
-                    type: "POST",
-                    url: "/getFiles/",
-                    data: {
-                        node: $('input#node_id').val(),
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                    },
-                    success: function(html){
-                        $('.node_files').html(html);
-                        showPopup(false);
-                    }
-                });
+                getFiles($('input#node_id').val());
             }, 500);
         });
 }
 
+//Получить все файлы, сохраненные для этого узла
+function getFiles(node_id){
+    $.ajax({
+        type: "POST",
+        url: "/getFiles/",
+        data: {
+            node: node_id,
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function(html){
+            $('.node_files').html(html);
+            showPopup(false);
+        }
+    });
+}
+
 //удаление файлов из узла
-$('.file span.delete').live('click', function(){
-    DeleteFile($(this).attr('id').replace('file_',''))
-});
-function DeleteFile(file_id){
+function DeleteFile(path){
     $.ajax({
         type: "POST",
         url: "/deleteFile/",
         data: {
-            file_id: file_id,
+            file_path: path,
             csrfmiddlewaretoken: '{{ csrf_token }}'
         },
         success: function(html){
-            $('span#file_'+file_id).parent().remove();
-            console.log(html);
+            getFiles($('input#node_id').val());
         }
     });
 }

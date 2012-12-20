@@ -128,9 +128,7 @@
                 </span>
             </div>
             <div class="node_files">
-                {% for file in node.files.all %}
-                    <span class="file"><a id='f_{{ file.id }}' href="/media/{{ file.file }}" target="_blank">{{ file.name }}</a><span id='file_{{ file.id }}' class="delete"></span>;</span>
-                {% endfor %}
+
             </div>
         </div>
 
