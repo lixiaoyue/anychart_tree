@@ -23,8 +23,8 @@
                 <span class="delete"></span>
             </div>
 
-            <div class="confirm" >
-                <input type="button"  onclick="CreateTie($(this).parent().parent().attr('id'), $(this).parent().attr('id'), $('#add_node_name_text').val())" value="Создать">
+            <div class="confirm" onclick="CreateTie($(this).parent().attr('id'), $(this).attr('id'), $('#add_node_name_text').val())">
+                <input type="button"  value="Создать">
                 <span class="status_5"></span>
             </div>
 
