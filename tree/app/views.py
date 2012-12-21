@@ -4,6 +4,7 @@ from django.template.context import RequestContext
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.conf import settings
+from django.db.models import Q
 from app.models import *
 import datetime
 import shutil
@@ -153,19 +154,17 @@ def getUsersCatalog(request):
 @csrf_exempt
 def getRequirements(request):
     message = ''
-    if request.is_ajax():
-        if request.method == 'POST':
-            tie_id = request.POST['liId'].replace('tie_','')
-            reqs = Node.objects.filter(parent__name_id = tie_id, type = 'OR').exclude(cur_status = DELETED)
-            for req in reqs:
-                colors = StatusColorUser.objects.filter(user = request.user.id).filter(status = req.cur_status.id)
-                if colors:
-                    color = colors[0]
-                else:
-                    color = req.cur_status.color
-                message += '''<li><div><p>
-                        <a id="OR_%s" class="open_tab reqs" style="color:%s"><span class = "status_%s"></span> %s </a>
-                        </p></div></li>''' %(req.name_id, color.color , req.cur_status.id, req.title)
+    tie_id = request.POST['liId'].replace('tie_','')
+    reqs = Node.objects.filter(parent__name_id = tie_id, type = 'OR').exclude(cur_status = DELETED)
+    for req in reqs:
+        colors = StatusColorUser.objects.filter(Q(user = request.user.id) | Q(status = req.cur_status.id))
+        if colors:
+            color = colors[0]
+        else:
+            color = req.cur_status.color
+        message += '''<li><div><p>
+                <a id="OR_%s" class="open_tab reqs" style="color:%s"><span class = "status_%s"></span> %s </a>
+                </p></div></li>''' %(req.name_id, color.color , req.cur_status.id, req.title)
     return HttpResponse(message)
 
 # Получить данные про узел

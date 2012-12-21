@@ -64,17 +64,16 @@ $(function(){
                         $('body').queue(function () {
                             //раскрываем дерево до родительского узла
                             openTree('BR_' + parentId);
+                            $('body').dequeue();
                         });
                         $('body').queue(function () {
                             //раскрываем дерево требования родительского узла
                             openTree('reqs_' + parentId);
+                            $('body').dequeue();
                         });
                         $('body').queue(function () {
                             //открываем требование
-                            console.log('OR_' + currentNode['name']);
                             openTab('OR_' + currentNode['name']);
-                        });
-                        $('body').queue(function () {
                             //выделяем открытое требование подсветкой
                             pickNodeInTree($('#OR_' + currentNode['name']));
                             $('body').dequeue();
@@ -218,6 +217,7 @@ $('a.sc, span.req, span.folder').live('click', function(){
 
 //Получить список требований для узла
 function pasteRequirements(liId){
+    console.log(liId);
     if (!$('li#' + liId).hasClass('req')){
         $.ajax({
             type: "POST",
@@ -274,6 +274,7 @@ function openTab(object_id){
     //добавляем блок для содержимого вкладки
     addBlockForTabContent(object_id);
     //добавляем название вкладки
+
     addTabNameToManageBlock(obj.html());
     //Показать контейнер для содержимого вкладки
     showTabContent(object_id);
