@@ -68,8 +68,13 @@ $(function(){
                         $('body').queue(function () {
                             //раскрываем дерево требования родительского узла
                             openTree('reqs_' + parentId);
+                        });
+                        $('body').queue(function () {
                             //открываем требование
+                            console.log('OR_' + currentNode['name']);
                             openTab('OR_' + currentNode['name']);
+                        });
+                        $('body').queue(function () {
                             //выделяем открытое требование подсветкой
                             pickNodeInTree($('#OR_' + currentNode['name']));
                             $('body').dequeue();
