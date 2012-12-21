@@ -38,7 +38,6 @@ class Status(models.Model):
         verbose_name = _(u'статус')
         verbose_name_plural = _(u'Статусы')
 
-
 class StatusColorUser(models.Model):
     user = models.ForeignKey(User, verbose_name = u'Пользователь')
     status = models.ForeignKey(Status, verbose_name = u'Статус')
@@ -60,12 +59,9 @@ class Source(models.Model):
 class File(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True, verbose_name=u'Название файла')
     file = models.FileField(upload_to='files/tmp/')
-    date = models.DateTimeField(auto_now=True)
     def __unicode__(self):
         return self.name
-    class Meta:
-        verbose_name = _(u'файл')
-        verbose_name_plural = _(u'Файлы')
+
 
 NODES_TYPES = (('NE', 'non_editable'), ('BR','business_requirement'), ('OR','other_requirement'))
 class Node(MPTTModel):
@@ -84,7 +80,6 @@ class Node(MPTTModel):
     creation_date = models.DateTimeField(verbose_name=u'Время создания')
     last_modified_date = models.DateTimeField(auto_now=True, verbose_name=u'Время последнего изменения')
     content = RichTextField(blank=True, null=True, verbose_name=u'Текст')
-    files = models.ManyToManyField(File,  null=True, blank=True, verbose_name=u'Файлы')
     def __unicode__(self):
         return self.title
     class MPTTMeta:
@@ -117,7 +112,12 @@ class ReleaseHistory(models.Model):
         verbose_name = _(u'историю смены релиза')
         verbose_name_plural = _(u'История смены релиза')
 
-
-
-
-
+class Term(models.Model):
+    product = models.ForeignKey(Product, verbose_name=u'ПРодукт')
+    name = models.CharField(max_length=300, verbose_name=u'Термин')
+    description = models.TextField(verbose_name=u'Определение')
+    def __unicode__(self):
+        return '%s - %s' % (self.name, self.description)
+    class Meta:
+        verbose_name = _(u'термин')
+        verbose_name_plural = _(u'Термины')

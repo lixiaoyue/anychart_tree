@@ -51,10 +51,10 @@ $(function(){
         if (location.hash.length>2){
             currentNode['name'] = location.pathname.split('/')[1] + location.hash.substr(3);
             // если это корзина, открываем корзину
-            if(location.hash.substr(1, 6)=='trash'){
+            if(location.hash.substr(1, 5)=='trash'){
                 openTrash();
             // если это (не)функциональное требование, нужно сначала подгрузить все требования для родительского узла в дереве, а затем его открыть
-            }else if (location.hash.substr(1, 3)=='OR'){
+            }else if (location.hash.substr(1, 2)=='OR'){
                 $.ajax({
                     type: "POST",
                     url: "/getParentNode/",
@@ -117,7 +117,7 @@ function LoggedIn(flag){
                 return true;
             },bindings: {
                 'create_tie': function() {
-                showCreateTieForm(tie_id, 'BR');},
+                showCreateTieForm( tie_id, 'BR');},
                 'create_folder': function() {
                 showCreateTieForm(tie_id, 'NE');}
             },
@@ -201,12 +201,6 @@ $('a.sc, span.req, span.folder').live('click', function(){
         $('li#'+liId).removeClass('cl');
         $('li#'+liId + ' div:first p a.sc').removeClass('close_tie').addClass('open_tie');
         if ($('li#' + liId + ' ul li.req ul').html() == '')pasteRequirements(liId);
-//        //если это папка с требованиями
-//        if ($('li#'+liId).hasClass('req')){
-//            //если требования не подгружены, получаем требования для узла по id узла
-//            if ($('li#' + liId + ' ul').html() == '')pasteRequirements(liId);
-//            $('li#'+liId + ' div:first p a.sc').removeClass('close_req').addClass('open_req');
-//        }
     //если узел развернут, сворачиваем
     }else{
         $('li#'+liId).addClass('cl');
@@ -282,7 +276,6 @@ function openTab(object_id){
     getNodeContent(object_id);
 }
 
-
 //Добавляем блок для содержимого вкладки
 function addBlockForTabContent(block_id){
     if ($('.tabs.tab_'+block_id).length <=0){
@@ -290,6 +283,7 @@ function addBlockForTabContent(block_id){
     }
 
 }
+
 //Добавляем название вкладки
 function addTabNameToManageBlock(tab_name){
     $('#tabs_manage_block ul li.active').html(tab_name);
@@ -330,6 +324,8 @@ function getNodeContent(object_id){
         });
     }
 }
+
+
 //------------------УДАЛЕНИЕ УЗЛОВ ДЕРЕВА-----------------------//
 
 //Всплывающая форма "Вы действительно хотите удалить узел?"
@@ -346,7 +342,7 @@ function DeleteNode(node_id, comment){
     $.ajax({
         type: "POST",
         url: "/deleteNode/",
-        data: {node: node_id, comment:comment, csrfmiddlewaretoken: '{{ csrf_token }}'},
+        data: {node: currentNode['name'], comment:comment, csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(href){
             showPopup(false);
             window.location.href = href;
@@ -404,17 +400,17 @@ function makeEditors(tab){
             {
                 filebrowserBrowseUrl : '/ckeditor/browse/',
                 filebrowserUploadUrl : '/ckeditor/browse/',
-
+                extraPlugins : 'vocabulary',
                 toolbar :
                     [
-                        { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
-                        { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','Scayt' ] },
-                        { name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'
+//                        { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+//                        { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','Scayt' ] },
+                        { name: 'insert', items : [ 'vocabularyButton', 'Table','HorizontalRule','Smiley','SpecialChar','PageBreak'
                             ] }, '/',
-                        { name: 'styles', items : [ 'Styles','Format' ] },
-                        { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
-                        { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
-                        { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
+                        { name: 'styles', items : [ 'Styles','Format' ]},
+//                        { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
+//                        { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
+//                        { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
                         { name: 'tools', items : [ 'Maximize','-','About' ] }
                     ]
             });
@@ -426,9 +422,10 @@ function makeEditors(tab){
             {
 //                skin : 'office2003',
                 height : '40',
+                extraPlugins : 'vocabulary',
                 toolbar :
                     [
-                        { name: 'basicstyles', items : [ 'Bold','Italic' ] },
+                        { name: 'basicstyles', items : ['vocabularyButton', 'Bold','Italic' ] },
                         { name: 'links', items : [ 'Link','Unlink','Anchor' ] }
                     ]
             });
@@ -437,12 +434,17 @@ function makeEditors(tab){
 
 //При клике на форму для комментария удаляем вспомогательный текст
 $('#deletion_comment, #release_description, #change_description').live('click', function(){
-    $(this).text('');
+    if ( $(this).text() == 'Оставьте комметарий' || $(this).text() == 'Оставьте описание релиза тут' || $(this).text() == 'Оставьте комментарий тут'){
+        $(this).text('');
+    }
 });
 
 //При клике на форму для комментария удаляем вспомогательный текст
 $('#add_node_name_text, #add_file_name_text, #add_release_name_text, #add_release_number_text, #add_release_date_text').live('click', function(){
-    $(this).val('');
+    if ( $(this).val() == 'Как называется новое требование?' || $(this).val() == 'Как называется твой новый файл?'|| $(this).val() == 'Как называется твой новый узел?' || $(this).val() == 'Как называется новая папка?' || $(this).val() == 'Как называется твой релиз?' || $(this).val() == 'Какой номер релиза?' || $(this).val() == 'Год-месяц-день'){
+        $(this).val('');
+    }
+
 });
 
 //Редактировать узел
@@ -596,6 +598,7 @@ function saveNode(nodeId){
         data: data,
         success: function(html){
             $('#tabs_content_block div.tabs.tab_' + nodeId).html(html);
+            getFiles(currentNode['name']);
             EDITING = false;
         }
     });

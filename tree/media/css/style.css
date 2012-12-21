@@ -417,7 +417,7 @@ li#create_tie a:hover,li#create_req a:hover {
 .treeview ul.l { border-left: 1px solid; margin-left: -1px; }
 .treeview li.cl ul { display: none; }
 .treeview li { margin: 0; padding: 0; }
-.treeview li li { margin: 0 0 0 0.5em; border-left: 1px dotted; padding: 0; }
+.treeview li li { margin:0 0 0 11px; border-left: 1px dotted; padding: 0; }
 .treeview li div { position: relative; height: 1.5em; min-height: 16px; //height: 1.3em; }
 .treeview li li div { border-bottom: 1px dotted; }
 .treeview li p{
@@ -478,7 +478,7 @@ li.req div p{
     cursor: pointer;
 }
 .treeview p.active{
-    background: #D6D6D6;
+    background: lavenderBlush;
 }
 ul.registration{
     float: right !important;
@@ -710,6 +710,7 @@ iframe{
     padding-right: 10px;}
 
 .description{width: 98%; margin: 20px 1% 20px 1%}
+.description img{width: 95%; margin: 0 auto;}
 
 .table {display:table; border-collapse: collapse; width: 100%;}
 div.wideItem {width: 100%; display: block;  height: auto;}

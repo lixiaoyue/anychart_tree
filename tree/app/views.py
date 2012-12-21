@@ -158,9 +158,14 @@ def getRequirements(request):
             tie_id = request.POST['liId'].replace('tie_','')
             reqs = Node.objects.filter(parent__name_id = tie_id, type = 'OR').exclude(cur_status = DELETED)
             for req in reqs:
+                colors = StatusColorUser.objects.filter(user = request.user.id).filter(status = req.cur_status.id)
+                if colors:
+                    color = colors[0]
+                else:
+                    color = req.cur_status.color
                 message += '''<li><div><p>
-                        <a id="OR_%s" class="open_tab reqs" style="color:%s"><span class = "status_%d"></span> %s </a>
-                        </p></div></li>''' %(req.name_id, req.cur_status.color, req.cur_status.id, req.title)
+                        <a id="OR_%s" class="open_tab reqs" style="color:%s"><span class = "status_%s"></span> %s </a>
+                        </p></div></li>''' %(req.name_id, color.color , req.cur_status.id, req.title)
     return HttpResponse(message)
 
 # Получить данные про узел
@@ -186,7 +191,7 @@ def getParentNode(request):
 @csrf_exempt
 def deleteNode(request):
     if request.method == 'POST':
-        node = Node.objects.get(name_id = request.POST['node'].split('_')[1])
+        node = Node.objects.get(name_id = request.POST['node'])
         delete_node_children(node.id)
         changeStatusInNode(node.id, DELETED, request.POST['comment'])
         if node.parent == 'None':
@@ -380,7 +385,7 @@ def saveNode(request):
         else:
             node.source = None
         node.source_description = request.POST['source_desc']
-        node.content = request.POST['node_desc']
+        node.content = replacePics(request.POST['node_desc'], node.name_id)
         node.creation_date = node.creation_date
         node.save()
         if NOT_AVAILABLE_NODES.has_key(node.name_id):
@@ -397,6 +402,20 @@ def saveNode(request):
             del NOT_AVAILABLE_NODES[product.short_name]
         return render_to_response("folder.html", {'product':product})
     return HttpResponse('Not a POST for some reason : ' + str(request.POST['title']))
+
+def replacePics(text, node_name):
+    path = os.path.join(settings.MEDIA_ROOT, 'files', node_name)
+    str = ''
+    for root, dirs, files in os.walk(path):
+        for fn in files:
+            str += fn + '; '
+            if fn.split('.')[1]=='png' or fn.split('.')[1]=='jpg' or fn.split('.')[1]=='gif' or fn.split('.')[1]=='JPEG' or fn.split('.')[1]=='jpeg':
+                text = text.replace('!%s:small!' % fn, '<img src="/media/files/%s" style="width:200px; float: left; margin: 0 5px">' % os.path.join(node_name, fn))
+                text = text.replace('!%s!' % fn, '<p style="text-align:center"><img src="/media/files/%s"></p>' % os.path.join(node_name, fn))
+                text = text.replace('!%s:a!' % fn, '<a href="/media/files/%s" target="_blank">%s</a>' %(os.path.join(node_name, fn), fn))
+            else:
+                text = text.replace('!%s!' % fn, '<a href="/media/files/%s" target="_blank">%s</a>' %(os.path.join(node_name, fn), fn))
+    return text
 
 # Сохраняем новые фыйлы для узла
 @csrf_exempt

@@ -20,10 +20,6 @@ class StatusColorUserAdmin(admin.ModelAdmin):
      list_display = ('user','status', 'color')
 admin.site.register(StatusColorUser ,StatusColorUserAdmin)
 
-class FileAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-admin.site.register(File, FileAdmin)
-
 class SourceAdmin(admin.ModelAdmin):
     list_display = ('source',)
 admin.site.register(Source, SourceAdmin)
@@ -33,7 +29,6 @@ class NodeAdmin(MPTTModelAdmin):
     list_display = ('title','id', 'creation_date')
     list_filter =('product','curator','developer', 'tester', 'cur_status', 'cur_release', 'source')
     ordering = ('creation_date',)
-    filter_horizontal = ('files',)
     search_fields = ('name_id', 'title')
 admin.site.register(Node, NodeAdmin)
 
@@ -46,4 +41,10 @@ class ReleaseHistoryAdmin(admin.ModelAdmin):
     list_display = ('date','description')
     list_filter =('id_node','id_release')
 admin.site.register(ReleaseHistory, ReleaseHistoryAdmin)
+
+class TermAdmin(admin.ModelAdmin):
+    list_display = ('name','description')
+    search_fields = ('name','description')
+    list_filter =('product',)
+admin.site.register(Term, TermAdmin)
 
