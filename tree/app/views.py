@@ -331,27 +331,25 @@ def cancelEditNode(request):
 # Добавить новый релиз, и вернуться в режиме редактирования
 @csrf_exempt
 def addingReleaseInNode(request):
-    if request.method == 'POST':
-        product = Product.objects.get(short_name = request.POST['product'])
-        description = request.POST['description']
-        if description == u'Оставьте комментарий тут':
-            description =''
-        print 'DESCRIPTION :'+ description
-        try:
-            release = Release(
-                name  = request.POST['name'],
-                number = request.POST['number'],
-                status = False,
-                date = request.POST['date'],
-                product = product,
-                description = description
-            )
-            release.save()
-            return HttpResponse("<option value='%s' selected='true'>%s %s </option>" % (release.id, release.name, release.date))
-        except Exception as e:
-            return HttpResponse('data error'+ e.message)
-    else:
-        return HttpResponse("Not a POST! " + str(request.method))
+    product = Product.objects.get(short_name = request.POST['product'])
+    description = request.POST['description']
+    if description == u'Оставьте комментарий тут':
+        description =''
+    print 'DESCRIPTION :'+ description
+    try:
+        release = Release(
+            name  = request.POST['name'],
+            number = request.POST['number'],
+            status = False,
+            date = request.POST['date'],
+            product = product,
+            description = description
+        )
+        release.save()
+        return HttpResponse("<option value='%s' selected='true'>%s %s </option>" % (release.id, release.name, release.date))
+    except Exception as e:
+        return HttpResponse('data error'+ e.message)
+
 
 # Сохранить все изменения по узлу и вернуться в режим чтения.
 @csrf_exempt
