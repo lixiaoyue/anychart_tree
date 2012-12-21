@@ -293,7 +293,7 @@ function addTabNameToManageBlock(tab_name){
 //Показать контейнер для содержимого вкладки
 function showTabContent(tabId){
     if (tabId != undefined){
-        location.hash = tabId.replace('_' + window.location.pathname.substr(1,2), '');
+        location.hash = tabId.replace('_' + location.pathname.split('/')[1], '');
     }
     $('#tabs_content_block div.tabs').hide();
     $('#tabs_content_block div.tabs.tab_'+tabId).show();
@@ -403,14 +403,13 @@ function makeEditors(tab){
                 extraPlugins : 'vocabulary',
                 toolbar :
                     [
-//                        { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
-//                        { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','Scayt' ] },
-                        { name: 'insert', items : [ 'vocabularyButton', 'Table','HorizontalRule','Smiley','SpecialChar','PageBreak'
-                            ] }, '/',
+                        { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+                        { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','Scayt' ] },
+                        { name: 'insert', items : [ 'vocabularyButton', 'Table','HorizontalRule','Smiley','SpecialChar','PageBreak'] }, '/',
                         { name: 'styles', items : [ 'Styles','Format' ]},
-//                        { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
-//                        { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
-//                        { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
+                        { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
+                        { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
+                        { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
                         { name: 'tools', items : [ 'Maximize','-','About' ] }
                     ]
             });
@@ -441,7 +440,7 @@ $('#deletion_comment, #release_description, #change_description').live('click', 
 
 //При клике на форму для комментария удаляем вспомогательный текст
 $('#add_node_name_text, #add_file_name_text, #add_release_name_text, #add_release_number_text, #add_release_date_text').live('click', function(){
-    if ( $(this).val() == 'Как называется новое требование?' || $(this).val() == 'Как называется твой новый файл?'|| $(this).val() == 'Как называется твой новый узел?' || $(this).val() == 'Как называется новая папка?' || $(this).val() == 'Как называется твой релиз?' || $(this).val() == 'Какой номер релиза?' || $(this).val() == 'Год-месяц-день'){
+    if ( $(this).val() == 'Как называется новое требование?' || $(this).val() == 'Как называется твой новый файл?'|| $(this).val() == 'Как называется твой новый узел?' || $(this).val() == 'Как называется новая папка?' || $(this).val() == 'Как называется твой релиз?' || $(this).val() == 'Какой номер релиза?' || $(this).val() == 'Год-месяц-день' || $(this).val() == 'Как называется новый релиз?'){
         $(this).val('');
     }
 
