@@ -217,7 +217,6 @@ $('a.sc, span.req, span.folder').live('click', function(){
 
 //Получить список требований для узла
 function pasteRequirements(liId){
-    console.log(liId);
     if (!$('li#' + liId).hasClass('req')){
         $.ajax({
             type: "POST",
@@ -244,7 +243,7 @@ $('a.open_tab.reqs, a.open_tie_in_tab').live('click', function(){
     if (EDITING){
         if (confirm('Несохраненные данные будут потеряны, вы уверены, что хотите покинуть требование?')) {
             // Отменеем режим редактирования, все несохраненные данные потеряны
-            cancelEditNode(location.hash.substr(1, 2) + '_' + window.location.pathname.substr(1,2) + location.hash.substr(3));
+            cancelEditNode(location.hash.substr(1, 2) + '_' + currentNode['name']);
             // отрываем новый узел
             openTab($(this).attr('id'));
             // Выделяем его в дереве
@@ -673,8 +672,7 @@ function cancelEditNode(nodeId){
 //TODO:При смене адреса выйти из режима редактирования.
 window.onbeforeunload = function() {
     if (EDITING) {
-        console.log('Отмена редактирования узла ' +location.hash.substr(1, 2) + '_' + window.location.pathname.substr(1,2) + location.hash.substr(3));
-        cancelEditNode(location.hash.substr(1, 2) + '_' + window.location.pathname.substr(1,2) + location.hash.substr(3));
+        cancelEditNode(location.hash.substr(1, 2) + '_' + currentNode['name']);
         EDITING = false;
     }
 };

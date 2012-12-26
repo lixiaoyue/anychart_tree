@@ -716,6 +716,8 @@ iframe{
 div.wideItem {width: 100%; display: block;  height: auto;}
 div.wideItem.description {padding-top: 20px; margin: 0}
 div.wideItem span {font-style: italic; font-size: 12px}
+div.wideItem div.files span {font-style: normal; font-size: 13px}
+div.wideItem div.node_files span.file {font-style: normal; font-size: 13px}
 div.wideItem.underline {border-bottom: 1px solid #7E7E7E; padding: 5px 0;}
 
 div.halfItem.picker {width: 50%; display: block;  height: auto; border: 1px solid #7E7E7E; border-top:none;  padding: 5px 0;  background: #DCDCDC;}

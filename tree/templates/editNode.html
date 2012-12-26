@@ -151,9 +151,9 @@
         <iframe class="hidden" id=hiddenframe name=hiddenframe style="width:0; height:0; border:0"></iframe>
         <form enctype=multipart/form-data action='/addFileToNode/' method=post name=load_file id='loadingFile' target=hiddenframe>
             <input type=hidden name='size' value=64000>
-            <input type='text' name='node' id='node_id' value="{{ node.name_id }}" class="hidden" >
+            <input type='text' name='node' id='node_id' value='{{ node.name_id }}' class="hidden" >
             <input type='text' name='name' id='add_file_name_text' value='Как называется твой новый файл?'>
-            <input type="file" name='file' id="id_file">
+            <input type="file" name='file' id="file">
             <div class="cancel">
                 <input type="button" onclick="showPopup(false)" value="Отменить">
                 <span class="delete"></span>

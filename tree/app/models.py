@@ -59,6 +59,7 @@ class Source(models.Model):
 class File(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True, verbose_name=u'Название файла')
     file = models.FileField(upload_to='files/tmp/')
+    date = models.DateTimeField(auto_now=True)
     def __unicode__(self):
         return self.name
 
@@ -81,7 +82,7 @@ class Node(MPTTModel):
     last_modified_date = models.DateTimeField(auto_now=True, verbose_name=u'Время последнего изменения')
     content = RichTextField(blank=True, null=True, verbose_name=u'Текст')
     def __unicode__(self):
-        return self.title
+        return self.name_id
     class MPTTMeta:
         order_insertion_by = ['-title']
     class Meta:

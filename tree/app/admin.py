@@ -24,6 +24,10 @@ class SourceAdmin(admin.ModelAdmin):
     list_display = ('source',)
 admin.site.register(Source, SourceAdmin)
 
+class FileAdmin(admin.ModelAdmin):
+    list_display = ('name', 'date')
+admin.site.register(File, FileAdmin)
+
 class NodeAdmin(MPTTModelAdmin):
     mptt_level_indent = 20
     list_display = ('title','id', 'creation_date')

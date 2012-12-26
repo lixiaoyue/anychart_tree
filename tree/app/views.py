@@ -418,7 +418,7 @@ def replacePics(text, node_name):
 @csrf_exempt
 def addingFilesInNodes(request):
     name = request.FILES['file'].name
-    temp_file = File.objects.create(file=request.FILES['file'])
+    temp_file = File(file=request.FILES['file'], name = name)
     if request.POST['name'] != u'Как называется твой новый файл?' and request.POST['name'].strip() != '':
         temp_file.name = request.POST['name'] + '.' + name.split('.')[1]
     temp_file.save()
@@ -427,9 +427,11 @@ def addingFilesInNodes(request):
     if not os.path.exists(target):
         os.mkdir(target)
     shutil.copy(os.path.join(settings.MEDIA_ROOT, temp_file.file.path), os.path.join(target, temp_file.name))
-    temp_file.delete()
+    name = temp_file.name
     os.remove(os.path.join(settings.MEDIA_ROOT, temp_file.file.path))
-    return HttpResponse('<a href="/media/files%s">%s</a>' % (os.path.join(node.name_id, temp_file.file.path) , temp_file.name))
+    temp_file.delete()
+    return HttpResponse('<a href="/media/files/%s">%s</a>' % (os.path.join(node.name_id, name), name))
+
 
 # Получаем список фалов для узла
 @csrf_exempt
