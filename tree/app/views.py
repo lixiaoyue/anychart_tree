@@ -520,10 +520,10 @@ def getTermById(request):
 # Получить список терминов для продукта
 @csrf_exempt
 def getTerms(request):
-    list = ''
-    for term in Term.objects.filter(product = Product.objects.get(short_name = request.POST['product'])):
+    list = u''
+    product = Product.objects.get(short_name = request.POST['product'])
+    for term in Term.objects.filter(product = product):
         list += u'%s&#%s!#' % (term.name, term.id)
-    print list
     return HttpResponse(list)
 
 def checking(request):
