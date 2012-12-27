@@ -47,7 +47,7 @@ CKEDITOR.dialog.add( 'vocabularyDialog', function ( editor )
                                                     list.push([html.split('!#')[option].split('&#')[0], html.split('!#')[option].split('&#')[1]])
                                                 }
                                             }
-                                            if (list){
+                                            if (list.length > 0){
                                                 $.each(list, function(index, item) {
                                                     $(element_id).get(0).options[$(element_id).get(0).options.length] = new Option(item[0], item[1]);
                                                 });
