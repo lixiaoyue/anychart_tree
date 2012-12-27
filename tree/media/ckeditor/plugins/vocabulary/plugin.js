@@ -116,7 +116,7 @@ CKEDITOR.dialog.add( 'vocabularyDialog', function ( editor )
             // Добавить в текст ссылку на термин, вставить скрытое описание
             function setLink(href, title, desc){
                 var link = editor.document.createElement( 'a');
-                href = '/'+ location.pathname.split('/')[1] + '/dictionary#' + href;
+                href = '/'+ location.pathname.split('/')[1] + '/dictionary/#' + href;
                 link.setAttribute('href', href );
                 link.setAttribute('class', 'tip');
                 link.setAttribute('target', '_blank');
