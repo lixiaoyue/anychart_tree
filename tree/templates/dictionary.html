@@ -1,0 +1,17 @@
+<div id="home_page">
+    <div class="dictionary">
+
+        {% for item in items %}
+            <div class="dic_item">
+                <h4 id='{{ item.id }}'>{{ item.name }}</h4>{{ item.description|safe}}
+                <p style="margin-top: 5px"><a href="/{{ cur_product.short_name }}/">К дереву требований</a>
+            </div>
+        {% endfor %}
+
+    </div>
+</div>
+<div id="footer">
+    Copyright (c) 2012 AnyChart.com. All rights reserved. Developed by AnyChart QA Department.
+</div>
+
+

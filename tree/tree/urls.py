@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     url('^$', homePage),
     url('^([A-Z]{1,6})/$', productPage),
     url('^([A-Z]{1,6})/catalog/$', catalogs),
+    url('^([A-Z]{1,6})/dictionary/$', dictionary),
 
     #Получение данных ajax
     url(r'^getRequirements/$', getRequirements),
@@ -39,6 +40,13 @@ urlpatterns = patterns('',
     url(r'^deleteReleaseCatalog/$', deleteReleaseCatalog),
     url(r'^saveReleaseCatalog/$', saveReleaseCatalog),
     url(r'^getUsersCatalog/$', getUsersCatalog),
+
+
+    #Термины
+    url(r'^saveTerm/$', saveTerm),
+    url(r'^getTermById/$', getTermById),
+    url(r'^getTerms/$', getTerms),
+
 
     url(r'^check/$', checking),
 

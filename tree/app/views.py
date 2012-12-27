@@ -33,10 +33,24 @@ def productPage(request, name):
 
 # Страница справочников
 def catalogs(request, name):
-    cur_product = Product.objects.get(short_name=name)
-    products = Product.objects.all()
-    user = request.user
-    return render_to_response('index.html',{'main_content':'catalog.html', 'user':user, 'products' : products, 'cur_product':cur_product})
+    try:
+        cur_product = Product.objects.get(short_name=name)
+        products = Product.objects.all()
+        user = request.user
+        return render_to_response('index.html',{'main_content':'catalog.html', 'user':user, 'products' : products, 'cur_product':cur_product})
+    except Exception:
+        homePage(request)
+
+# Страница словаря
+def dictionary(request, name):
+    try:
+        cur_product = Product.objects.get(short_name=name)
+        products = Product.objects.all()
+        user = request.user
+        items = Term.objects.filter(product = cur_product)
+        return render_to_response('index.html',{'main_content':'dictionary.html', 'items':items, 'user':user, 'products' : products, 'cur_product':cur_product})
+    except Exception:
+        homePage(request)
 
 #Получаем словарь Статусов
 @csrf_exempt
@@ -408,7 +422,7 @@ def replacePics(text, node_name):
             str += fn + '; '
             if fn.split('.')[1]=='png' or fn.split('.')[1]=='jpg' or fn.split('.')[1]=='gif' or fn.split('.')[1]=='JPEG' or fn.split('.')[1]=='jpeg':
                 text = text.replace('!%s:small!' % fn, '<img src="/media/files/%s" style="width:200px; float: left; margin: 0 5px">' % os.path.join(node_name, fn))
-                text = text.replace('!%s!' % fn, '<p style="text-align:center"><img src="/media/files/%s"></p>' % os.path.join(node_name, fn))
+                text = text.replace('!%s!' % fn, '<img src="/media/files/%s">' % os.path.join(node_name, fn))
                 text = text.replace('!%s:a!' % fn, '<a href="/media/files/%s" target="_blank">%s</a>' %(os.path.join(node_name, fn), fn))
             else:
                 text = text.replace('!%s!' % fn, '<a href="/media/files/%s" target="_blank">%s</a>' %(os.path.join(node_name, fn), fn))
@@ -488,6 +502,29 @@ def restoreTrash(request):
             changeStatusInNode(i, status.id_status, 'Восстановлено из корзины')
     return HttpResponse('ok')
 
+
+# Сохранить новый термин
+@csrf_exempt
+def saveTerm(request):
+    newTerm = Term(product = Product.objects.get(short_name = request.POST['product']), name = request.POST['term_name'], description=request.POST['term_decs'])
+    newTerm.save()
+    return HttpResponse(newTerm.id)
+
+# Получить описание термина по id
+@csrf_exempt
+def getTermById(request):
+    term = Term.objects.get(id = request.POST['term_id'])
+    return HttpResponse('%s#!%s' %(term.name, term.description))
+
+
+# Получить список терминов для продукта
+@csrf_exempt
+def getTerms(request):
+    list = ''
+    for term in Term.objects.filter(product = Product.objects.get(short_name = request.POST['product'])):
+        list += u'%s&#%s!#' % (term.name, term.id)
+    print list
+    return HttpResponse(list)
 
 def checking(request):
 #    NOT_AVAILABLE_NODES = {}

@@ -45,7 +45,9 @@ $(function(){
     // если это страница статистки
     }else if (location.pathname.split('/')[2] == 'statistic'){
         //TODO: Тут пока никто незнает что делать надо, но делать чего-то надо
-    // Если не статистика и не каталог, значит мы в каком-то продукте.
+    // Проверяем, что мы не в словаре
+    }else if (location.pathname.split('/')[2] == 'dictionary'){
+        // Просто показываем словарь со всеми терминами,js на данном этапе не нужен
     }else{
         // если hash не пуст. значит нужно открыть какой-то узел или корзину
         if (location.hash.length>2){
@@ -61,23 +63,16 @@ $(function(){
                     data: {reqId: currentNode['name'], csrfmiddlewaretoken: '{{ csrf_token }}'},
                     success: function(parentId){
                         //получили parentId - id родительского узла для требования
-                        $('body').queue(function () {
                             //раскрываем дерево до родительского узла
                             openTree('BR_' + parentId);
-                            $('body').dequeue();
-                        });
-                        $('body').queue(function () {
                             //раскрываем дерево требования родительского узла
                             openTree('reqs_' + parentId);
-                            $('body').dequeue();
-                        });
-                        $('body').queue(function () {
-                            //открываем требование
-                            openTab('OR_' + currentNode['name']);
-                            //выделяем открытое требование подсветкой
-                            pickNodeInTree($('#OR_' + currentNode['name']));
-                            $('body').dequeue();
-                        });
+                            window.setTimeout(function(){
+                                //открываем требование
+                                openTab('OR_' + currentNode['name']);
+                                //выделяем открытое требование подсветкой
+                                pickNodeInTree($('#OR_' + currentNode['name']));
+                            }, 100);
                     }
                 });
             // если это бизнес-требование,или папка или описание продукта, то просто открываем его для просмотра, location.hash.substr(1, 3) - укажет нам тип (остались: BR, NE или PR)
@@ -403,12 +398,11 @@ function makeEditors(tab){
         if (editor) { editor.destroy(true); }
         CKEDITOR.replace(obj.id,
             {
-                filebrowserBrowseUrl : '/ckeditor/browse/',
-                filebrowserUploadUrl : '/ckeditor/browse/',
+
                 extraPlugins : 'vocabulary',
                 toolbar :
                     [
-                        { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+                        { name: 'clipboard', items : [ 'Source', 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
                         { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','Scayt' ] },
                         { name: 'insert', items : [ 'vocabularyButton', 'Table','HorizontalRule','Smiley','SpecialChar','PageBreak'] }, '/',
                         { name: 'styles', items : [ 'Styles','Format' ]},
@@ -709,6 +703,7 @@ function openTrash(){
         }
     });
 }
+
 
 // При выделении узлов чекбоксами в корзине
 function checkTrash(){

@@ -84,7 +84,7 @@ class Node(MPTTModel):
     def __unicode__(self):
         return self.name_id
     class MPTTMeta:
-        order_insertion_by = ['-title']
+        order_insertion_by = ['title']
     class Meta:
         verbose_name = _(u'узел дерева')
         verbose_name_plural = _(u'Узлы дерева')
@@ -114,7 +114,7 @@ class ReleaseHistory(models.Model):
         verbose_name_plural = _(u'История смены релиза')
 
 class Term(models.Model):
-    product = models.ForeignKey(Product, verbose_name=u'ПРодукт')
+    product = models.ForeignKey(Product, verbose_name=u'Продукт')
     name = models.CharField(max_length=300, verbose_name=u'Термин')
     description = models.TextField(verbose_name=u'Определение')
     def __unicode__(self):

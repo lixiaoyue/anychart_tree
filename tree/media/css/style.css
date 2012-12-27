@@ -710,7 +710,7 @@ iframe{
     padding-right: 10px;}
 
 .description{width: 98%; margin: 20px 1% 20px 1%}
-.description img{width: 95%; margin: 0 auto;}
+.description img{max-width: 95%;}
 
 .table {display:table; border-collapse: collapse; width: 100%;}
 div.wideItem {width: 100%; display: block;  height: auto;}
@@ -740,6 +740,13 @@ div.picker.statuses span.status_3, div.picker.statuses span.status_4, div.picker
 
 .description ul, .description ol{margin:10px 0 5px 0; padding-left: 40px; }
 .description table {margin:20px 0 20px 40px; border-collapse: collapse;}
+
+.description a{position: relative; }
+.description a.tip span.hidden {position: absolute;width: 300px;}
+.description a.tip:hover span.hidden {display: block; background: #fff; padding: 5px; border: 1px solid #888;}
+
+.dic_item{margin: 50px 0;}
+.dic_item h4{margin:0; padding: 0}
 
 .description table tr td {border: 1px solid #888; padding: 5px;}
 .table input{

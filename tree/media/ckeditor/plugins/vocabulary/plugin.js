@@ -31,11 +31,26 @@ CKEDITOR.dialog.add( 'vocabularyDialog', function ( editor )
                             {
                                 type : 'select',
                                 id : 'item',
-                                items : [ ['--- Select an Exam---',0] ],
+                                items : [ ['Select Term',0] ],
                                 onLoad : function(element) {
                                     var element_id = '#' + this.getInputElement().$.id;
-                                    $.each(getValue(), function(index, item) {
-                                        $(element_id).get(0).options[$(element_id).get(0).options.length] = new Option(item[0], item[1]);
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/getTerms/",
+                                        data: {
+                                            product : location.pathname.split('/')[1],
+                                            csrfmiddlewaretoken: '{{ csrf_token }}'},
+                                        success: function(html){
+                                            var list = [];
+                                            for (var option in html.split('!#')){
+                                                if (html.split('!#')[option] != ''){
+                                                    list.push([html.split('!#')[option].split('&#')[0], html.split('!#')[option].split('&#')[1]])
+                                                }
+                                            }
+                                            $.each(list, function(index, item) {
+                                                 $(element_id).get(0).options[$(element_id).get(0).options.length] = new Option(item[0], item[1]);
+                                            });
+                                        }
                                     });
                                 }
                             }
@@ -49,37 +64,87 @@ CKEDITOR.dialog.add( 'vocabularyDialog', function ( editor )
                         {
                             type : 'text',
                             id : 'term',
-                            label : 'Термин',
-                            validate : CKEDITOR.dialog.validate.notEmpty( "Term field cannot be empty" )
+                            label : 'Термин'
+//                            validate : CKEDITOR.dialog.validate.notEmpty( "Term field cannot be empty" )
                         },
                         {
                             type : 'textarea',
                             id : 'desc',
-                            label : 'Определение',
-                            validate : CKEDITOR.dialog.validate.notEmpty( "Explanation field cannot be empty" )
+                            label : 'Определение'
+//                            validate : CKEDITOR.dialog.validate.notEmpty( "Explanation field cannot be empty" )
                         }
                     ]
             }
             ],
         onOk : function()
         {
-            //TODO: сохранить новый термин в бд и вставить ссылку со всплывающей подсказкой
-//            var dialog = this;
-//            var abbr = editor.document.createElement( 'abbr' );
-//            abbr.setAttribute( 'title', dialog.getValueOf( 'tab2', 'desc' ) );
-//            abbr.setText( dialog.getValueOf( 'tab2', 'term' ) );
-//            editor.insertElement( abbr );
+            //сохранить новый термин в бд и вставить ссылку со всплывающей подсказкой или просто вставить ссылку
+            if (this.getValueOf( 'tab2', 'term' ) != '' && this.getValueOf( 'tab2', 'desc' ) != ''){
+                var term = this.getValueOf( 'tab2', 'term'),
+                    term_desc = this.getValueOf( 'tab2', 'desc' );
+                // Отправляем новый термин и описание. возвращаем id сохраненного термина
+                $.ajax({
+                    type: "POST",
+                    url: "/saveTerm/",
+                    data: {
+                        product : location.pathname.split('/')[1],
+                        term_name: term,
+                        term_decs: term_desc,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'},
+                    success: function(html){
+                        setLink(html, term, term_desc);
+                    }
+                });
+
+            }else if (this.getValueOf( 'tab1', 'item' ) != 0){
+                var term_id = this.getValueOf( 'tab1', 'item');
+                //Отправляем id термина, получаем его описание
+                $.ajax({
+                    type: "POST",
+                    url: "/getTermById/",
+                    data: {
+                        term_id: term_id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'},
+                    success: function(html){
+                        setLink(term_id, html.split('#!')[0], html.split('#!')[1]);
+                    }
+                });
+            }else{
+                alert('No term chosen or added');
+            }
+
+            // Добавить в текст ссылку на термин, вставить скрытое описание
+            function setLink(href, title, desc){
+                var link = editor.document.createElement( 'a');
+                href = '/'+ location.pathname.split('/')[1] + '/dictionary#' + href;
+                link.setAttribute('href', href );
+                link.setAttribute('class', 'tip');
+                link.setAttribute('target', '_blank');
+                link.setHtml(title + '<span class="hidden">' + desc + '</span>');
+                editor.insertElement(link);
+            }
         }
     };
 });
 
 function getValue(){
-    //TODO: сделать запрос в бд и сформировать список терминов уже существующих для этого продукта
-    return [
-        [ 'Слово первое', 1],
-        [ 'Слово второе', 2 ],
-        [ 'Слово пятьдесят девятое', 3 ]
-    ]
+    $.ajax({
+        type: "POST",
+        url: "/getTerms/",
+        data: {
+            product : location.pathname.split('/')[1],
+            csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){
+            var list = [];
+            for (var option in html.split('!#')){
+                if (html.split('!#')[option] != ''){
+                    list.push([html.split('!#')[option].split('&#')[0], html.split('!#')[option].split('&#')[1]])
+                }
+            }
+            console.log(list);
+            return list
+        }
+    });
 }
 
 // Add a new option to a SELECT object (combo or list).
