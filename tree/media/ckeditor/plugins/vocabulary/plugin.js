@@ -41,7 +41,6 @@ CKEDITOR.dialog.add( 'vocabularyDialog', function ( editor )
                                         product : location.pathname.split('/')[1],
                                         csrfmiddlewaretoken: '{{ csrf_token }}'},
                                         success: function(html){
-                                            console.log(html);
                                             var list = [];
                                             for (var option in html.split('!#')){
                                                 if (html.split('!#')[option] != ''){
