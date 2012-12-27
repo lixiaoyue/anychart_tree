@@ -38,8 +38,8 @@ CKEDITOR.dialog.add( 'vocabularyDialog', function ( editor )
                                         type: "POST",
                                         url: "/getTerms/",
                                         data: {
-                                            product : location.pathname.split('/')[1],
-                                            csrfmiddlewaretoken: '{{ csrf_token }}'},
+                                        product : location.pathname.split('/')[1],
+                                        csrfmiddlewaretoken: '{{ csrf_token }}'},
                                         success: function(html){
                                             var list = [];
                                             for (var option in html.split('!#')){
@@ -47,9 +47,11 @@ CKEDITOR.dialog.add( 'vocabularyDialog', function ( editor )
                                                     list.push([html.split('!#')[option].split('&#')[0], html.split('!#')[option].split('&#')[1]])
                                                 }
                                             }
-                                            $.each(list, function(index, item) {
-                                                 $(element_id).get(0).options[$(element_id).get(0).options.length] = new Option(item[0], item[1]);
-                                            });
+                                            if (list){
+                                                $.each(list, function(index, item) {
+                                                    $(element_id).get(0).options[$(element_id).get(0).options.length] = new Option(item[0], item[1]);
+                                                });
+                                            }
                                         }
                                     });
                                 }
@@ -65,13 +67,11 @@ CKEDITOR.dialog.add( 'vocabularyDialog', function ( editor )
                             type : 'text',
                             id : 'term',
                             label : 'Термин'
-//                            validate : CKEDITOR.dialog.validate.notEmpty( "Term field cannot be empty" )
                         },
                         {
                             type : 'textarea',
                             id : 'desc',
                             label : 'Определение'
-//                            validate : CKEDITOR.dialog.validate.notEmpty( "Explanation field cannot be empty" )
                         }
                     ]
             }
@@ -126,26 +126,6 @@ CKEDITOR.dialog.add( 'vocabularyDialog', function ( editor )
         }
     };
 });
-
-function getValue(){
-    $.ajax({
-        type: "POST",
-        url: "/getTerms/",
-        data: {
-            product : location.pathname.split('/')[1],
-            csrfmiddlewaretoken: '{{ csrf_token }}'},
-        success: function(html){
-            var list = [];
-            for (var option in html.split('!#')){
-                if (html.split('!#')[option] != ''){
-                    list.push([html.split('!#')[option].split('&#')[0], html.split('!#')[option].split('&#')[1]])
-                }
-            }
-            console.log(list);
-            return list
-        }
-    });
-}
 
 // Add a new option to a SELECT object (combo or list).
 function addOption( combo, optionText, optionValue, documentObject, index )

@@ -301,6 +301,8 @@ function showTabContent(tabId){
 
 //Получает содержимое узла, или папки, или описание продукта и записывает в контейнер
 function getNodeContent(object_id){
+    currentNode['name'] = object_id.split('_')[1];
+    currentNode['type'] = object_id.substr(0,2);
     if (object_id.substr(0,2)== 'PR' || object_id.substr(0,2)== 'NE'){
         $.ajax({
             type: "POST",
@@ -447,6 +449,7 @@ $('#add_node_name_text, #add_file_name_text, #add_release_name_text, #add_releas
 
 //Редактировать узел
 function editNode(nodeId){
+    currentNode['name'] = nodeId;
     $.ajax({
         type: "POST",
         url: "/editNode/",
