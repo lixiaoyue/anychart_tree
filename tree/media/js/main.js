@@ -598,9 +598,8 @@ function saveNode(nodeId){
         url: "/saveNode/",
         data: data,
         success: function(html){
-            $('#tabs_content_block div.tabs.tab_' + nodeId).html(html);
-            getFiles(currentNode['name']);
             EDITING = false;
+            window.location.reload();
         }
     });
 }
