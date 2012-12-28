@@ -104,7 +104,7 @@ def deleteSourceCatalog(request):
     for node in Node.objects.filter(source =  Source.objects.get(id = request.POST['id'])):
         node.source = None
         node.save()
-        
+
     Source.objects.get(id = request.POST['id']).delete()
     sources = Source.objects.all()
     cur_product = Product.objects.get(short_name = request.POST['product'])

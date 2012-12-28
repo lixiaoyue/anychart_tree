@@ -366,6 +366,7 @@ function showCreateTieForm(parent_id, type){
 
 //Создать новый узел
 function CreateTie(parent_id, type, name){
+    if (type == 'OR'){parent_id = 'BR_' + parent_id}
     if (name=='Как называется твой новый узел?' || name.trim() == ''){
         alert('Извините, но вы не можете создать узел без имени.')
     }else{
@@ -377,9 +378,9 @@ function CreateTie(parent_id, type, name){
             success: function(href){
                 showPopup(false);
 
-                window.location.href = href;
+//                window.location.href = href;
                 window.setTimeout(function(){
-                    window.location.reload();
+//                    window.location.reload();
                 }, 100);
             }
         });
