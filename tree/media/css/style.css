@@ -340,11 +340,10 @@ li#create_tie a:hover,li#create_req a:hover {
     color: #104E8B;
 }
 li.req.noReqs div {
-    opacity: 0.4;
     cursor: default;
 }
 li.req.noReqs div p span.folder{
-
+    color: #7E7E7E;
     cursor: default;
 }
 li.req div p{

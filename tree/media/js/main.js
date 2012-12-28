@@ -117,10 +117,12 @@ function LoggedIn(flag){
             menuStyle: {width: 170, cursor:'pointer' },
             itemHoverStyle: {backgroundColor:'#ccc', border:'1px solid white', margin:'0', padding:'3px'}
         });
+
         // создать новое требование
+
         $('span.right_active.req').contextMenu('popup_req_menu',{
             onContextMenu: function(e) {
-                tie_id = $(e.target).parent().parent().parent().attr('id').replace('req_tie_','');
+                tie_id = $(e.target).parent().parent().parent().attr('id').replace('reqs_','');
                 return true;
             },bindings: {'add_req': function() {
                 showCreateTieForm(tie_id, 'OR');}
