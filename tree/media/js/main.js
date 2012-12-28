@@ -448,19 +448,17 @@ $('#add_node_name_text, #add_file_name_text, #add_release_name_text, #add_releas
 
 //Редактировать узел
 function editNode(nodeId){
-    currentNode['name'] = nodeId;
     $.ajax({
         type: "POST",
         url: "/editNode/",
         data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(html){
             $('#tabs_content_block div.tabs.tab_' + nodeId).html(html);
-
             if ($('.table').hasClass('editable')){
                 EDITING = true;
                 window.setTimeout(function(){
-                    makeEditors(nodeId);
                     getFiles(currentNode['name']);
+                    makeEditors(nodeId);
                 }, 300);
             }
         }
@@ -651,7 +649,9 @@ function DeleteFile(path){
 
 //Отменить редактирование
 function cancelEditNode(nodeId){
+
     if (EDITING){
+        console.log(nodeId);
         $.ajax({
             type: "POST",
             url: "/cancelEditNode/",
