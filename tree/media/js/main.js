@@ -394,7 +394,7 @@ function makeEditors(tab){
         if (editor) { editor.destroy(true); }
         CKEDITOR.replace(obj.id,
             {
-
+                resize_enabled: false,
                 extraPlugins : 'vocabulary',
                 toolbar :
                     [
@@ -407,7 +407,6 @@ function makeEditors(tab){
                             '-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
                         { name: 'links', items : [ 'Link','Unlink','Anchor', 'vocabularyButton' ] },
                         { name: 'insert', items : [ 'Table','Smiley','SpecialChar'] },
-                        '/',
                         { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
                         { name: 'colors', items : [ 'TextColor','BGColor' ] },
                         { name: 'tools', items : [ 'Maximize'] }
