@@ -19,104 +19,152 @@
 </div>
 
 <div class='content_node'>
+
+
     <div class='table editable'>
 
 
         <div class="wideItem">
-                Название:
+            <form class="form-horizontal">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="nodeTitle">Название</label>
+                        <div class="controls">
+                            <input type="text" name='title' id='nodeTitle' value="{{ node.title }}">
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
+
+
+        <div class="margin"></div>
+
+
         <div class="wideItem">
-            <div class="line">
-                <input type="text" name='title' id='nodeTitle' value="{{ node.title }}">
+            <div class="span6">
+                <form class="form-horizontal">
+                    <fieldset>
+                         <div class="control-group">
+                            <label class="control-label" for="curator">Куратор</label>
+                            <div class="controls">
+                                <input type="text" style="width: 88%;" class="input-xlarge" id="curator" value="{{ node.curator.first_name }} {{ node.curator.last_name }}" disabled="True">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="selectDeveloper">Разработчик</label>
+                            <div class="controls">
+                                <select id="selectDeveloper" name="developer">
+                                    <option value="None">None</option>
+                                    {% for dev in developers %}
+                                        {% if dev == node.developer %}
+                                            <option value="{{ dev.id }}" selected="true">{{ dev.get_full_name }}</option>
+                                        {% else %}
+                                            <option value="{{ dev.id }}">{{ dev.get_full_name }} </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="selectTester">Тестировщик</label>
+                            <div class="controls">
+                                <select id="selectTester" name="developer">
+                                    <option value="None">None</option>
+                                    {% for tester in testers %}
+                                        {% if tester == node.tester %}
+                                            <option value="{{ tester.id }}" selected="true">{{tester.get_full_name }} </option>
+                                        {% else %}
+                                            <option value="{{ tester.id }}">{{tester.get_full_name }} </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+            <div class="span6">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label" for="selectStatus">Статус</label>
+                            <div class="controls">
+                                <select id="selectStatus" name="status" onchange="AskWhy('status')">
+                                    {% for status in statuses %}
+                                        {% if status == node.cur_status %}
+                                            <option value="{{ status.id }}" selected="true">{{status.title }} </option>
+                                        {% else %}
+                                            <option value="{{ status.id }}">{{status.title }} </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="selectRelease">Релиз</label>
+                            <div class="controls">
+                                <select id="selectRelease" name="release" onchange="AskWhy('release')">
+                                    <option value="None">None</option>
+                                    {% for release in releases %}
+                                        {% if release == node.cur_release %}
+                                            <option value="{{ release.id }}" selected="true">{{release }} {{release.date.date|date:'Y-m-d' }} </option>
+                                        {% else %}
+                                            <option value="{{ release.id }}">{{release }} {{release.date.date|date:'Y-m-d' }} </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select> <span class="add release" style='float: right; margin: 4px 15px 0 0;' onclick="ShowAddReleaseForm()"></span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="selectSource">Источник</label>
+                            <div class="controls">
+                                <select id="selectSource" name="source">
+                                    <option value="None">None</option>
+                                    {% for source in sources %}
+                                        {% if source == node.source %}
+                                            <option value="{{ source.id }}" selected="true">{{source }} </option>
+                                        {% else %}
+                                            <option value="{{ source.id }}">{{source }} </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
             </div>
         </div>
 
         <div class="margin"></div>
 
-
-        <div class="wideItem">
-            <div class="halfItem">
-                <div class="line">
-                    <div class="halfItem left">Куратор: </div><div class="halfItem">{{ node.curator.first_name }} {{ node.curator.last_name }}</div>
-                </div>
-                <div class="line">
-                    <div class="halfItem left">Разработчик: </div><div class="halfItem"><select id="selectDeveloper" name="developer">
-                    <option value="None">None</option>
-                    {% for dev in developers %}
-                        {% if dev == node.developer %}
-                            <option value="{{ dev.id }}" selected="true">{{ dev.get_full_name }}</option>
-                        {% else %}
-                            <option value="{{ dev.id }}">{{ dev.get_full_name }} </option>
-                        {% endif %}
-                    {% endfor %}
-                </select></div>
-                </div>
-                <div class="line">
-                    <div class="halfItem left">Тестировщик: </div><div class="halfItem"> <select id="selectTester" name="developer">
-                    <option value="None">None</option>
-                    {% for tester in testers %}
-                        {% if tester == node.tester %}
-                            <option value="{{ tester.id }}" selected="true">{{tester.get_full_name }} </option>
-                        {% else %}
-                            <option value="{{ tester.id }}">{{tester.get_full_name }} </option>
-                        {% endif %}
-                    {% endfor %}
-                </select></div>
-                </div>
-            </div>
-            <div class="halfItem">
-                <div class="line">
-                    <div class="halfItem left">Статус: </div>
-                    <div class="halfItem">
-                        <select id="selectStatus" name="status" onchange="AskWhy('status')">
-                            {% for status in statuses %}
-                                {% if status == node.cur_status %}
-                                    <option value="{{ status.id }}" selected="true">{{status.title }} </option>
-                                {% else %}
-                                    <option value="{{ status.id }}">{{status.title }} </option>
-                                {% endif %}
-                            {% endfor %}
-                     </select>
-                    </div>
-                </div>
-                <div class="line">
-                    <div class="halfItem left">Релиз: </div>
-                    <div class="halfItem">
-                        <select id="selectRelease" name="release" onchange="AskWhy('release')">
-                            <option value="None">None</option>
-                            {% for release in releases %}
-                                {% if release == node.cur_release %}
-                                    <option value="{{ release.id }}" selected="true">{{release }} {{release.date.date|date:'Y-m-d' }} </option>
-                                {% else %}
-                                    <option value="{{ release.id }}">{{release }} {{release.date.date|date:'Y-m-d' }} </option>
-                                {% endif %}
-                            {% endfor %}
-                        </select> <span class="add release" onclick="ShowAddReleaseForm()"></span>
-                    </div>
-                </div>
-                <div class="line">
-                    <div class="halfItem left">Источник: </div>
-                    <div class="halfItem">
-                        <select id="selectSource" name="source">
-                            <option value="None">None</option>
-                            {% for source in sources %}
-                                {% if source == node.source %}
-                                    <option value="{{ source.id }}" selected="true">{{source }} </option>
-                                {% else %}
-                                    <option value="{{ source.id }}">{{source }} </option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="margin"></div>
         <div class="wideItem">Уточнения источника <span>(ссылка на тикет или на обращение клиента):</span></div>
         <div class="wideItem">
             <textarea id='source_textArea' class="small_text" name='source_content'>{% if node.source_description %}{{ node.source_description|safe }}{% endif %}</textarea>
+        </div>
+        <div class="margin"></div>
+        <div class="wideItem">
+            <a class="btn btn-small btn-info" onclick="$('.wideItem.help').toggle()"><i class="icon-info-sign icon-white"></i> Небольшая справка </a>
+        </div>
+        <div class="margin"></div>
+        <div class="wideItem help" >
+            <div class="alert alert-info">
+                <p><strong>Способы добавления в тело приаттаченных файлов: </strong></p>
+                <ol>
+                    <li>!file.png:small! - картинка шириной 200, обтекание слева</li>
+                    <li>!file.png! - картинка c максимальной шириной 95% </li>
+                    <li>!file.png:a! - ссылка на картинку, target = _blank (так же обрабатываются все файлы, что не картинка) </li>
+                    <li>!file.zip! -  ссылка на файл, target = _blank</li>
+                </ol>
+                <p></p>
+                <strong>Вставка терминов:</strong>
+                <p><img src="/media/i/screen1.png" style="float: left; margin: 0 10px 3px 0;"> Для вставки термина используйте кнопку на панели "link to vocabulary".
+                    В открывшемся окне, вы можете выбрать существующий термин из выпадающего списка, либо добавить новый: для этого необходимо перейти вл вкладку "Добавить новый термин", ввести название термина, его определение и нажать "Ok".
+                    При нажатии на кнопку "Ok", в редактор добавляется ссылка на выбранный или добавленный термин в словаре и всплывающая подсказка с определением термина.
+                    <p><strong>Всплывающая подсказка не работает в режиме редактирования.</strong></p>
+                </p>
+            </div>
         </div>
         <div class="margin"></div>
         <div class="wideItem">
@@ -128,11 +176,11 @@
                 </span>
             </div>
             <div class="node_files">
-
             </div>
         </div>
-
         <div class="margin"></div>
+
+
         <div class="wideItem description">Описание: </div>
         <div class="wideItem">
             <textarea id='content_textArea' class="big_text" name='description_content'>{% if node.content %} {{ node.content|safe }}{% endif %}</textarea>

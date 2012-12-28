@@ -16,19 +16,13 @@ var currentNode = {name:'', type:''}; // Имя-идентефикатор те�
 
 //выполняем сразу при загрузке страницы:
 $(function(){
-    //делаем меню красивым
-    $('#menu > ul').dropotron({
-        mode: 'fade',
-        globalOffsetY: 4,
-        offsetY: -16
-    });
     $('#tabs_content_block').html('');
     //устанавливаем высоту объектов в зависимости от высоты экрана
     $('#page').css('height',$(window).height()-45);
     $('#tabs_content_block').css('height', $(window).height()-129);
 
     // Проверяем выполнена ли регистрация
-    if ($('#login_space a').hasClass('registration') && $('#login_space a').hasClass('curators')) {LoggedIn(true);}
+    if ($('a#login_space').hasClass('registration') && $('a#login_space').hasClass('curators')) {LoggedIn(true);}
     else{LoggedIn(false);}
 
 /*  Выясняем где мы находимся. Мы можем быть
@@ -404,14 +398,19 @@ function makeEditors(tab){
                 extraPlugins : 'vocabulary',
                 toolbar :
                     [
-                        { name: 'clipboard', items : [ 'Source', 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
-                        { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','Scayt' ] },
-                        { name: 'insert', items : [ 'vocabularyButton', 'Table','HorizontalRule','Smiley','SpecialChar','PageBreak'] }, '/',
-                        { name: 'styles', items : [ 'Styles','Format' ]},
-                        { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
-                        { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
-                        { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
-                        { name: 'tools', items : [ 'Maximize','-','About' ] }
+                        { name: 'source', items : [ 'Source'] },
+                        { name: 'clipboard', items : [ 'Cut','Copy','Paste'] },
+                        { name: 'undred', items : ['Undo','Redo' ] },
+                        { name: 'editing', items : [ 'Find','Replace'] },
+                        { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+                        { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv',
+                            '-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
+                        { name: 'links', items : [ 'Link','Unlink','Anchor', 'vocabularyButton' ] },
+                        { name: 'insert', items : [ 'Table','Smiley','SpecialChar'] },
+                        '/',
+                        { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
+                        { name: 'colors', items : [ 'TextColor','BGColor' ] },
+                        { name: 'tools', items : [ 'Maximize'] }
                     ]
             });
     });

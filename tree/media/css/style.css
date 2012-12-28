@@ -1,21 +1,28 @@
 * {	margin: 0;	padding: 0;}
 a {	text-decoration: none;	color: #1C86EE; cursor: pointer}
 a:hover {color: #104E8B;}
-body {font-size: 12pt;color: #5C5B5B;}
-body,input {font-family: Georgia, serif;}
+/*body {font-size: 12pt;color: #5C5B5B;}*/
+
+/*body,input {font-family: Georgia, serif;}*/
+
 strong {color: #2C2B2B;}
 br.clearfix {clear: both;}
 h1,h2,h3,h4 {font-weight: normal;letter-spacing: -1px;}
-h2 {font-size: 2.25em;}
+/*h2 {font-size: 2.25em;}*/
+
 h2,h3,h4 {color: #2C2B2B;margin-bottom: 1em;}
-h3 {font-size: 1.75em;}
-h4 {font-size: 1.5em;}
+/*h3 {font-size: 1.75em;}*/
+/*h4 {font-size: 1.5em;}*/
+
 img.alignleft {margin: 5px 20px 20px 0;float: left;}
 img.aligntop {margin: 5px 0 20px 0;}
 img.pic {padding: 5px;	border: solid 1px #D4D4D4;}
-p {	margin-bottom: 1.5em;}
-ul {margin-bottom: 1.5em;}
-ul h4 {	margin-bottom: 0.35em;}
+
+/*p {	margin-bottom: 1.5em;}*/
+/*ul {margin-bottom: 1.5em;}*/
+/*ul h4 {	margin-bottom: 0.35em;}*/
+
+
 .hidden{display: none}
 .box {overflow: hidden;	margin-bottom: 1em;}
 .date {	background: #6E6E6E;padding: 5px 6px 5px 6px;margin: 0 6px 0 0;	color: #FFFFFF;	font-size: 0.8em;border-radius: 2px;}
@@ -194,149 +201,19 @@ div.login .line{
     margin: 0;
     min-width: 900px;
 }
-#header{
-    height: 30px;
-    width: 100%;
-    border-bottom: solid 10px #104E8B;
-    min-width: 1113px;
-}
-#logo{
-    height: 40px;
-    width: 330px;
-    float: left;
-}
-#logo a {
-    text-decoration: none;
-    text-shadow: 0 1px 1px #3E3E3E;
-    color: #6E6E6E;
-    padding-left: 40px;
+
+a.brand {
     background: url(../i/logo.png) no-repeat left center;
+    padding: 10px 40px !important;
+    margin-left: 5px !important;
 }
-#logo h1 {
-    font-size: 1.5em;
-    padding: 0;
-    margin: 2px 0 0 16px;
-    float: left;
+.dropdown-menu li label{
+    padding: 5px 10px;
 }
-
-/* <<-- MENU */
-#menu {
-    padding: 0 0 0 0;
-    position: relative;
-    margin: 0;
-    width: 60%;
-    min-width: 700px;
-    text-shadow: 0 1px 1px #007D7D;
-    float: right;
-    border-bottom: 40px solid #104E8B;
-    border-left: 50px solid transparent;
-    height: 0;
+.navbar-inner {
+    border-bottom: solid 1px #2C2B2B;
 }
 
-#menu div#login_space{
-    color: pink;
-    float: left;
-    padding: 10px 15px 5px 15px;
-}
-#menu div#login_space a{
-    color: #fff;
-    text-decoration: none;
-}
-#menu ul {
-    list-style: none;
-    padding-top: 3px;
-    position: relative;
-    float: right;
-}
-#menu ul li {
-    padding: 7px 10px 5px 10px;
-    margin-left: 10px;
-    display: inline-block;
-}
-#menu ul li a, #menu ul li span{
-    text-decoration: none;
-    color: #FFFFFF;
-    letter-spacing: -1px;
-    font-size: 1.1em;
-}
-#menu ul li span b {
-    display: inline-block;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 7px solid #1C86EE;
-    margin-left: 8px;
-    position: relative;
-    top: -1px;
-}
-#menu ul li.active {
-    background: #1874CD;
-    border-top: solid 1px #1C86EE;
-    border-bottom: solid 1px #1C86EE;
-    border-radius: 3px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-}
-#menu ul li.active span b {
-    border-top-color: #1C86EE;
-}
-.dropotron {
-    background: rgba(16,78,139,0.9);
-    border-top: solid 1px #1874CD;
-    border-bottom: solid 1px #1C86EE;
-    text-shadow: 0 1px 1px #007D7D;
-    list-style: none;
-    margin: 0;
-    padding: 15px 10px 15px 10px;
-    min-width: 200px;
-    border-radius: 6px;
-    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2);
-}
-.dropotron a, .dropotron span {
-    color: #FFFFFF;
-    text-decoration: none;
-    letter-spacing: -1px;
-    display: block;
-    width: 100%;
-    position: relative;
-    height: 20px;
-}
-.dropotron span b {
-    display: inline-block;
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
-    border-left: 7px solid #00BFFF;
-    position: absolute;
-    right: 0;
-    top: 4px;
-}
-.dropotron li:hover span b {
-    border-left-color: #104E8B;
-}
-.dropotron li {
-    padding: 3px 10px 3px 10px;
-    margin: 2px 0 2px 0;
-    border-radius: 3px;
-}
-.dropotron li:hover, .dropotron li.active {
-    padding-top: 2px;
-    padding-bottom: 2px;
-    background: rgba(26,116,205,0.9);
-    border-top: solid 1px #1C86EE;
-    border-bottom: solid 1px #1C86EE;
-}
-.dropotron-level-1 {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-}
-label.menu{
-    color: #FFFFFF;
-    text-decoration: none;
-    letter-spacing: -1px;
-    margin-left: 10px;
-    position: relative;
-    height: 20px;
-}
-/* MENU -->> */
 
 
 #page {
@@ -344,8 +221,6 @@ label.menu{
     width: 100%;
     margin: 0 0 0 0;
     height: 500px;
-    border-top: solid 1px #2C2B2B;;
-    /*background: #104E8B;*/
 }
 #sidebar {
     width: 30%;
@@ -362,7 +237,7 @@ label.menu{
     height: 100%;
 }
 
-
+.wideItem.help{display: none}
 /* <<-- TREE */
 #popup_menu{
     display: none;
@@ -476,6 +351,7 @@ li.req div p{
     color: #000;
     font-weight: normal;
     cursor: pointer;
+    margin-top: 3px;
 }
 .treeview p.active{
     background: lavenderBlush;
@@ -553,43 +429,6 @@ iframe{
     color: #1c1c1c;
     font-family: verdana, sans-serif;
 }
-/*#tabs_manage_block ul li{*/
-/*float: left;*/
-/*min-width: 140px;*/
-/*padding: 6px 10px 10px 10px;*/
-/*height: 10px;*/
-/*border-top: solid 1px #7E7E7E;*/
-/*border-right: solid 1px #7E7E7E;*/
-/*background: #fff;*/
-/*overflow: hidden;*/
-/*position: relative;*/
-/*-moz-border-radius: 10px 10px 0 0; *//* Firefox */
-/*-webkit-border-radius: 10px 10px 0 0; *//* Safari, Chrome */
-/*-khtml-border-radius: 10px 10px 0 0; *//* KHTML */
-/*border-radius: 10px 10px 0 0; *//* CSS3 */
-/*}*/
-/*#tabs_manage_block ul li:first-child{*/
-/*border-left: solid 1px #7E7E7E;*/
-/*}*/
-/*#tabs_manage_block ul li.active{*/
-/*background: #6E6E6E;*/
-/*color: #fff;*/
-/*}*/
-/*#tabs_manage_block ul li.active:hover{*/
-/*background: #6E6E6E;*/
-/*}*/
-/*#tabs_manage_block ul li:hover{*/
-/*background: #DCDCDC;*/
-/*}*/
-/*#tabs_manage_block li.active a{*/
-/*color: #DCDCDC;*/
-/*}*/
-/*#tabs_manage_block li:hover a{*/
-/*color: #0F8C8C;*/
-/*color: #104E8B;*/
-/*}*/
-/* TABS -->> */
-/* <<-- TABS CONTENT */
 
 #tabs_content_block{
     height: 85%;
@@ -713,6 +552,8 @@ iframe{
 .description img{max-width: 95%;}
 
 .table {display:table; border-collapse: collapse; width: 100%;}
+
+
 div.wideItem {width: 100%; display: block;  height: auto;}
 div.wideItem.description {padding-top: 20px; margin: 0}
 div.wideItem span {font-style: italic; font-size: 12px}

@@ -4,13 +4,21 @@
     <title>AnyChart requirements tree</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <link rel="icon" type="image/ico" href="/media/i/favicon.ico"/>
-    <link rel="stylesheet" type="text/css" href="/media/css/style.css" />{# Стили #}
+
+
+    <link rel="stylesheet" type="text/css" href="/media/css/bootstrap.css" />{# Стили#}
+    <link rel="stylesheet" type="text/css" href="/media/css/style.css" />{# Стили bootstrap #}
+
     <script type="text/javascript" src="/media/js/jquery-1.8.0.min.js"></script>{# JQuery #}
-    <script type="text/javascript" src="/media/js/jquery.dropotron-1.0.js"></script>{# Красивое меню наверху #}
+
     <script type="text/javascript" src="/media/ckeditor/ckeditor.js"></script>{# Делаем из texarea редактор #}
     <script type="text/javascript" src="/media/js/jquery.contextmenu.js"></script> {#Для реакции на правую кнопку мыши#}
-    <script type="text/javascript" src="/media/js/main.js"></script> {# Файл с обработкой всех остальных событий - самый главный файл#}
+    <script type="text/javascript" src="/media/js/main.js"></script> {# Файл с обработкой всех остальных событий - самый главный файл #}
+
     <script type="text/javascript" src="/media/js/farbtastic.js"></script> {# Выбор цвета #}
+
+
+    <script type="text/javascript" src="/media/js/bootstrap.min.js"></script> {# bootstrap#}
 </head>
 <body>
     <div class="shadow" onclick="showPopup(false)"></div>
@@ -31,51 +39,56 @@
         </div>
     </div>
     <div id="wrapper">
-        <div id="header">
-            <div id="logo">
-                <h1><a href="/">AnyChart requirements tree</a></h1>
-            </div>
-            <div id="menu">
+        <div class="navbar" style='margin-bottom: 0'>
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="/">AnyChart Requirements Tree</a>
+                    <ul class="nav">
+                        {% if user.is_authenticated %}
 
-                <div id='login_space'>
+                            <li> <a> Здравствуй, {{ user.first_name }} {{ user.last_name }}!</a></li>
+                            <li><a id="login_space" class="registration {% for group in user.groups.all %} {{ group }} {% endfor %}" href="{% url auth_logout %}">Выйти</a></li>
+                            {% else %}
+                                {% if cur_product %}
+                                    <li> <a href="{% url auth_login %}">Войти</a></li>
+                                {% else %}
+                                    <li> Для начала работы необходимо <a href="{% url auth_login %}">войти на сайт</a></li>
+                                {% endif %}
+                            {% endif %}
+                    </ul>
                     {% if user.is_authenticated %}
-                        Здравствуй, {{ user.first_name }} {{ user.last_name }}! <a class="registration {% for group in user.groups.all %} {{ group }} {% endfor %}" href="{% url auth_logout %}">Выйти</a>
-                    {% else %}
-                        {% if cur_product %}
-                            <a href="{% url auth_login %}">Войти</a>
-                        {% else %}
-                            Для начала работы необходимо <a href="{% url auth_login %}">войти на сайт</a>
-                        {% endif %}
+                        <ul class="nav pull-right">
+                            {% if cur_product %}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ cur_product.title }} <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        {%  for product in products %}
+                                            <li onclick="changeProduct('{{ product.short_name }}')">
+                                                <label class="menu checkbox" for="product_{{ product.short_name }}" >
+                                                <input style='margin: -3px 0 0 0;' type="radio" value="{{ product.id }}" id="product_{{ product.short_name }}" name = "product" {% if product == cur_product %} checked {% endif %}>
+                                                {{ product.title }}
+                                                </label>
+                                            </li>
+                                        {% endfor  %}
+{#                                        <li><a href="#">Новый проект</a></li>#}
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Справочники<b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="/{{ cur_product.short_name }}/catalog/#1" onclick="changeCatalog(1)">Статусы требований </a></li>
+                                        <li><a href="/{{ cur_product.short_name }}/catalog/#2" onclick="changeCatalog(2)">Источники требований </a></li>
+                                        <li><a href="/{{ cur_product.short_name }}/catalog/#3" onclick="changeCatalog(3)">Релизы </a></li>
+                                        <li><a href="/{{ cur_product.short_name }}/catalog/#4" onclick="changeCatalog(4)">Пользователи </a></li>
+                                    </ul>
+                                </li>
+
+                            {% endif %}
+                            <li class="divider-vertical"></li>
+                            <li><a href="#">Статистика</a></li>
+                        </ul>
                     {% endif %}
                 </div>
-                {% if user.is_authenticated %}
-                    <ul>
-                        {% if cur_product %}
-                            <li><span class="opener">{{ cur_product.title }}<b></b></span>
-                                <ul>
-                                    {%  for product in products %}
-                                        <li onclick="changeProduct('{{ product.short_name }}')">
-                                            <input type="radio" value="{{ product.id }}" id="product_{{ product.short_name }}" name = "product" {% if product == cur_product %} checked {% endif %}>
-                                            <label class="menu" for="product_{{ product.short_name }}" >{{ product.title }}</label>
-                                        </li>
-                                    {% endfor  %}
-                                <li><a href="#">Новый проект</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <span class="opener">Справочники<b></b></span>
-                                <ul>
-                                    <li><a href="/{{ cur_product.short_name }}/catalog/#1" onclick="changeCatalog(1)">Статусы требований </a></li>
-                                    <li><a href="/{{ cur_product.short_name }}/catalog/#2" onclick="changeCatalog(2)">Источники требований </a></li>
-                                    <li><a href="/{{ cur_product.short_name }}/catalog/#3" onclick="changeCatalog(3)">Релизы </a></li>
-                                    <li><a href="/{{ cur_product.short_name }}/catalog/#4" onclick="changeCatalog(4)">Пользователи </a></li>
-                                </ul>
-                            </li>
-                        {% endif %}
-                        <li><a href="#">Статистика</a></li>
-                    </ul>
-                {% endif %}
-                <br class="clearfix"/>
             </div>
         </div>
 
