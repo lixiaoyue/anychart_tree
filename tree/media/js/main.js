@@ -394,8 +394,10 @@ function makeEditors(tab){
         if (editor) { editor.destroy(true); }
         CKEDITOR.replace(obj.id,
             {
+                height : '500',
                 resize_enabled: false,
                 extraPlugins : 'vocabulary',
+
                 toolbar :
                     [
                         { name: 'source', items : [ 'Source'] },
