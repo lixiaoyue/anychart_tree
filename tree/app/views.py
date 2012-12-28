@@ -101,6 +101,9 @@ def addSourceCatalog(request):
 # Удалить источник
 @csrf_exempt
 def deleteSourceCatalog(request):
+    for node in Node.objects.filter(source =  Source.objects.get(id = request.POST['id'])):
+        node.source = None
+        node.save()
     Source.objects.get(id = request.POST['id']).delete()
     sources = Source.objects.all()
     cur_product = Product.objects.get(short_name = request.POST['product'])
@@ -476,7 +479,7 @@ def nodeHistory(request):
 # Открываем корзину
 @csrf_exempt
 def openTrash(request):
-    deletedNodes = Node.objects.filter(cur_status = 6)
+    deletedNodes = Node.objects.filter(cur_status = 6, product = Product.objects.get(short_name = request.POST['product']))
     nodes = StatusHistory.objects.filter(id_node__in = deletedNodes).filter(id_status = 6).filter(id_node__type = 'BR').order_by('-date')
     requirements = StatusHistory.objects.filter(id_node__in = deletedNodes).filter(id_status = 6).filter(id_node__type = 'OR').order_by('-date')
     return render_to_response("trash.html", {'nodes':checkForRepeatable(nodes), 'requirements':checkForRepeatable(requirements)})

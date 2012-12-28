@@ -698,7 +698,8 @@ function openTrash(){
     $.ajax({
         type: "POST",
         url: "/openTrash/",
-        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        data: {product:location.pathname.split('/')[1],
+            csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(html){
             $('#tabs_content_block div.tabs').hide();
             $('#tabs_content_block div.tabs.tab_trash').html(html);
