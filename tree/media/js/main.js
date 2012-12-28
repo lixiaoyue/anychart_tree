@@ -377,10 +377,9 @@ function CreateTie(parent_id, type, name){
             data: {parent:parent_id, type:type, name:name, product:$('input[name=product]:checked').val(), csrfmiddlewaretoken: '{{ csrf_token }}'},
             success: function(href){
                 showPopup(false);
-
-//                window.location.href = href;
+                window.location.href = href;
                 window.setTimeout(function(){
-//                    window.location.reload();
+                    window.location.reload();
                 }, 100);
             }
         });
