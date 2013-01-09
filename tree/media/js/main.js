@@ -640,18 +640,19 @@ function getFiles(node_id){
 
 //удаление файлов из узла
 function DeleteFile(path){
-    console.log(path);
-    $.ajax({
-        type: "POST",
-        url: "/deleteFile/",
-        data: {
-            file_path: path,
-            csrfmiddlewaretoken: '{{ csrf_token }}'
-        },
-        success: function(html){
-            getFiles($('input#node_id').val());
-        }
-    });
+    if (confirm('Вы уверены, что хотите удалить файл ' + path + ' ?')){
+        $.ajax({
+            type: "POST",
+            url: "/deleteFile/",
+            data: {
+                file_path: path,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function(html){
+                getFiles($('input#node_id').val());
+            }
+        });
+    }
 }
 
 //Отменить редактирование
