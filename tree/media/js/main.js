@@ -318,6 +318,7 @@ function getNodeContent(object_id){
                 $('#tabs_content_block div.tabs.tab_'+object_id).html(html);
                 if (!LOGGED_IN) LoggedIn(false);
                 getFiles(currentNode['name']);
+                window.setTimeout(function(){$('.node_files span.delete').hide()}, 50);
             }
         });
     }
@@ -378,6 +379,8 @@ function CreateTie(parent_id, type, name){
             success: function(href){
                 showPopup(false);
                 window.location.href = href;
+                window.location.href = href;
+                window.locatiohref = href;
                 window.setTimeout(function(){
                     window.location.reload();
                 }, 100);
@@ -637,6 +640,7 @@ function getFiles(node_id){
 
 //удаление файлов из узла
 function DeleteFile(path){
+    console.log(path);
     $.ajax({
         type: "POST",
         url: "/deleteFile/",
