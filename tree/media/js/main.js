@@ -121,7 +121,7 @@ function LoggedIn(flag){
                 'create_folder': function() {
                 showCreateTieForm(tie_id, 'NE');}
             },
-            menuStyle: {width: 170, cursor:'pointer' },
+            menuStyle: {width: 180, cursor:'pointer' },
             itemHoverStyle: {backgroundColor:'#ccc', border:'1px solid white', margin:'0', padding:'3px'}
         });
 
