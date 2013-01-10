@@ -45,8 +45,9 @@ $(function(){
         $('.dic_item h4').each(function(){
             $(this).attr('id', $(this).html().replace(' ', '_'));
         });
-        location.href = location.href;
-
+        if (location.hash != ''){
+            location.href = location.href;
+        }
     }else{
         // если hash не пуст. значит нужно открыть какой-то узел или корзину
         if (location.hash.length>2){
