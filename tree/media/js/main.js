@@ -41,7 +41,12 @@ $(function(){
         //TODO: Тут пока никто незнает что делать надо, но делать чего-то надо
     // Проверяем, что мы не в словаре
     }else if (location.pathname.split('/')[2] == 'dictionary'){
-        // Просто показываем словарь со всеми терминами,js на данном этапе не нужен
+        // Показываем словарь со всеми терминами и вставляем вместо пробелов нижний проччерк
+        $('.dic_item h4').each(function(){
+            $(this).attr('id', $(this).html().replace(' ', '_'));
+        });
+        location.href = location.href;
+
     }else{
         // если hash не пуст. значит нужно открыть какой-то узел или корзину
         if (location.hash.length>2){
@@ -149,8 +154,7 @@ window.onresize = function (){
 //Меняем продукт
 function changeProduct(name){
     $('input#product_'+ name).attr('checked', true);
-    var st = 'http://'+ window.location.host +'/' + name +'/';
-    window.location.href = st;
+    window.location.href = 'http://'+ window.location.host +'/' + name +'/';
 }
 
 //Показать или сткрыть всплывающее окно
@@ -264,7 +268,6 @@ function openTab(object_id){
     //добавляем блок для содержимого вкладки
     addBlockForTabContent(object_id);
     //добавляем название вкладки
-
     addTabNameToManageBlock(obj.html());
     //Показать контейнер для содержимого вкладки
     showTabContent(object_id);
@@ -402,7 +405,6 @@ function makeEditors(tab){
                 height : '500',
                 resize_enabled: false,
                 extraPlugins : 'vocabulary',
-
                 toolbar :
                     [
                         { name: 'source', items : [ 'Source'] },
@@ -425,7 +427,6 @@ function makeEditors(tab){
         if (editor) { editor.destroy(true); }
         CKEDITOR.replace(obj.id,
             {
-//                skin : 'office2003',
                 height : '40',
                 extraPlugins : 'vocabulary',
                 toolbar :
@@ -618,7 +619,7 @@ function SaveFile(){
     $("#loadingFile").submit(function(){
             setTimeout(function(){
                 getFiles($('input#node_id').val());
-            }, 500);
+            }, 1000);
         });
 }
 

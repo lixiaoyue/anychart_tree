@@ -3,7 +3,7 @@
 
         {% for item in items %}
             <div class="dic_item">
-                <h4 id='{{ item.id }}'>{{ item.name }}</h4>{{ item.description|safe}}
+                <h4 id=''>{{ item.name }}</h4>{{ item.description|safe}}
                 <p style="margin-top: 5px"><a href="/{{ cur_product.short_name }}/">К дереву требований</a>
             </div>
         {% endfor %}
