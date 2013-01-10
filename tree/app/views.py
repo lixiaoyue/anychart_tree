@@ -47,7 +47,7 @@ def dictionary(request, name):
         cur_product = Product.objects.get(short_name=name)
         products = Product.objects.all()
         user = request.user
-        items = Term.objects.filter(product = cur_product)
+        items = Term.objects.filter(product = cur_product).order_by('name')
         return render_to_response('index.html',{'main_content':'dictionary.html', 'items':items, 'user':user, 'products' : products, 'cur_product':cur_product})
     except Exception:
         homePage(request)

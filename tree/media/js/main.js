@@ -118,14 +118,16 @@ function LoggedIn(flag){
                 'create_tie': function() {
                 showCreateTieForm( tie_id, 'BR');},
                 'create_folder': function() {
-                showCreateTieForm(tie_id, 'NE');}
+                showCreateTieForm(tie_id, 'NE');},
+                'copy_link_tie': function() {
+                copyLinkToHash(tie_id);
+                }
             },
             menuStyle: {width: 170, cursor:'pointer' },
             itemHoverStyle: {backgroundColor:'#ccc', border:'1px solid white', margin:'0', padding:'3px'}
         });
 
         // создать новое требование
-
         $('span.right_active.req').contextMenu('popup_req_menu',{
             onContextMenu: function(e) {
                 tie_id = $(e.target).parent().parent().parent().attr('id').replace('reqs_','');
@@ -136,6 +138,7 @@ function LoggedIn(flag){
             menuStyle: {width: 180, cursor:'pointer' },
             itemHoverStyle: {backgroundColor:'#ccc', border:'1px solid white', margin:'0', padding:'3px'}
         });
+        //делаем контекстное меню для требований (там можно скопировать ссылку на требование)
         $('#basket').removeClass('hidden').show();
     }else{
         // скрыть инструменты редактирования
@@ -225,11 +228,37 @@ function pasteRequirements(liId){
                 }else{
                     $('li#' + liId.replace('tie_', 'reqs_')).removeClass('noReqs');
                     $('li#' + liId.replace('tie_', 'reqs_') + ' ul').html(html);
+                    var tie_id;
+                    $('li.req a.reqs').contextMenu('popup_req',{
+                        onContextMenu: function(e) {
+                            tie_id = $(e.target).attr('id');
+                            return true;
+                        },
+                        bindings: {'copy_link_req': function() {
+                            copyLinkToHash(tie_id);
+                        }},
+                        menuStyle: {width: 180, cursor:'pointer' },
+                        itemHoverStyle: {backgroundColor:'#ccc', border:'1px solid white', margin:'0', padding:'3px'}
+                    });
                     $('body').dequeue();
                 }
             }
         });
     }
+
+}
+
+//Копируем в hash ссылку
+function copyLinkToHash(id){
+    if (id.split('_')[0] == 'PR'){
+        var link = '/' + id.split('_')[1] + '/#' + id.split('_')[0];
+    }else{
+        link = '/' + id.split('_')[1].split('-')[0] + '/#' + id.split('_')[0]+'-'+id.split('_')[1].split('-')[1];
+    }
+    $("#copy_link_req, #copy_link_tie").zclip({
+        path: "http://www.steamdev.com/zclip/js/ZeroClipboard.swf",
+        copy: link
+    });
 
 }
 
@@ -605,6 +634,7 @@ function saveNode(nodeId){
         success: function(html){
             EDITING = false;
             window.location.reload();
+
         }
     });
 }
