@@ -526,7 +526,7 @@ def getTermById(request):
 def getTerms(request):
     list = u''
     product = Product.objects.get(short_name = request.POST['product'])
-    for term in Term.objects.filter(product = product):
+    for term in Term.objects.filter(product = product).order_by('name'):
         list += u'%s&#%s!#' % (term.name, term.id)
     return HttpResponse(list)
 
