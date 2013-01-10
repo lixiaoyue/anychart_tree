@@ -280,6 +280,13 @@ li#create_tie a:hover,li#create_req a:hover {
     color: #ccc;
 }
 
+.context_input {
+    float: right;
+    width: 110px;
+    padding: 0!important;
+    text-align: right !important;
+    font-size: 11px !important;
+}
 .treeview { padding: 10px 0; clear: both; font-family: Arial, sans-serif; width: 200%; }
 .treeview ul{
     overflow: hidden;

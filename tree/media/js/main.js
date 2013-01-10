@@ -251,7 +251,7 @@ function copyLinkToHash(input_id, id){
     }else{
         link = '/' + id.split('_')[1].split('-')[0] + '/#' + id.split('_')[0]+'-'+id.split('_')[1].split('-')[1];
     }
-    $('li#'+input_id).html('Ссылка: ' + link);
+    $('li#'+input_id).html('Ссылка: <input type="text" class="context_input" onfocus="this.value = this.value;" value="'+location.origin+link+'" readonly>');
 }
 
 //Открываем узел при клике по дереву ()
