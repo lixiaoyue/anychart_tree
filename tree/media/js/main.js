@@ -113,15 +113,13 @@ function LoggedIn(flag){
                         tie_id = $(e.target).attr('id');
                     }
                 }
+                copyLinkToHash('copy_link_tie', tie_id);
                 return true;
             },bindings: {
                 'create_tie': function() {
                 showCreateTieForm( tie_id, 'BR');},
                 'create_folder': function() {
-                showCreateTieForm(tie_id, 'NE');},
-                'copy_link_tie': function() {
-                copyLinkToHash(tie_id);
-                }
+                showCreateTieForm(tie_id, 'NE');}
             },
             menuStyle: {width: 170, cursor:'pointer' },
             itemHoverStyle: {backgroundColor:'#ccc', border:'1px solid white', margin:'0', padding:'3px'}
@@ -232,11 +230,9 @@ function pasteRequirements(liId){
                     $('li.req a.reqs').contextMenu('popup_req',{
                         onContextMenu: function(e) {
                             tie_id = $(e.target).attr('id');
+                            copyLinkToHash('copy_link_req', tie_id);
                             return true;
                         },
-                        bindings: {'copy_link_req': function() {
-                            copyLinkToHash(tie_id);
-                        }},
                         menuStyle: {width: 180, cursor:'pointer' },
                         itemHoverStyle: {backgroundColor:'#ccc', border:'1px solid white', margin:'0', padding:'3px'}
                     });
@@ -249,17 +245,13 @@ function pasteRequirements(liId){
 }
 
 //Копируем в hash ссылку
-function copyLinkToHash(id){
+function copyLinkToHash(input_id, id){
     if (id.split('_')[0] == 'PR'){
         var link = '/' + id.split('_')[1] + '/#' + id.split('_')[0];
     }else{
         link = '/' + id.split('_')[1].split('-')[0] + '/#' + id.split('_')[0]+'-'+id.split('_')[1].split('-')[1];
     }
-    $("#copy_link_req, #copy_link_tie").zclip({
-        path: "http://www.steamdev.com/zclip/js/ZeroClipboard.swf",
-        copy: link
-    });
-
+    $('li#'+input_id).html('Ссылка: ' + link);
 }
 
 //Открываем узел при клике по дереву ()
