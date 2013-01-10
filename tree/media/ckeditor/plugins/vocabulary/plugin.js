@@ -14,7 +14,7 @@ CKEDITOR.plugins.add( 'vocabulary',
 
 
     } );
-
+var select_element_id;
 CKEDITOR.dialog.add( 'vocabularyDialog', function ( editor )
 {
     return {
@@ -33,7 +33,7 @@ CKEDITOR.dialog.add( 'vocabularyDialog', function ( editor )
                                 id : 'item',
                                 items : [ ['Select Term',0] ],
                                 onLoad : function(element) {
-                                    var element_id = '#' + this.getInputElement().$.id;
+                                    select_element_id = '#' + this.getInputElement().$.id;
                                     $.ajax({
                                         type: "POST",
                                         url: "/getTerms/",
@@ -49,7 +49,7 @@ CKEDITOR.dialog.add( 'vocabularyDialog', function ( editor )
                                             }
                                             if (list.length > 0){
                                                 $.each(list, function(index, item) {
-                                                    $(element_id).get(0).options[$(element_id).get(0).options.length] = new Option(item[0], item[1]);
+                                                    $(select_element_id).get(0).options[$(select_element_id).get(0).options.length] = new Option(item[0], item[1]);
                                                 });
                                             }
                                         }
@@ -91,8 +91,9 @@ CKEDITOR.dialog.add( 'vocabularyDialog', function ( editor )
                         term_name: term,
                         term_decs: term_desc,
                         csrfmiddlewaretoken: '{{ csrf_token }}'},
-                    success: function(html){
-                        setLink(html, term, term_desc);
+                    success: function(term_id){
+                        setLink(term_id, term, term_desc);
+                        $(select_element_id +' option').eq(1).before($("<option></option>").val(term_id).html(term));
                     }
                 });
 
