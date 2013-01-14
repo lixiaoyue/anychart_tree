@@ -115,10 +115,10 @@ CKEDITOR.dialog.add( 'vocabularyDialog', function ( editor )
             }
 
             // Добавить в текст ссылку на термин, вставить скрытое описание
-            function setLink(href, title, desc){
+            function setLink(id, title, desc){
                 var link = editor.document.createElement( 'a');
-                link.setAttribute('id', href );
-                href = '/'+ location.pathname.split('/')[1] + '/dictionary/#' + title.replace(' ', '_');
+                link.setAttribute('id', id);
+                var href = '/'+ location.pathname.split('/')[1] + '/dictionary/#' + title.replace(' ', '_');
                 link.setAttribute('href', href );
                 link.setAttribute('class', 'tip');
                 link.setAttribute('target', '_blank');
