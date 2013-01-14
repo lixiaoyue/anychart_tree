@@ -287,16 +287,16 @@ def editNode(request):
         statuses.append(Status.objects.get(id = int(node.cur_status.id)))
         if node.cur_status.id < 5:
             statuses.append(Status.objects.get(id = int(node.cur_status.id) + 1))
-        return HttpResponse(statuses)
-#        return render_to_response("editNode.html", {
-#            'node':node,
-#            'colorItems': StatusColorUser.objects.filter(user = request.user.id),
-#            'statuses':statuses,
-#            'sources': Source.objects.all(),
-#            'releases': Release.objects.filter(product = node.product).filter(status = False),
-#            'developers': User.objects.filter(groups__name='developers'),
-#            'testers': User.objects.filter(groups__name='testers')
-#        }, context_instance=RequestContext(request))
+#        return HttpResponse(statuses)
+        return render_to_response("editNode.html", {
+            'node':node,
+            'colorItems': StatusColorUser.objects.filter(user = request.user.id),
+            'statuses':statuses,
+            'sources': Source.objects.all(),
+            'releases': Release.objects.filter(product = node.product).filter(status = False),
+            'developers': User.objects.filter(groups__name='developers'),
+            'testers': User.objects.filter(groups__name='testers')
+        }, context_instance=RequestContext(request))
 
 # Открыть для просмотра Папку или Продукт
 @csrf_exempt
