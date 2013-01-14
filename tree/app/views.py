@@ -276,25 +276,26 @@ def addNode(request):
 def editNode(request):
     if request.method == 'POST':
         node = Node.objects.get(name_id = request.POST['nodeId'].split('_')[1])
-        if NOT_AVAILABLE_NODES.has_key(node.name_id) and NOT_AVAILABLE_NODES[node.name_id] != request.user.get_full_name():
-            return HttpResponse('Оперция не возможна: %s еще не закончил редактирование %s.' % (NOT_AVAILABLE_NODES[node.name_id], node.title))
-        else:
-            NOT_AVAILABLE_NODES[node.name_id] = request.user.get_full_name()
-        statuses = []
-        if node.cur_status.id > 1:
-            statuses.append(Status.objects.get(id = int(node.cur_status.id) - 1))
-        statuses.append(Status.objects.get(id = int(node.cur_status.id)))
-        if node.cur_status.id < 5:
-            statuses.append(Status.objects.get(id = int(node.cur_status.id) + 1))
-        return render_to_response("editNode.html", {
-            'node':node,
-            'colorItems': StatusColorUser.objects.filter(user = request.user.id),
-            'statuses':statuses,
-            'sources': Source.objects.all(),
-            'releases': Release.objects.filter(product = node.product).filter(status = False),
-            'developers': User.objects.filter(groups__name='developers'),
-            'testers': User.objects.filter(groups__name='testers')
-        }, context_instance=RequestContext(request))
+        return HttpResponse(node.content)
+#        if NOT_AVAILABLE_NODES.has_key(node.name_id) and NOT_AVAILABLE_NODES[node.name_id] != request.user.get_full_name():
+#            return HttpResponse('Оперция не возможна: %s еще не закончил редактирование %s.' % (NOT_AVAILABLE_NODES[node.name_id], node.title))
+#        else:
+#            NOT_AVAILABLE_NODES[node.name_id] = request.user.get_full_name()
+#        statuses = []
+#        if node.cur_status.id > 1:
+#            statuses.append(Status.objects.get(id = int(node.cur_status.id) - 1))
+#        statuses.append(Status.objects.get(id = int(node.cur_status.id)))
+#        if node.cur_status.id < 5:
+#            statuses.append(Status.objects.get(id = int(node.cur_status.id) + 1))
+#        return render_to_response("editNode.html", {
+#            'node':node,
+#            'colorItems': StatusColorUser.objects.filter(user = request.user.id),
+#            'statuses':statuses,
+#            'sources': Source.objects.all(),
+#            'releases': Release.objects.filter(product = node.product).filter(status = False),
+#            'developers': User.objects.filter(groups__name='developers'),
+#            'testers': User.objects.filter(groups__name='testers')
+#        }, context_instance=RequestContext(request))
 
 # Открыть для просмотра Папку или Продукт
 @csrf_exempt
@@ -529,6 +530,12 @@ def getTerms(request):
     for term in Term.objects.filter(product = product).order_by('name'):
         list += u'%s&#%s!#' % (term.name, term.id)
     return HttpResponse(list)
+
+# Изменить термин
+@csrf_exempt
+def getTermDescription(request):
+    term = Term.objects.get(id = request.POST['id'])
+    return HttpResponse(term.description)
 
 def checking(request):
 #    NOT_AVAILABLE_NODES = {}

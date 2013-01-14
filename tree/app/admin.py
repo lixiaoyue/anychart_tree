@@ -48,7 +48,7 @@ class ReleaseHistoryAdmin(admin.ModelAdmin):
 admin.site.register(ReleaseHistory, ReleaseHistoryAdmin)
 
 class TermAdmin(admin.ModelAdmin):
-    list_display = ('name','description')
+    list_display = ('name','id','description')
     search_fields = ('name','description')
     list_filter =('product',)
 admin.site.register(Term, TermAdmin)

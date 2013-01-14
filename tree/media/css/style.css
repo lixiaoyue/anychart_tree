@@ -23,7 +23,7 @@ img.pic {padding: 5px;	border: solid 1px #D4D4D4;}
 /*ul h4 {	margin-bottom: 0.35em;}*/
 
 
-.hidden{display: none}
+.hidden{display: none; visibility: initial;}
 .box {overflow: hidden;	margin-bottom: 1em;}
 .date {	background: #6E6E6E;padding: 5px 6px 5px 6px;margin: 0 6px 0 0;	color: #FFFFFF;	font-size: 0.8em;border-radius: 2px;}
 .table div.hidden, div.hidden{display: none}
@@ -589,7 +589,7 @@ div.picker.statuses span.status_3, div.picker.statuses span.status_4, div.picker
 .description table {margin:20px 0 20px 40px; border-collapse: collapse;}
 
 .description a{position: relative; }
-.description a.tip span.hidden {position: absolute;width: 300px;}
+.description a.tip span.hidden {position: absolute;width: 300px;z-index: 999}
 .description a.tip:hover span.hidden {display: block; background: #fff; padding: 5px; border: 1px solid #888;}
 
 .dic_item{margin: 50px 0;}
