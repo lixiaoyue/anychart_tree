@@ -919,7 +919,7 @@ function saveRelease(id){
 //------------------Термины-----------------------//
 $('a.tip').live('mouseenter', function(){
     var a = $(this);
-    if (a.children("span").html() == ''){
+    if (a.children("span").html() == '&nbsp;'){
         $.ajax({
             type: "POST",
             url: "/getTermDescription/",
