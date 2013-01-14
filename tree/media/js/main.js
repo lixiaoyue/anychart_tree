@@ -24,6 +24,9 @@ $(function(){
     // Проверяем выполнена ли регистрация
     if ($('a#login_space').hasClass('registration') && $('a#login_space').hasClass('curators')) {LoggedIn(true);}
     else{LoggedIn(false);}
+    $('body').keyup(function(event){
+        if(event.keyCode === 27){showPopup(false);}
+    });
 
 /*  Выясняем где мы находимся. Мы можем быть
     1. "/"      - дома, страница инициализации
@@ -163,6 +166,13 @@ function changeProduct(name){
 function showPopup(bool){
     if(bool){
         $('div.popup, .shadow').show();
+        //реагируем на Enter и на Esc во всплывающем окне добавление нового узла
+        $('.cover_form.small #add_node_name_text').keypress(function(event){
+            if (event.keyCode == 13) {
+                CreateTie($(this).parent().attr('id'), $(this).parent().children('div.confirm').attr('id'), $('#add_node_name_text').val());
+            }
+        });
+
     }else{
         $('div.popup').html('');
         $('div.popup, .shadow').hide();
@@ -413,6 +423,8 @@ function CreateTie(parent_id, type, name){
         });
     }
 }
+
+
 
 
 //------------------РЕДАКТИРОВАНИЕ УЗЛОВ ДЕРЕВА-----------------------//
@@ -918,6 +930,7 @@ function saveRelease(id){
 }
 
 //------------------Термины-----------------------//
+
 $('a.tip').live('mouseenter', function(){
     var a = $(this);
     if (a.children("span").html() == '&nbsp;'){
@@ -932,12 +945,15 @@ $('a.tip').live('mouseenter', function(){
     }
 });
 
+//редактировать термин
 function editTerm(term_Id){
     $('div.dic_item#' + term_Id).addClass('alert alert-success');
     $('div.dic_item#' + term_Id + ' h4.name').html('<input type="text" value="'+$('div.dic_item#' + term_Id + ' h4.name').html()+'">');
     $('div.dic_item#' + term_Id + ' div.descr').html('<textarea style="width: 650px;">'+$('div.dic_item#' + term_Id + ' div.descr').html()+'</textarea>');
     $('div.dic_item#' + term_Id + ' p.manage').html('<span style="cursor: pointer" onclick="saveEditedTerm($(this).parent().parent().attr(\'id\'))"><i class="icon-ok" style="margin-right: 5px;"></i> Сохранить</span>');
 }
+
+//Сохранить отредактированный термин
 function saveEditedTerm(term_Id){
     $.ajax({
         type: "POST",
@@ -953,6 +969,8 @@ function saveEditedTerm(term_Id){
         }
     });
 }
+
+//Удалить термин
 function deleteTerm(term_Id){
 if (window.confirm("Вы уверены, что хотите удалить термин?")){
     $.ajax({
