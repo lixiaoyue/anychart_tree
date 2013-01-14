@@ -122,7 +122,7 @@ CKEDITOR.dialog.add( 'vocabularyDialog', function ( editor )
                 link.setAttribute('href', href );
                 link.setAttribute('class', 'tip');
                 link.setAttribute('target', '_blank');
-                link.setHtml(title + '<span class="hidden">' + desc + '</span>');
+                link.setHtml(title + '<span class="hidden"></span>');
                 editor.insertElement(link);
             }
         }

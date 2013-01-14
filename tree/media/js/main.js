@@ -919,14 +919,14 @@ function saveRelease(id){
 //------------------Термины-----------------------//
 $('a.tip').live('mouseenter', function(){
     var a = $(this);
-    $.ajax({
-        type: "POST",
-        url: "/getTermDescription/",
-        data: {id: a.attr('id'), csrfmiddlewaretoken: '{{ csrf_token }}'},
-        success: function(html){
-            a.children("span").html(html);
-        }
-    });
-
-
+    if (a.children("span").html() == ''){
+        $.ajax({
+            type: "POST",
+            url: "/getTermDescription/",
+            data: {id: a.attr('id'), csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(html){
+                a.children("span").html(html);
+            }
+        });
+    }
 });
