@@ -276,11 +276,11 @@ def addNode(request):
 def editNode(request):
     if request.method == 'POST':
         node = Node.objects.get(name_id = request.POST['nodeId'].split('_')[1])
-        return HttpResponse(node.content)
-#        if NOT_AVAILABLE_NODES.has_key(node.name_id) and NOT_AVAILABLE_NODES[node.name_id] != request.user.get_full_name():
-#            return HttpResponse('Оперция не возможна: %s еще не закончил редактирование %s.' % (NOT_AVAILABLE_NODES[node.name_id], node.title))
-#        else:
-#            NOT_AVAILABLE_NODES[node.name_id] = request.user.get_full_name()
+        if NOT_AVAILABLE_NODES.has_key(node.name_id) and NOT_AVAILABLE_NODES[node.name_id] != request.user.get_full_name():
+            return HttpResponse('Оперция не возможна: %s еще не закончил редактирование %s.' % (NOT_AVAILABLE_NODES[node.name_id], node.title))
+        else:
+            NOT_AVAILABLE_NODES[node.name_id] = request.user.get_full_name()
+        return HttpResponse(NOT_AVAILABLE_NODES)
 #        statuses = []
 #        if node.cur_status.id > 1:
 #            statuses.append(Status.objects.get(id = int(node.cur_status.id) - 1))
