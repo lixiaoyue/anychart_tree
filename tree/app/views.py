@@ -280,13 +280,14 @@ def editNode(request):
             return HttpResponse('Оперция не возможна: %s еще не закончил редактирование %s.' % (NOT_AVAILABLE_NODES[node.name_id], node.title))
         else:
             NOT_AVAILABLE_NODES[node.name_id] = request.user.get_full_name()
-        return HttpResponse(NOT_AVAILABLE_NODES)
-#        statuses = []
-#        if node.cur_status.id > 1:
-#            statuses.append(Status.objects.get(id = int(node.cur_status.id) - 1))
-#        statuses.append(Status.objects.get(id = int(node.cur_status.id)))
-#        if node.cur_status.id < 5:
-#            statuses.append(Status.objects.get(id = int(node.cur_status.id) + 1))
+
+        statuses = []
+        if node.cur_status.id > 1:
+            statuses.append(Status.objects.get(id = int(node.cur_status.id) - 1))
+        statuses.append(Status.objects.get(id = int(node.cur_status.id)))
+        if node.cur_status.id < 5:
+            statuses.append(Status.objects.get(id = int(node.cur_status.id) + 1))
+        return HttpResponse(statuses)
 #        return render_to_response("editNode.html", {
 #            'node':node,
 #            'colorItems': StatusColorUser.objects.filter(user = request.user.id),
