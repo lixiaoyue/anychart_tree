@@ -342,8 +342,8 @@ function getNodeContent(object_id){
             success: function(html){
                 $('#tabs_content_block div.tabs.tab_'+object_id).html(html);
                 if (!LOGGED_IN) LoggedIn(false);
-                getFiles(currentNode['name']);
-                window.setTimeout(function(){$('.node_files span.delete').hide()}, 50);
+                getFiles(currentNode['name'], false);
+
             }
         });
     }
@@ -647,7 +647,7 @@ function SaveFile(){
 }
 
 //Получить все файлы, сохраненные для этого узла
-function getFiles(node_id){
+function getFiles(node_id, flag){
     $.ajax({
         type: "POST",
         url: "/getFiles/",
@@ -657,6 +657,7 @@ function getFiles(node_id){
         },
         success: function(html){
             $('.node_files').html(html);
+            if (!flag){window.setTimeout(function(){$('.node_files span.delete').hide()}, 10);}
             showPopup(false);
         }
     });
