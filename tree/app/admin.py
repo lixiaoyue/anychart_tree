@@ -30,7 +30,7 @@ admin.site.register(File, FileAdmin)
 
 class NodeAdmin(MPTTModelAdmin):
     mptt_level_indent = 20
-    list_display = ('title','id', 'creation_date')
+    list_display = ('title','id','type', 'creation_date')
     list_filter =('product', 'type', 'cur_status', 'cur_release', 'source')
     ordering = ('creation_date',)
     search_fields = ('name_id', 'title')
