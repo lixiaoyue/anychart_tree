@@ -477,21 +477,19 @@ $('#add_node_name_text, #add_file_name_text, #add_release_name_text, #add_releas
 
 //Редактировать узел
 function editNode(nodeId){
-    console.log(nodeId);
     $.ajax({
         type: "POST",
         url: "/editNode/",
         data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(html){
-            console.log(html);
-//            $('#tabs_content_block div.tabs.tab_' + nodeId).html(html);
-//            if ($('.table').hasClass('editable')){
-//                EDITING = true;
-//                window.setTimeout(function(){
-//                    getFiles(currentNode['name']);
-//                    makeEditors(nodeId);
-//                }, 300);
-//            }
+            $('#tabs_content_block div.tabs.tab_' + nodeId).html(html);
+            if ($('.table').hasClass('editable')){
+                EDITING = true;
+                window.setTimeout(function(){
+                    getFiles(currentNode['name']);
+                    makeEditors(nodeId);
+                }, 300);
+            }
         }
     });
 }
