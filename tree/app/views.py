@@ -532,11 +532,29 @@ def getTerms(request):
         list += u'%s&#%s!#' % (term.name, term.id)
     return HttpResponse(list)
 
-# Изменить термин
+# Получить описание термина
 @csrf_exempt
 def getTermDescription(request):
+    try:
+        term = Term.objects.get(id = request.POST['id'])
+        return HttpResponse(term.description)
+    except Exception:
+        return HttpResponse('Error: Термин удален')
+
+# Изменить термин
+@csrf_exempt
+def saveEditedTerm(request):
     term = Term.objects.get(id = request.POST['id'])
-    return HttpResponse(term.description)
+    term.name = request.POST['name']
+    term.description = request.POST['description']
+    term.save()
+    return HttpResponse('<h4 class="name" id="%s">%s</h4><div class="descr">%s</div>' %(term.name, term.name, term.description))
+# Изменить термин
+@csrf_exempt
+def deleteTerm(request):
+    term = Term.objects.get(id = request.POST['id'])
+    term.delete()
+    return HttpResponse('')
 
 def checking(request):
 #    NOT_AVAILABLE_NODES = {}

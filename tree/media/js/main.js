@@ -930,3 +930,40 @@ $('a.tip').live('mouseenter', function(){
         });
     }
 });
+
+function editTerm(term_Id){
+    $('div.dic_item#' + term_Id).addClass('alert alert-success');
+    $('div.dic_item#' + term_Id + ' h4.name').html('<input type="text" value="'+$('div.dic_item#' + term_Id + ' h4.name').html()+'">');
+    $('div.dic_item#' + term_Id + ' div.descr').html('<textarea style="width: 650px;">'+$('div.dic_item#' + term_Id + ' div.descr').html()+'</textarea>');
+    $('div.dic_item#' + term_Id + ' p.manage').html('<span style="cursor: pointer" onclick="saveEditedTerm($(this).parent().parent().attr(\'id\'))"><i class="icon-ok" style="margin-right: 5px;"></i> Сохранить</span>');
+}
+function saveEditedTerm(term_Id){
+    $.ajax({
+        type: "POST",
+        url: "/saveEditedTerm/",
+        data: {
+            id: term_Id,
+            name: $('div.dic_item#' + term_Id + ' h4.name input[type=text]').val(),
+            description: $('div.dic_item#' + term_Id + ' div.descr textarea').val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){
+            $('div.dic_item#' + term_Id).removeClass('alert alert-success');
+            $('div.dic_item#' + term_Id).html(html + '<p class="manage" style="margin-top: 5px"><span style="cursor: pointer; margin-right: 10px; color: #1C86EE;" onclick="editTerm($(this).parent().parent().attr(\'id\'));"><i class="icon-pencil" style="margin-right: 5px;"></i>Редактировать;</span><span style="cursor: pointer; margin-right: 10px; color: #1C86EE;" onclick="deleteTerm($(this).parent().parent().attr(\'id\'));"><i class="icon-remove" style="margin-right: 5px;"></i>Удалить;</span><a href="/AATS/">К дереву требований</a></p>');
+        }
+    });
+}
+function deleteTerm(term_Id){
+if (window.confirm("Вы уверены, что хотите удалить термин?")){
+    $.ajax({
+        type: "POST",
+        url: "/deleteTerm/",
+        data: {
+            id: term_Id,
+            csrfmiddlewaretoken: '{{ csrf_token }}'},
+        success: function(html){
+            $('div.dic_item#' + term_Id).remove();
+        }
+    });
+}
+
+}

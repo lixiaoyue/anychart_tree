@@ -47,6 +47,8 @@ urlpatterns = patterns('',
     url(r'^getTermById/$', getTermById),
     url(r'^getTerms/$', getTerms),
     url(r'^getTermDescription/$', getTermDescription),
+    url(r'^saveEditedTerm/$', saveEditedTerm),
+    url(r'^deleteTerm/$', deleteTerm),
 
 
     url(r'^check/$', checking),
