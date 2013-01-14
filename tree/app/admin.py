@@ -31,9 +31,10 @@ admin.site.register(File, FileAdmin)
 class NodeAdmin(MPTTModelAdmin):
     mptt_level_indent = 20
     list_display = ('title','id', 'creation_date')
-    list_filter =('product','curator','developer', 'tester', 'cur_status', 'cur_release', 'source')
+    list_filter =('product', 'type', 'cur_status', 'cur_release', 'source')
     ordering = ('creation_date',)
     search_fields = ('name_id', 'title')
+    list_editable = ('type', )
 admin.site.register(Node, NodeAdmin)
 
 class StatusHistoryAdmin(admin.ModelAdmin):
