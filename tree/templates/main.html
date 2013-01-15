@@ -2,7 +2,7 @@
     {% if user.is_authenticated %}
         <div class="start_work">
             <p>Для начала работы выберите продукт:</p>
-            <ul>
+            <ul class="link unstyled">
                 {%  for product in products %}
                     <li onclick="changeProduct('{{ product.short_name }}')">
                         {{ product.title }} ({{ product.short_name }})

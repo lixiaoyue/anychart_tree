@@ -1,11 +1,4 @@
 <div class="panel">
-{#    <div class="current">#}
-{#        <div class="status" style="color:{{ node.cur_status.color }}">#}
-{#            <span class="status_{{ node.cur_status.id }}"></span>{{ node.cur_status.title }}#}
-{#        </div>#}
-{#        <br class="clearfix"/>#}
-{##}
-{#    </div>#}
     <ul class="save_tools" id='{{ node.id }}'>
         <li class="repair disable" onclick="">
             <span class="edit node"></span>
@@ -15,52 +8,35 @@
 </div>
 <div class="table trash">
     <div class='content_node'>
-            {% for item in nodes %}
-
-            {% endfor %}
-
-
         {% if nodes %}
-            <div class="wideItem statuses">
-                <div style="padding: 5px 0 5px 5px">
-                    Удаленные узлы:
-                </div>
-            </div>
-            <div class="history statuses">
-                {% for item in nodes %}
-                    <div class="wideItem underline">
-                        <div class="halfItem">
-                            <div class="halfItem"  style="color:#104E8B" > <input type="checkbox" id='node_{{ item.id_node.id }}' onclick='checkTrash()'> <label for ='node_{{ item.id_node.id }}'>{{ item.id_node.title }} </label></div>
-                            <div class="halfItem"> {{ item.date }} </div>
-                        </div>
-                        <div class="halfItem" style="color:#1c1c1c">{{ item.description }} </div>
-                        <br class="clearfix">
-                    </div>
-                {% endfor %}
-            </div>
+            <table class="table"  style="margin-bottom: 60px">
+                <tbody>
+                <th><td colspan="4"><h4>Удаленные узлы</h4></td></th>
+                    {% for item in nodes %}
+                        <tr>
+                            <td style="color:#104E8B; width: 3%"><input type="checkbox" id='node_{{ item.id_node.id }}' onclick='checkTrash()'> </td>
+                            <td style=" width: 22%"> <label for ='node_{{ item.id_node.id }}'>{{ item.id_node.title }} </label></td>
+                            <td style=" width: 25%">{{ item.date }}</td>
+                            <td style="color:#1c1c1c; width: 50%">{{ item.description }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         {% endif %}
-
         {% if requirements %}
-            <div class="wideItem releases">
-                <div style="padding: 5px 0 5px 5px">
-                    Удаленные требования:
-                </div>
-            </div>
-
-            <div class="history releases">
+            <table class="table">
+                <tbody>
+                <th><td colspan="4"><h4>Удаленные требования</h4></td></th>
                 {% for item in requirements %}
-                    <div class="wideItem underline">
-                        <div class="halfItem">
-                            <div class="halfItem"  style="color:#4682B4" > <input type="checkbox" id='node_{{ item.id_node.id }}' onclick='checkTrash()'><label for ='node_{{ item.id_node.id }}'>{{ item.id_node.title }} </label></div>
-                            <div class="halfItem"> {{ item.date }} </div>
-                        </div>
-                        <div class="halfItem" style="color:#1c1c1c">{{ item.description }} </div>
-                        <br class="clearfix">
-                    </div>
+                    <tr>
+                        <td style="color:#104E8B; width: 3%"><input type="checkbox" id='node_{{ item.id_node.id }}' onclick='checkTrash()'> </td>
+                        <td style=" width: 22%"> <label for ='node_{{ item.id_node.id }}'>{{ item.id_node.title }} </label></td>
+                        <td style=" width: 25%">{{ item.date }}</td>
+                        <td  style="color:#1c1c1c; width: 50%">{{ item.description }}</td>
+                    </tr>
                 {% endfor %}
-            </div>
+                </tbody>
+            </table>
         {% endif %}
-
-
     </div>
 </div>

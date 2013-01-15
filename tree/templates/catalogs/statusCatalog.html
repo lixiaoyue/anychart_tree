@@ -1,54 +1,35 @@
 
 <div class="table">
-    <div class='content_other'>
+    <div class='content_node' style="margin-top: 20px">
+        <table class="statuses">
+            <tr class="wideItem underline {{ item.id  }}">
+                <td rowspan="7" style="width: 250px"><div id="picker" style="float: left; margin: 20px"></div></td>
+            </tr>
 
-
-
-
-            <div class="picker statuses">
-                <div class="wideItem ">
-                    <div class="halfItem" style="float: right; ">
-                        <div id="picker" style="float: left; margin: 20px"></div>
-                    </div>
-                    {% for item in statuses %}
-                        <div class="halfItem picker">
-
-                            <div class="halfItem left" style="color:{{ item.color }};
-                                    {% for i in colorItems %}
-                                        {% if item.id == i.status.id %}
-                                            color:{{ i.color }};
-                                        {% endif %}
-                                    {% endfor %}
-                                    margin-top: 7px" >  <span class="status_{{ item.id }}"></span>{{ item.title }} </div>
-                            <div class="halfItem" style="color:{{ item.color }};
-                                    {% for i in colorItems %}
-                                        {% if item.id == i.status.id %}
-                                            color:{{ i.color }};
-                                        {% endif %}
-                                    {% endfor %}">
-
-                                <input type='text' value="{% for i in colorItems %}{% if item.id == i.status.id %}{{ i.color }}{% endif %}{% endfor %}" class="statusCatalog status_{{ item.id }}" rel={{item.color}}>
-                                    {% for i in colorItems %}
-                                            {% if item.id == i.status.id %}
-                                                {{ i.color }}
-                                            {% endif %}
-                                        {% endfor %}
-                            </div>
-                            <br class="clearfix">
-
-                        </div>
-                    {% endfor %}
-
-
-                </div>
-                <br class="clearfix"/>
-                <div class="wideItem ">
-
-                    <div class="halfItem" style="padding: 25px 0; text-align: center">
-                        <input type="button" style="width: 200px; text-align: center" onclick="saveStatusesColors()" value="Сохранить">
-                    </div>
-
-                </div>
-            </div>
+            {% for item in statuses %}
+                <tr class="wideItem underline {{ item.id  }}">
+                    <td><span style="color:{{ item.color }};
+                            {% for i in colorItems %}
+                                {% if item.id == i.status.id %}
+                                    color:{{ i.color }};
+                                {% endif %}
+                            {% endfor %}
+                            margin-top: 7px" > {{ item.title }}
+                        </span>
+                    <td>
+                    <td><input type='text' value="{% for i in colorItems %}{% if item.id == i.status.id %}{{ i.color }}{% endif %}{% endfor %}" class="statusCatalog status_{{ item.id }}" rel={{item.color}}> <td>
+                    <td>
+                        {% for i in colorItems %}
+                            {% if item.id == i.status.id %}
+                                {{ i.color }}
+                            {% endif %}
+                        {% endfor %}
+                    <td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="6"><input type="button" onclick="saveStatusesColors()" class="btn btn-primary" value="Сохранить"></td>
+             </tr>
+        </table>
     </div>
 </div>

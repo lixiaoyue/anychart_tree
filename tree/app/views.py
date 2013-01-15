@@ -175,7 +175,7 @@ def getRequirements(request):
     tie_id = request.POST['liId'].replace('tie_','')
     reqs = Node.objects.filter(parent__name_id = tie_id, type = 'OR').exclude(cur_status = DELETED)
     for req in reqs:
-        colors = StatusColorUser.objects.filter(Q(user = request.user.id) | Q(status = req.cur_status.id))
+        colors = StatusColorUser.objects.filter(Q(user = request.user.id) & Q(status = req.cur_status.id))
         if colors:
             color = colors[0]
         else:
@@ -207,21 +207,21 @@ def getParentNode(request):
 # Удалить узел
 @csrf_exempt
 def deleteNode(request):
-    if request.method == 'POST':
-        node = Node.objects.get(name_id = request.POST['node'])
-        delete_node_children(node.id)
-        changeStatusInNode(node.id, DELETED, request.POST['comment'])
-        if node.parent == 'None':
-            return HttpResponse('/')
-        return HttpResponse('/%s/#%s-%s' % (node.product.short_name, node.parent.type, node.parent.name_id.replace(node.product.short_name + '-', '')))
+    node = Node.objects.get(name_id = request.POST['node'])
+    delete_node_children(node.id)
+    changeStatusInNode(node.id, DELETED, request.POST['comment'])
+    if node.parent == 'None':
+        return HttpResponse('/')
+    return HttpResponse('/%s/#%s-%s' % (node.product.short_name, node.parent.type, node.parent.name_id.replace(node.product.short_name + '-', '')))
 
 # Удалить детей узла (Id узла)
 def delete_node_children(node_id):
     children = Node.objects.filter(parent=node_id)
-    for i in children:
-        delete_node_children(i.id)
-        status = Status.objects.get(id = 6)
-        changeStatusInNode(i.id, status)
+    if children:
+        for i in children:
+            delete_node_children(i.id)
+            status = Status.objects.get(id = 6)
+            changeStatusInNode(i.id, status)
 
 # Поменять статус узла и записать в историю,(Id узла, новый статус, комметратий - почему меняем статус.)
 def changeStatusInNode(node_id, status, comment=''):

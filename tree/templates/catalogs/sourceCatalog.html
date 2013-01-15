@@ -1,24 +1,17 @@
 
 <div class="table">
-    <div class='content_other'>
-
-
-            <div class="picker statuses">
-                <div class="wideItem ">
-
-                    {% for item in sources %}
-                        <div class="halfItem picker">
-                            <input type='text' value="{{ item.source }}" class="source" readonly="true" disabled="true"><input type="button"  onclick="deleteSource({{ item.id }})" value="Удалить" class="source_button">
-                            <br class="clearfix">
-                        </div>
-
-                    {% endfor %}
-                    <div class="halfItem picker">
-                        <input type='text' value="" class="source" id='new_source'>  <input type="button"  onclick="addSource()" value="Добавить" class="source_button">
-                    </div>
-                </div>
-                <br class="clearfix"/>
-
-            </div>
+    <div class='content_node' style="margin-top: 20px">
+        <table class="release">
+            {% for item in sources %}
+                <tr class="wideItem underline {{ item.id  }}">
+                    <td><input type='text' value="{{ item.source }}" class="source" readonly="true" disabled="true"></td>
+                    <td> <input type="button" onclick="deleteSource({{ item.id }})" value="Удалить" class="btn"></td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td><input type='text' value="" class="source" id='new_source'> </td>
+                <td><input type="button"  onclick="addSource()" value="Добавить" class="btn btn-success"></td>
+            </tr>
+        </table>
     </div>
 </div>

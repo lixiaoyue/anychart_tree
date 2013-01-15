@@ -6,249 +6,250 @@
     </div>
     <ul class="save_tools" id='{{ node.type }}_{{ node.name_id }}'>
         <li class="edit " onclick="saveNode($(this).parent().attr('id'))">
-            <span class="edit node"></span>
-            Сохранить
-
+            <i class="icon-ok"></i> Сохранить
         </li>
         <li class="delete " onclick="cancelEditNode($(this).parent().attr('id'))">
-            <span class="delete node"></span>
-            Отменить
-
+            <i class="icon-remove"></i> Отменить
         </li>
     </ul>
 </div>
 
-<div class='content_node'>
-
-
-    <div class='table editable'>
-
-
-        <div class="wideItem">
-            <form class="form-horizontal">
+<div class='content_node editable'>
+    <form class="form-horizontal">
+        <fieldset>
+            <div class="control-group">
+                <label class="control-label" for="nodeTitle">Название</label>
+                <div class="controls">
+                    <input type="text" name='title' id='nodeTitle' class="input-block-level" value="{{ node.title }}">
+                </div>
+            </div>
+        </fieldset>
+        <div class="row-fluid">
+            <div class="span6">
                 <fieldset>
                     <div class="control-group">
-                        <label class="control-label" for="nodeTitle">Название</label>
+                        <label class="control-label" for="curator">Куратор</label>
                         <div class="controls">
-                            <input type="text" name='title' id='nodeTitle' value="{{ node.title }}">
+                            <input type="text" class="input-large" id="curator" value="{{ node.curator.first_name }} {{ node.curator.last_name }}" disabled="True">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="selectDeveloper">Разработчик</label>
+                        <div class="controls">
+                            <select id="selectDeveloper" name="developer">
+                                <option value="None">None</option>
+                                {% for dev in developers %}
+                                    {% if dev == node.developer %}
+                                        <option value="{{ dev.id }}" selected="true">{{ dev.get_full_name }}</option>
+                                    {% else %}
+                                        <option value="{{ dev.id }}">{{ dev.get_full_name }} </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="selectTester">Тестировщик</label>
+                        <div class="controls">
+                            <select id="selectTester" name="developer">
+                                <option value="None">None</option>
+                                {% for tester in testers %}
+                                    {% if tester == node.tester %}
+                                        <option value="{{ tester.id }}" selected="true">{{tester.get_full_name }} </option>
+                                    {% else %}
+                                        <option value="{{ tester.id }}">{{tester.get_full_name }} </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                 </fieldset>
-            </form>
-        </div>
-
-
-        <div class="margin"></div>
-
-
-        <div class="wideItem">
-            <div class="span6">
-                <form class="form-horizontal">
-                    <fieldset>
-                         <div class="control-group">
-                            <label class="control-label" for="curator">Куратор</label>
-                            <div class="controls">
-                                <input type="text" style="width: 88%;" class="input-xlarge" id="curator" value="{{ node.curator.first_name }} {{ node.curator.last_name }}" disabled="True">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="selectDeveloper">Разработчик</label>
-                            <div class="controls">
-                                <select id="selectDeveloper" name="developer">
-                                    <option value="None">None</option>
-                                    {% for dev in developers %}
-                                        {% if dev == node.developer %}
-                                            <option value="{{ dev.id }}" selected="true">{{ dev.get_full_name }}</option>
-                                        {% else %}
-                                            <option value="{{ dev.id }}">{{ dev.get_full_name }} </option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="selectTester">Тестировщик</label>
-                            <div class="controls">
-                                <select id="selectTester" name="developer">
-                                    <option value="None">None</option>
-                                    {% for tester in testers %}
-                                        {% if tester == node.tester %}
-                                            <option value="{{ tester.id }}" selected="true">{{tester.get_full_name }} </option>
-                                        {% else %}
-                                            <option value="{{ tester.id }}">{{tester.get_full_name }} </option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
             </div>
-
             <div class="span6">
-                <form class="form-horizontal">
-                    <fieldset>
-                        <div class="control-group">
-                            <label class="control-label" for="selectStatus">Статус</label>
-                            <div class="controls">
-                                <select id="selectStatus" name="status" onchange="AskWhy('status')">
-                                    {% for status in statuses %}
-                                        {% if status == node.cur_status %}
-                                            <option value="{{ status.id }}" selected="true">{{status.title }} </option>
-                                        {% else %}
-                                            <option value="{{ status.id }}">{{status.title }} </option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                            </div>
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="selectStatus">Статус</label>
+                        <div class="controls">
+                            <select id="selectStatus" name="status" onchange="AskWhy('status')">
+                                {% for status in statuses %}
+                                    {% if status == node.cur_status %}
+                                        <option value="{{ status.id }}" selected="true">{{status.title }} </option>
+                                    {% else %}
+                                        <option value="{{ status.id }}">{{status.title }} </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label" for="selectRelease">Релиз</label>
-                            <div class="controls">
-                                <select id="selectRelease" name="release" onchange="AskWhy('release')">
-                                    <option value="None">None</option>
-                                    {% for release in releases %}
-                                        {% if release == node.cur_release %}
-                                            <option value="{{ release.id }}" selected="true">{{release }} {{release.date.date|date:'Y-m-d' }} </option>
-                                        {% else %}
-                                            <option value="{{ release.id }}">{{release }} {{release.date.date|date:'Y-m-d' }} </option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select> <span class="add release" style='float: right; margin: 4px 15px 0 0;' onclick="ShowAddReleaseForm()"></span>
-                            </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="selectRelease">Релиз</label>
+                        <div class="controls">
+                            <select id="selectRelease" name="release" onchange="AskWhy('release')">
+                                <option value="None">None</option>
+                                {% for release in releases %}
+                                    {% if release == node.cur_release %}
+                                        <option value="{{ release.id }}" selected="true">{{release }} {{release.date.date|date:'Y-m-d' }} </option>
+                                    {% else %}
+                                        <option value="{{ release.id }}">{{release }} {{release.date.date|date:'Y-m-d' }} </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select> <i class="icon-plus" style='margin: 1px 15px 0 5px; cursor: pointer' onclick="ShowAddReleaseForm()"></i>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label" for="selectSource">Источник</label>
-                            <div class="controls">
-                                <select id="selectSource" name="source">
-                                    <option value="None">None</option>
-                                    {% for source in sources %}
-                                        {% if source == node.source %}
-                                            <option value="{{ source.id }}" selected="true">{{source }} </option>
-                                        {% else %}
-                                            <option value="{{ source.id }}">{{source }} </option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                            </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="selectSource">Источник</label>
+                        <div class="controls">
+                            <select id="selectSource" name="source">
+                                <option value="None">None</option>
+                                {% for source in sources %}
+                                    {% if source == node.source %}
+                                        <option value="{{ source.id }}" selected="true">{{source }} </option>
+                                    {% else %}
+                                        <option value="{{ source.id }}">{{source }} </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
                         </div>
-                    </fieldset>
-                </form>
+                    </div>
+                </fieldset>
             </div>
         </div>
-
-        <div class="margin"></div>
-
-        <div class="wideItem">Уточнения источника <span>(ссылка на тикет или на обращение клиента):</span></div>
-        <div class="wideItem">
-            <textarea id='source_textArea' class="small_text" name='source_content'>{% if node.source_description %}{{ node.source_description|safe }}{% endif %}</textarea>
+        <div class="control-group">
+            <label class="control-label" for="source_textArea">Уточнения источника <span class="help-block">(ссылка на тикет или на обращение клиента)</span></label>
+            <div class="controls">
+                <textarea id='source_textArea' class="small_text" name='source_content'>{% if node.source_description %}{{ node.source_description|safe }}{% endif %}</textarea>
+            </div>
         </div>
-        <div class="margin"></div>
-        <div class="wideItem">
-            <a class="btn btn-small btn-info" onclick="$('.wideItem.help').toggle()"><i class="icon-info-sign icon-white"></i> Небольшая справка </a>
+        <div class="control-group">
+            <label class="control-label">Файлы  <span class="help-block"><a class="btn btn-small btn-primary" onclick="ShowAddfileForm()"><i class="icon-plus icon-white"></i> Добавить файл</a></span></label>
+            <div class="controls">
+                <div class="node_files"></div>
+            </div>
         </div>
-        <div class="margin"></div>
-        <div class="wideItem help" >
-            <div class="alert alert-info">
-                <p><strong>Способы добавления в тело приаттаченных файлов: </strong></p>
-                <ol>
-                    <li>!file.png:small! - картинка шириной 200, обтекание слева</li>
-                    <li>!file.png! - картинка c максимальной шириной 95% </li>
-                    <li>!file.png:a! - ссылка на картинку, target = _blank (так же обрабатываются все файлы, что не картинка) </li>
-                    <li>!file.zip! -  ссылка на файл, target = _blank</li>
-                </ol>
-                <p></p>
-                <strong>Вставка терминов:</strong>
-                <p><img src="/media/i/screen1.png" style="float: left; margin: 0 10px 3px 0;"> Для вставки термина используйте кнопку на панели "link to vocabulary".
-                    В открывшемся окне, вы можете выбрать существующий термин из выпадающего списка, либо добавить новый: для этого необходимо перейти вл вкладку "Добавить новый термин", ввести название термина, его определение и нажать "Ok".
-                    При нажатии на кнопку "Ok", в редактор добавляется ссылка на выбранный или добавленный термин в словаре и всплывающая подсказка с определением термина.
+        <div class="control-group">
+            <label class="control-label"> <a class="btn btn-small btn-info" onclick="$('.controls.help').toggle()"><i class="icon-info-sign icon-white"></i> Небольшая справка </a></label>
+            <div class="controls help">
+                <div class="alert alert-info">
+                    <p><strong>Способы добавления в тело приаттаченных файлов: </strong></p>
+                    <ol>
+                        <li>!file.png:small! - картинка шириной 200, обтекание слева</li>
+                        <li>!file.png! - картинка c максимальной шириной 95% </li>
+                        <li>!file.png:a! - ссылка на картинку, target = _blank (так же обрабатываются все файлы, что не картинка) </li>
+                        <li>!file.zip! -  ссылка на файл, target = _blank</li>
+                    </ol>
+                    <p></p>
+                    <strong>Вставка терминов:</strong>
+                    <p><img src="/media/i/screen1.png" style="float: left; margin: 0 10px 3px 0;"> Для вставки термина используйте кнопку на панели "link to vocabulary".
+                        В открывшемся окне, вы можете выбрать существующий термин из выпадающего списка, либо добавить новый: для этого необходимо перейти вл вкладку "Добавить новый термин", ввести название термина, его определение и нажать "Ok".
+                        При нажатии на кнопку "Ok", в редактор добавляется ссылка на выбранный или добавленный термин в словаре и всплывающая подсказка с определением термина.
                     <p><strong>Всплывающая подсказка не работает в режиме редактирования.</strong></p>
-                </p>
+                </div>
             </div>
         </div>
-        <div class="margin"></div>
-        <div class="wideItem">
-            <div class="files">
-                <p>Файлы:
-                <p><span>
-                    <a onclick="ShowAddfileForm()">Добавить файл</a>
-                    <span class="add file" onclick="ShowAddfileForm()"></span>
-                </span>
-            </div>
-            <div class="node_files">
-            </div>
-        </div>
-        <div class="margin"></div>
-
-
-        <div class="wideItem description">Описание: </div>
-        <div class="wideItem">
-            <textarea id='content_textArea' class="big_text" name='description_content'>{% if node.content %} {{ node.content|safe }}{% endif %}</textarea>
-        </div>
-
-
-
+        <textarea id='content_textArea' class="big_text" name='description_content'>{% if node.content %} {{ node.content|safe }}{% endif %}</textarea>
         <textarea class="hidden" name='product' id='release_comment' ></textarea>
         <textarea class="hidden" name='product' id='status_comment' ></textarea>
         <input type=text class="hidden" id='cur_node_id' value="{{ node.id }}">
-    </div>
+    </form>
 </div>
 
 <div class='hidden add_file_form' >
-    <div class="cover_form" >
+    <div class="modal" >
         <iframe class="hidden" id=hiddenframe name=hiddenframe style="width:0; height:0; border:0"></iframe>
         <form enctype=multipart/form-data action='/addFileToNode/' method=post name=load_file id='loadingFile' target=hiddenframe>
+        <div class="modal-header">
+            <button type="button" class="close" onclick="showPopup(false)" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Добавление файла</h3>
+        </div>
+        <div class="modal-body">
             <input type=hidden name='size' value=64000>
-            <input type='text' name='node' id='node_id' value='{{ node.name_id }}' class="hidden" >
-            <input type='text' name='name' id='add_file_name_text' value='Как называется твой новый файл?'>
-            <input type="file" name='file' id="file">
-            <div class="cancel">
-                <input type="button" onclick="showPopup(false)" value="Отменить">
-                <span class="delete"></span>
+            <input type='hidden' name='node' id='node_id' value='{{ node.name_id }}'>
+            <div class="control-group">
+                <input type="file" name='file' id="file">
             </div>
 
-            <div class="confirm" >
-                <input type="submit"  onclick="SaveFile()" value="Добавить">
-                <span class="status_5"></span>
+            <div class="control-group">
+                <label class="control-label" for="add_file_name_text">Имя файла</label>
+                <div class="controls">
+                    <input type='text' name='name' id='add_file_name_text'>
+                </div>
             </div>
 
-
+         </div>
+        <div class="modal-footer">
+            <a class="btn" onclick="showPopup(false)"><i class="icon-remove"></i> Отменить</a>
+            <input type='submit' class="btn btn-primary" onclick="SaveFile()" value='Добавить'>
+        </div>
         </form>
     </div>
 </div>
 
 <div class='hidden add_release_form'>
-    <div class="cover_form">
-        <input type=text class="hidden" name='node_id' value="{{ node.id }}">
-        <input type=text class="hidden" name='product' id='release_product' value="">
-        <input type='text' name='release_name' id='add_release_name_text' value='Как называется новый релиз?'>
-        <input type='text' name='release_number' id='add_release_number_text' value='Какой номер релиза?'>
-        <input type='text' name='release_date' id='add_release_date_text' value="Год-месяц-день">
-        <textarea name="release_description" id='release_description' >Оставьте описание релиза тут</textarea>
-        <div class="cancel">
-            <input type="button" onclick="showPopup(false)" value="Отменить">
-            <span class="delete"></span>
-        </div>
+    <div class="modal">
+        <form>
+            <div class="modal-header">
+                <button type="button" class="close" onclick="showPopup(false)" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Добавление релиза</h3>
+            </div>
+            <div class="modal-body">
+                <input type=hidden name='node_id' value="{{ node.id }}">
+                <input type=hidden name='product' id='release_product' value="">
 
-        <div class="confirm" >
-            <input type="button"  onclick="addRelease()" value="Добавить">
-            <span class="status_5"></span>
-        </div>
 
-    </div>
+                <div class="control-group">
+                    <label class="control-label" for="add_release_name_text">Название релиза</label>
+                    <div class="controls">
+                        <input class="input-block-level" type='text' name='release_name' id='add_release_name_text'>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="add_release_number_text">Номер релиза</label>
+                    <div class="controls">
+                        <input  class="input-block-level" type='text' name='release_number' id='add_release_number_text'>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="add_release_date_text"> Дата выхода релиза<span class="help-block">Год-месяц-день</span></label>
+                    <div class="controls">
+                        <input class="input-block-level" type='text' name='release_date' id='add_release_date_text'>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="release_description">Описание релиза</label>
+                    <div class="controls">
+                        <textarea class="input-block-level" name="release_description" id='release_description' ></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn" onclick="showPopup(false)"><i class="icon-remove"></i> Отменить</a>
+                <input type='button' class="btn btn-primary" onclick="addRelease()" value='Добавить'>
+            </div>
+        </form>
+   </div>
 </div>
 
 <div class='hidden ask_why'>
-    <div class="cover_form">
-        <textarea name="release_description" id='change_description' >Оставьте комментарий тут</textarea>
-        <div class="cancel">
-            <input type="button" onclick="showPopup(false)" value="Отменить">
-            <span class="delete"></span>
-        </div>
+    <div class="modal">
+        <form>
+            <div class="modal-header">
+                <button type="button" class="close" onclick="showPopup(false)" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Смена статуса</h3>
+            </div>
+            <div class="modal-body">
+                <input type=hidden name='node_id' value="{{ node.id }}">
+                <div class="control-group">
+                    <label class="control-label" for="change_description">Ваш комментарий</label>
+                    <div class="controls">
+                        <textarea  class="input-block-level" name="release_description" id='change_description'></textarea>
+                    </div>
+                </div>
 
-        <div class="confirm" >
-            <input type="button"  onclick="addComment($(this).parent().parent().attr('id'), $('#change_description').val())" value="Сохранить">
-            <span class="status_5"></span>
-        </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn" onclick="showPopup(false)"><i class="icon-remove"></i> Отменить</a>
+                <input type='button' class="btn btn-primary" onclick="addComment($(this).attr('id'), $('#change_description').val())" value='Сохранить'>
+            </div>
+        </form>
     </div>
 </div>

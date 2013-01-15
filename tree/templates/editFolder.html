@@ -1,11 +1,11 @@
 <div class="panel">
     <ul class="save_tools" id='{% if node %}{{ node.type }}_{{ node.name_id }}{% elif product %}PR_{{ product.short_name }}{% endif %}'>
         <li class="edit " onclick="saveNode($(this).parent().attr('id'))">
-            <span class="edit node"></span>
+            <i class="icon-ok"></i>
             Сохранить
         </li>
         <li class="delete " onclick="cancelEditNode($(this).parent().attr('id'))">
-            <span class="delete node"></span>
+            <i class="icon-remove"></i>
             Отменить
         </li>
     </ul>
@@ -21,8 +21,6 @@
                 <input type="text" name='title' id='nodeTitle' value="{% if node %}{{ node.title }} {% elif product%} {{ product.title }}{% endif %}">
             </div>
         </div>
-
-
         <div class="margin"></div>
         <div class="wideItem">Описание: </div>
         <div class="wideItem">
@@ -30,7 +28,6 @@
         </div>
 
         <div class="margin"></div>
-
         <input type=hidden class="hidden" id='cur_node_id' value="{{ node.id }}{{ product.id }}">
     </div>
 </div>

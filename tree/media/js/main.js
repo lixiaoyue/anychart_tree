@@ -318,7 +318,6 @@ function addBlockForTabContent(block_id){
 //Добавляем название вкладки
 function addTabNameToManageBlock(tab_name){
     $('#tabs_manage_block ul li.active').html(tab_name);
-    $('#tabs_manage_block li.active span').remove();
 }
 
 //Показать контейнер для содержимого вкладки
@@ -364,7 +363,7 @@ function getNodeContent(object_id){
 
 //Всплывающая форма "Вы действительно хотите удалить узел?"
 function showDeleteNodePopup(node_id){
-    $('.deletion_form .cover_form').attr('id', node_id);
+    $('.deletion_form input[type=button]').attr('id', node_id);
     $('div.popup').html($('.deletion_form').html());
     showPopup(true);
 }
@@ -389,8 +388,8 @@ function DeleteNode(node_id, comment){
 
 //Показать всплывающую форму "Создать новый узел"
 function showCreateTieForm(parent_id, type){
-    $('.add_node_form .cover_form').attr('id', parent_id);
-    $('.cover_form .confirm').attr('id', type);
+    $('.add_node_form .modal-footer').attr('id', parent_id);
+    $('.add_node_form input[type=button]').attr('id', type);
     $('div.popup').html($('.add_node_form').html());
     if (type == 'OR') {
         $('#add_node_name_text').val('Как называется новое требование?');
@@ -495,7 +494,7 @@ function editNode(nodeId){
         data: {nodeId: nodeId, csrfmiddlewaretoken: '{{ csrf_token }}'},
         success: function(html){
             $('#tabs_content_block div.tabs.tab_' + nodeId).html(html);
-            if ($('.table').hasClass('editable')){
+            if ($('.content_node').hasClass('editable')){
                 EDITING = true;
                 window.setTimeout(function(){
                     getFiles(currentNode['name']);
@@ -575,8 +574,10 @@ function addRelease(){
 
 //Уточнить почему меняется статус или релиз
 function AskWhy(item){
-    $('.ask_why .cover_form').attr('id', item);
-    $('div.popup').html($('.ask_why').html());
+    $('.ask_why input[type=button]').attr('id', item);
+    window.setTimeout(function(){
+        $('div.popup').html($('.ask_why').html())
+    }, 10);
     showPopup(true);
 }
 
@@ -669,7 +670,6 @@ function getFiles(node_id, flag){
         },
         success: function(html){
             $('.node_files').html(html);
-            if (!flag){window.setTimeout(function(){$('.node_files span.delete').hide()}, 10);}
             showPopup(false);
         }
     });

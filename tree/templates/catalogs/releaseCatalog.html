@@ -1,6 +1,6 @@
 
 <div class="table">
-    <div class='content_node' style="padding-top: 20px">
+    <div class='content_node' style="MARGIN-top: 20px">
             <table class="release">
                 <thead>
                 <tr>
@@ -14,10 +14,10 @@
                 </thead>
                 {% for item in releases %}
                     <tr class="wideItem underline {{ item.id  }}">
-                        <td>
-                            <span class="edit node" onclick="editRelease({{ item.id }})"></span>
+                        <td style="width: 100px">
+                            <a class="btn btn-small btn-info" onclick="editRelease({{ item.id }})"><i class="icon-edit icon-white" ></i> </a>
                             {% if item not in cant_delete %}
-                                <span class="delete node" onclick="deleteRelease({{ item.id }})"></span>
+                                <a class="btn btn-small btn-info" onclick="deleteRelease({{ item.id }})"><i class="icon-trash icon-white" ></i> </a>
                             {% endif %}
                         </td>
                         <td><input type="checkbox" disabled="true" {% if item.status %} checked="true" {% endif %}></td>
@@ -27,21 +27,21 @@
                         <td colspan="2">{{ item.description }}</td>
                     </tr>
                     <tr class="wideItem hidden {{ item.id  }}">
-                        <td><span class="save node" onclick="saveRelease({{ item.id }})"></span></td>
+                        <td><a class="btn btn-small btn-success" onclick="saveRelease({{ item.id }})"><i class="icon-ok icon-white" ></i> Сохранить</a></td>
                         <td><input type="checkbox" name="status_{{ item.id }}" {% if item.status %} checked="true" {% endif %}></td>
-                        <td><input  style="width: 75%" type="text" value="{{ item.name }}" name="name_{{ item.id }}"> </td>
-                        <td><input type="text" value="{{ item.number }}" name="number_{{ item.id }}"> </td>
-                        <td><div class="hint_popup" data-title="Y-m-d, Например: 2014-01-25"><input type="text" value="{{ item.date|date:"Y-m-d" }}" name="date_{{ item.id }}"> </div></td>
-                        <td colspan="2"><textarea rows="2" cols="45" name="description_{{ item.id }}"> {{ item.description }}</textarea></td>
+                        <td><input type="text" value="{{ item.name }}" name="name_{{ item.id }}"> </td>
+                        <td><input class="input-small" type="text" value="{{ item.number }}" name="number_{{ item.id }}"> </td>
+                        <td><div class="hint_popup" data-title="Y-m-d, Например: 2014-01-25"><input class="input-small" type="text" value="{{ item.date|date:"Y-m-d" }}" name="date_{{ item.id }}"> </div></td>
+                        <td colspan="2"><textarea rows="4" cols="45" name="description_{{ item.id }}"> {{ item.description }}</textarea></td>
                     </tr>
                 {% endfor %}
                 <tr class="wideItem underline new">
-                    <td><span class="save node" onclick="saveRelease('new')"></span></td>
-                    <td><input type="checkbox" name="status_new" ></td>
+                    <td><a class="btn btn-small btn-success" onclick="saveRelease('new')"><i class="icon-ok icon-white" ></i> Сохранить</a></td>
+                    <td></td>
                     <td><input  style="width: 75%" type="text" value="" name="name_new"> </td>
-                    <td><input type="text" value="" name="number_new"> </td>
-                    <td><div class="hint_popup" data-title="Y-m-d, Например: 2014-01-25"><input type="text" value="{{ item.date|date:"Y-m-d" }}" name="date_new">  </div></td>
-                    <td colspan="2"><textarea rows="2" cols="45" name="description_new"></textarea></td>
+                    <td><input type="text" class="input-small" value="" name="number_new"> </td>
+                    <td><div class="hint_popup" data-title="Y-m-d, Например: 2014-01-25"><input class="input-small" type="text" value="{{ item.date|date:"Y-m-d" }}" name="date_new">  </div></td>
+                    <td colspan="2"><textarea rows="1" cols="45" name="description_new"></textarea></td>
                 </tr>
 
             </table>

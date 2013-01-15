@@ -4,13 +4,12 @@
     <title>AnyChart live tree</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <link rel="icon" type="image/ico" href="/media/i/favicon.ico"/>
-    <link rel="stylesheet" type="text/css" href="/media/css/style.css" />{# Стили #}
+    <link rel="stylesheet" type="text/css" href="/media/css/bootstrap.css" />{# Стили #}
 
 </head>
 <body>
     <div class="login">
         {% block content %}
-            <h1>Авторизация</h1>
 
             {% if user.is_authenticated %}
                 Что такое, {{ user.username }}? Вы же уже авторизорваны.
@@ -21,34 +20,45 @@
                     {{ form.non_field_errors }}
                 {% endif %}
 
-                <form method="post" action="">{% csrf_token %}
-                    <dl class="register">
-                        {% for field in form %}
-                            <div class="line">
-                                <div class="halfItem left">
-                                    <dt>{{ field.label_tag }}</dt>
-                                </div>
-                                <div class="halfItem">
-                                    <dd class="clearfix">{{ field }}
-                                        {% if field.help_text %}<div class="clearfix">{{ field.help_text }}</div>{% endif %}
-                                        {% if field.errors %}<div class="myerrors clearfix">{{ field.errors }}</div>{% endif %}
-                                    </dd>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </dl>
-                <p style="text-align: center;margin-top: 15px"><input type="submit" value="Вход" class="clearfix"></p>
+                <div class="modal">
+                    <form class="form" method="post" action="">{% csrf_token %}
+                        <div class="modal-body">
+                            {% for field in form %}
+                                <div class="control-group">
+                                    <label class="control-label">{{ field.label_tag }}</label>
+                                    <div class="controls">
+                                        {{ field }}
 
-                </form>
+                                        {% if field.help_text %}<span class="help-inline">{{ field.help_text }}</span>{% endif %}
+                                        {% if field.errors %}<span class="help-inline">{{ field.errors }}</span>{% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <div style="float: left">
+                                <label class="checkbox">
+                                    <input type="checkbox"> Запомнить меня
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Войти</button>
+                        </div>
+                    </form>
+                </div>
 
                 <script type="text/javascript">
-                    document.getElementById('id_username').focus()
+                        document.getElementById('id_username').focus();
+                        el = parent.document.getElementById('id_password').parentNode;
+                        el.innerHTML = el.innerHTML + '<span class="help-block"><a href="{% url auth_password_reset %}">Забыли пароль?</a></span>';
+                        addClass(parent.document.getElementById('id_password'), 'input-block-level');
+                        addClass(parent.document.getElementById('id_username'), 'input-block-level');
+                        function addClass(o, c){
+                            var re = new RegExp("(^|\\s)" + c + "(\\s|$)", "g")
+                            if (re.test(o.className)) return
+                            o.className = (o.className + " " + c).replace(/\s+/g, " ").replace(/(^ | $)/g, "")
+                        }
                 </script>
-
-
-
-                    <p style="text-align: center; margin-top: 40px"><a href="{% url auth_password_reset %}">Забыли пароль?</a></p>
-
             {% endif %}
         {% endblock %}
     </div>

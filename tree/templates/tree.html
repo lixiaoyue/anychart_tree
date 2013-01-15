@@ -20,19 +20,24 @@
                     </ul>
                 </div>
                 <li>
-                    <div><p><a href="#" class="sc close_req"></a>
+                    <div><p>
                         <span class='folder right_active tie' style="color: #000;">
-                            <a id="PR_{{ cur_product.short_name}}" class="open_tie_in_tab">{{ cur_product.title }}</a>
+                            <a id="PR_{{ cur_product.short_name}}" class="open_tie_in_tab"><i class="icon-folder-open"></i>{{ cur_product.title }}</a>
                         </span></p></div>
                     {% load mptt_tags %}
                     <ul>
                         {% recursetree nodes %}
                             {% if node.type == 'NE' %}
                                 <li id="NE_{{ node.name_id }}" class="cl">
-                                    <div><p><a href="#" class="sc close_req"></a>
+                                    <div>
+                                        <p>
                                         <span class='folder right_active tie' style="color: #000;">
-                                            <a id="NE_{{ node.name_id }}" class="open_tie_in_tab">{{ node.title }}</a>
-                                        </span></p></div>
+                                            <a id="NE_{{ node.name_id }}" class="open_tie_in_tab">
+                                                <i class="icon-folder-open"></i>{{ node.title }}
+                                            </a>
+                                        </span>
+                                        </p>
+                                    </div>
                                     <ul>
                                         {% if not node.is_leaf_node %}
                                             {{ children }}
@@ -42,15 +47,16 @@
                             {% else  %}
                                 <li id="tie_{{ node.name_id }}" class="cl">
                                     <div>
-                                        <p><a href="#" class="sc close_tie"></a> <span class="folder right_active tie">
+                                        <p><span class="folder right_active tie">
                                             <a id="BR_{{ node.name_id }}" class="open_tie_in_tab" style="color:{{ node.cur_status.color }};{% for i in colorItems %}{% if i.status.id == node.cur_status.id %}color:{{ i.color }};{% endif %}{% endfor %}">
-                                        <span class="status_{{ node.cur_status.id }}"></span>{{ node.title }}</a></span></p>
+                                                <span class="status_{{ node.cur_status.id }}"></span>
+                                                {{ node.title }}</a></span></p>
                                     </div>
                                     <ul>
                                         <li id="reqs_{{ node.name_id }}" class="cl req">
                                             <div>
                                                 <p>
-                                                    <a href="#" class="sc close_req"></a>  <span class="right_active req folder">Требования</span>
+                                                   <span class="right_active req folder"><i class="icon-folder-open"></i> Требования</span>
                                                 </p>
                                             </div>
                                             <ul></ul>
@@ -64,10 +70,10 @@
                             {% endif %}
                         {% endrecursetree %}
                         <li id="basket" class="cl hidden">
-                            <div><p><a href="#" class="sc trash" onclick="openTrash()"></a> <span style="color: #7A7A7A;" class="folder" onclick="openTrash()">Корзина</span></p></div>
+                            <div><p><a onclick="openTrash()" class="trash"><span style="color: #7A7A7A; font-weight: bold;"> <i class="icon-trash"></i> Корзина</span></a></p></div>
                         </li>
                         <li id="dic">
-                            <div><p><a href="/{{ cur_product.short_name }}/dictionary/" ><span style="color: #7A7A7A; font-weight: bold; margin-left: 3px">Словарь</span></a></p></div>
+                            <div><p><a href="/{{ cur_product.short_name }}/dictionary/" ><span style="color: #7A7A7A; font-weight: bold;"> <i class="icon-book"></i>Словарь</span></a></p></div>
                         </li>
                     </ul>
                 </li>
@@ -76,7 +82,7 @@
     </div>
     <div id="content">
         <div id="tabs_manage_block">
-            <ul>
+            <ul class="unstyled">
                 <li class="active"></li>
             </ul>
         </div>
