@@ -21,6 +21,7 @@ $(function(){
     $('#page').css('height',$(window).height()-45);
     $('#tabs_content_block').css('height', $(window).height()-129);
 
+
     // Проверяем выполнена ли регистрация
     if ($('a#login_space').hasClass('registration') && $('a#login_space').hasClass('curators')) {LoggedIn(true);}
     else{LoggedIn(false);}
@@ -60,6 +61,7 @@ $(function(){
                 openTrash();
             // если это (не)функциональное требование, нужно сначала подгрузить все требования для родительского узла в дереве, а затем его открыть
             }else if (location.hash.substr(1, 2)=='OR'){
+
                 $.ajax({
                     type: "POST",
                     url: "/getParentNode/",
@@ -93,7 +95,21 @@ $(function(){
         }
     }
 });
-
+function resizeNodeDescription(){
+    if($('.tab_'+ currentNode.type + '_' + currentNode.name + ' .second_panel').length > 0){
+        var h = $('.tab_'+ currentNode.type + '_' + currentNode.name + ' .second_panel').height() + 95;
+    }else{
+        h = 65;
+    }
+    $('#tabs_content_block').css('overflow', 'inherit');
+    $('.description').css('overflow-y', 'scroll');
+    $('.description').height($('#tabs_content_block').height() - h);
+}
+function resizeNodeEdiTable(){
+    $('#tabs_content_block').css('overflow', 'inherit');
+    $('.content_node').css('overflow-y', 'scroll');
+    $('.content_node').height($('#tabs_content_block').height() - 45);
+}
 // Включить. выключить режим авторизованного пользователя.
 function LoggedIn(flag){
     LOGGED_IN = flag;
@@ -153,7 +169,8 @@ function LoggedIn(flag){
 window.onresize = function (){
     $('#page').css('height',$(window).height()-45);
     $('#tabs_content_block').css('height', $(window).height()-129);
-//    tabsWidthDetect();
+    resizeNodeDescription();
+    resizeNodeEdiTable();
 };
 
 //Меняем продукт
@@ -340,6 +357,7 @@ function getNodeContent(object_id){
             data: {nodeId: object_id, csrfmiddlewaretoken: '{{ csrf_token }}'},
             success: function(html){
                 $('#tabs_content_block div.tabs.tab_'+object_id).html(html);
+                resizeNodeDescription();
                 if (!LOGGED_IN) LoggedIn(false);
             }
         });
@@ -352,7 +370,7 @@ function getNodeContent(object_id){
                 $('#tabs_content_block div.tabs.tab_'+object_id).html(html);
                 if (!LOGGED_IN) LoggedIn(false);
                 getFiles(currentNode['name'], false);
-
+                resizeNodeDescription();
             }
         });
     }
@@ -498,6 +516,7 @@ function editNode(nodeId){
                 EDITING = true;
                 window.setTimeout(function(){
                     getFiles(currentNode['name']);
+                    resizeNodeEdiTable();
                     makeEditors(nodeId);
                 }, 300);
             }
@@ -517,6 +536,7 @@ function editNodeLessEditable(nodeId){
                 EDITING = true;
                 window.setTimeout(function(){
                     makeEditors(nodeId);
+                    resizeNodeEdiTable();
                 }, 300);
             }
         }
@@ -745,6 +765,7 @@ function openTrash(){
         success: function(html){
             $('#tabs_content_block div.tabs').hide();
             $('#tabs_content_block div.tabs.tab_trash').html(html);
+            resizeNodeEdiTable();
             $('#tabs_content_block div.tabs.tab_trash').show();
 
         }

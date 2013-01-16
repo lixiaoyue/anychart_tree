@@ -11,7 +11,7 @@ ul.link li:hover{color: #104E8B;}
 a.brand {padding: 0 20px !important;font-weight: bold !important;font-size: 16px !important;border-right: 50px solid transparent;
         border-bottom: 40px solid #104E8B;height: 0;line-height: 40px;color:#fff !important;text-shadow: 0 1px 0 #170420 !important;}
 span.logo{float: left;background: url(../i/logo.png) no-repeat left center; width: 30px; height: 35px; margin-right:10px}
-.navbar-inner{border-color: #7E7E7E; background: lavender; border-radius:0 }
+.navbar-inner{border-color: #7E7E7E; background: #F0F0F0; border-radius:0 }
 .navbar .divider-vertical{border-color: #104E8B;}
 .dropdown-menu{margin-top: -1px}
 ul.nav li span{float: none; padding: 10px 15px 10px; display: block;}
@@ -22,7 +22,7 @@ ul.nav li span{float: none; padding: 10px 15px 10px; display: block;}
 #page {position: relative;width: 100%; margin: 0 0 0 0;height: 500px;}
 #sidebar {width: 30%;padding: 0;float:left;overflow: scroll; height: 100%;}
 #content {width: 70%;float: left;padding: 0;height: 100%;}
-
+.tabs {height: 100%;}
 
 /* ДЕРЕВО */
 .treeview ul div#popup_menu ul{position: absolute;background: rgba(16, 78, 139, 0.9);border-top: solid 1px #1874CD;border-bottom: solid 1px #1C86EE;text-shadow: 0 1px 1px #007D7D;list-style: none;
@@ -39,7 +39,7 @@ ul.nav li span{float: none; padding: 10px 15px 10px; display: block;}
 .treeview li li { margin:0 0 0 20px; border-left: 1px dotted; padding: 0; }
 .treeview li div { position: relative; height: 1.5em; min-height: 16px; //height: 1.3em; }
 .treeview li li div { border-bottom: 1px dotted; }
-.treeview li p{position: absolute;z-index: 1;top: 0.8em; //top: 0.65em;left: 1.55em; width: 100%; margin: 0;border-bottom: 1px dotted lavender;padding: 0;}
+.treeview li p{position: absolute;z-index: 1;top: 0.8em; //top: 0.65em;left: 1.55em; width: 100%; margin: 0;border-bottom: 1px dotted #E6E6E6;padding: 0;}
 .treeview li p span{margin: 2px 3px 0 1px; float: left}
 .treeview li p span.folder{margin: -1px 3px 0 0; float: left; cursor: pointer}
 .treeview a i{margin-right: 3px }
@@ -61,7 +61,7 @@ ul.nav li span{float: none; padding: 10px 15px 10px; display: block;}
 li.req.noReqs div {cursor: default;}
 li.req.noReqs div p span.folder{color: #7E7E7E;cursor: default;}
 li.req div p{color: #000;font-weight: normal;cursor: pointer; margin-top: 3px;}
-.treeview p.active{ background: lavender;}
+.treeview p.active{ background: #E6E6E6;}
 ul.registration{float: right !important;left:0 !important;color: #feb21f;text-shadow: none;}
 ul.registration li a.registration{letter-spacing: 0;font-size: 1em !important;}
 .treeview a.open_tab span{width: 16px; height: 16px; float: left;}
@@ -82,12 +82,12 @@ span.status_5{background: url(../i/icons.png) no-repeat -287px 0;}
 #tabs_manage_block a{color: #7E7E7E;text-decoration: none;overflow: hidden; width: 70%;display: block;}
 #tabs_manage_block ul{list-style: none;}
 #tabs_manage_block ul li.active{font-weight: bold;font-size: 13pt;color: #1c1c1c;font-family: verdana, sans-serif;}
-#tabs_content_block{height: 85%; width: 97%;margin: 0 auto; border: solid 1px #7E7E7E;overflow-y: scroll;position: relative;background:#fff;}
-.panel{width: 99%; padding: 0 0 0 1%;min-width: 650px;margin: 0;height: 40px;border-bottom: solid 1px #7E7E7E;border-right: solid 1px #7E7E7E;background: lavenderBlush;position: absolute;top:0;z-index: 0;}
+#tabs_content_block{height: 85%; width: 97%;margin: 0 auto; border: solid 1px #7E7E7E;position: relative;background:#fff;overflow-y:scroll;}
+.panel{width: 99%; padding: 0 0 0 1%;min-width: 650px;margin: 0;height: 40px;border-bottom: solid 1px #7E7E7E;border-right: solid 1px #7E7E7E;background: #F0F0F0; top:0; z-index: 0;}
 .panel span.status_1, .panel span.status_2,.panel span.status_3,.panel span.status_4,.panel span.status_5{margin: 2px 4px 4px 5px;}
 .panel div.tools{float: right;margin: 10px 54px 0 0;cursor: pointer;}
 .panel div.tools span.opener{display: inline-block;border-left: 6px solid transparent;border-right: 6px solid transparent;border-top: 7px solid #7E7E7E;margin-left: 8px;position: relative;top: -1px;}
-.panel ul.tools{float: right; list-style: none;margin: 0;width: 200px;background: lavenderBlush; border: 1px solid #7E7E7E; border-top: none;position: absolute;top:40px;right: -1px;z-index: 30; display: none;}
+.panel ul.tools{float: right; list-style: none;margin: 0;width: 200px;background: #F0F0F0; border: 1px solid #7E7E7E; border-top: none;position: absolute;top:40px;right: -1px;z-index: 30; display: none;}
 .panel ul.tools li{float: left;margin: 3px 30px 3px 10px; cursor: pointer; width: 100%;}
 .panel ul.tools_up{float: right;list-style: none;margin: 0;}
 .panel ul.tools_up li{float: left;margin-top: 10px; margin-right: 30px;cursor: pointer;}
@@ -95,12 +95,12 @@ span.status_5{background: url(../i/icons.png) no-repeat -287px 0;}
 .panel ul.save_tools li{ float: left; margin: 10px 30px 0 0;cursor: pointer;}
 .panel .current{float: left; position: relative;}
 .panel .current div.status{float: left;margin-top: 10px;}
-.second_panel {width: 97%; padding: 55px 1% 10px 2%; background: lavenderBlush; border-bottom: 1px solid #DCDCDC;}
+.second_panel {width: 97%; padding: 20px 1% 10px 2%; background: #F0F0F0; border-bottom: 1px solid #DCDCDC;}
 .second_panel table.people {width: 50%; float: left;}
 .second_panel table.data {width: 50%; float: right;}
 .second_panel table.data p {margin: 0}
 .second_panel table td.staff {color:#7E7E7E;text-align: right; padding-right: 10px;}
-.description{width: 98%; margin: 20px 1% 20px 1%}
+.description{width: 98%; padding: 1%; }
 .description img{max-width: 95%;}
 span.file {margin-right: 10px; float: left; display: block;}
 .node_files{padding-top: 5px}
@@ -109,7 +109,7 @@ span.file {margin-right: 10px; float: left; display: block;}
 .description a.tip span.hidden {position: absolute; width: 300px; z-index: 999;}
 .description a.tip:hover span.hidden {display: block; background: #fff; padding: 5px; border: 1px solid #888;visibility: initial;}
 .controls .node_files span.file span.delete {width: 16px;height: 16px; float:left; background: url(../i/icons.png) no-repeat -456px 0; cursor: pointer;margin: 3px;}
-.content_node{margin-top: 60px; padding: 0 20px;}
+.content_node{margin-top: 0; padding: 0 20px;overflow-y: inherit; }
 .controls.help{display: none}
 
 /* КОРЗИНА */
