@@ -68,7 +68,7 @@
                             {% if cur_product %}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ cur_product.title }} <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu" style="min-width: 210px">
                                         {%  for product in products %}
                                             <li onclick="changeProduct('{{ product.short_name }}')">
                                                 <label class="menu checkbox" for="product_{{ product.short_name }}" >
@@ -81,7 +81,7 @@
                                 </li>
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Справочники<b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu" >
                                         <li><a href="/{{ cur_product.short_name }}/catalog/#1" onclick="changeCatalog(1)">Цветовая схема</a></li>
                                         <li><a href="/{{ cur_product.short_name }}/catalog/#2" onclick="changeCatalog(2)">Источники требований </a></li>
                                         <li><a href="/{{ cur_product.short_name }}/catalog/#3" onclick="changeCatalog(3)">Релизы </a></li>
