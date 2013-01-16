@@ -1,4 +1,5 @@
 * {	margin: 0;	padding: 0;}
+body{margin: 0;	padding: 0;}
 a {	text-decoration: none;	color: #1C86EE; cursor: pointer}
 a:hover {color: #104E8B;text-decoration: none;}
 br.clearfix {clear: both;}
@@ -7,11 +8,11 @@ ul.link li{color: #1C86EE; cursor: pointer}
 ul.link li:hover{color: #104E8B;}
 .hidden{display: none;}
 
-#wrapper{min-width: 980px;}
+/*#wrapper{min-width: 890px;}*/
 a.brand {padding: 0 20px !important;font-weight: bold !important;font-size: 16px !important;border-right: 50px solid transparent;
         border-bottom: 40px solid #104E8B;height: 0;line-height: 40px;color:#fff !important;text-shadow: 0 1px 0 #170420 !important;}
-span.logo{float: left;background: url(../i/logo.png) no-repeat left center; width: 30px; height: 35px; margin-right:10px}
-.navbar-inner{border-color: #7E7E7E; background: #F0F0F0; border-radius:0 }
+span.logo{float: left;background: url(../i/logo.png) no-repeat left center; width: 30px; height: 35px; margin: 0 10px}
+.navbar-inner{border-color: #7E7E7E; background: #F0F0F0; border-radius:0; padding: 0;min-width: 1090px;}
 .navbar .divider-vertical{border-color: #104E8B;}
 .dropdown-menu{margin-top: -1px}
 ul.nav li span{float: none; padding: 10px 15px 10px; display: block;}
